@@ -31,9 +31,10 @@ const esc = (s: string) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 
 function layout(campaign: { organizer_label: string; purpose_text: string; name: string }, contactName: string, body: string) {
-  return `<!doctype html><html lang="nb"><body style="margin:0;background:#faf7f2;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1c1917">
+  return `<!doctype html><html lang="nb"><body style="margin:0;background:#f1eee8;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#121a26">
 <div style="max-width:560px;margin:0 auto;padding:24px 16px">
-<p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#6b4226;text-transform:uppercase;letter-spacing:.04em">${esc(campaign.organizer_label)}</p>
+<p style="margin:0 0 12px"><img src="${APP_URL}/email-logo.png" width="180" height="48" alt="ProDugnad" style="display:block;border:0"></p>
+<p style="margin:0 0 6px;font-size:14px;font-weight:600;color:#002e5f">${esc(campaign.organizer_label)}</p>
 <div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e7e5e4">${body}</div>
 <p style="font-size:13px;color:#57534e;line-height:1.5;margin-top:16px">
 ${esc(campaign.name)} er organisert av ${esc(campaign.organizer_label)}, ikke av klubben direkte.
