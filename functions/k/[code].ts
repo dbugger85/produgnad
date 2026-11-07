@@ -1,6 +1,6 @@
 // /k/<link code>: a parent's order link. Preview with the campaign, the parent and the first product picture.
 import { defaultPictureFor, defaultPreviewUrl } from '../../src/lib/defaultPictures'
-import { imageUrl, kr, rpc, withPreview, type Env } from '../../functions-lib/preview'
+import { imageUrl, isPreviewBot, kr, rpc, withPreview, type Env } from '../../functions-lib/preview'
 
 interface LinkPage {
   campaign: { name: string; organizer_label: string; purpose_text: string }
@@ -10,6 +10,7 @@ interface LinkPage {
 
 export const onRequest = async (context: { request: Request; env: Env; params: { code: string }; next: () => Promise<Response> }) => {
   const response = await context.next()
+  if (!isPreviewBot(context.request)) return response
   const data = await rpc<LinkPage>(context.env, 'public_campaign_by_link', { p_link_code: context.params.code })
   if (!data?.campaign) return response
 

@@ -14,6 +14,7 @@ export interface Rendered {
 }
 
 interface OutboxRow {
+  created_at?: string
   kind: string
   campaign_id: string | null
   order_id: string | null
@@ -78,7 +79,8 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
     : { data: null }
   const base = {
     fromName: `${campaign.organizer_label.replace(/[<>"]/g, '')} via ProDugnad`,
-    replyTo: contact?.email || null,
+    // With "Ansvarlige og kontakt = Ikke vist" the admins' addresses aren't shown either
+    replyTo: campaign.admins_visibility === 'none' ? null : contact?.email || null,
   }
   // Emails to parents: replies to the contact admin
   const wrap = (subject: string, body: string): Rendered => {
@@ -148,8 +150,18 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
   }
 
   if (row.kind === 'digest') {
-    const osloDay = (d: string | Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Oslo' }).format(new Date(d))
-    const today = osloDay(new Date())
+    // Orders since this parent's previous digest (or the last 24 hours), up to when this one was queued
+    const until = row.created_at ? new Date(row.created_at) : new Date()
+    const { data: prev } = await db
+      .from('email_outbox')
+      .select('created_at')
+      .eq('kind', 'digest')
+      .eq('campaign_parent_id', cp.id)
+      .lt('created_at', until.toISOString())
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    const since = prev ? new Date(prev.created_at) : new Date(until.getTime() - 24 * 3600 * 1000)
     const { data: orders } = await db
       .from('orders')
       .select('code, type, buyer_first_name, created_by, created_at, paid_to_parent_at, order_lines(qty, unit_price, products(name))')
@@ -160,7 +172,10 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
     type O = { code: string; type: string; buyer_first_name: string; created_by: string; created_at: string; paid_to_parent_at: string | null; order_lines: Line[] }
     const all = (orders ?? []) as O[]
     const amount = (o: O) => o.order_lines.reduce((s, l) => s + l.qty * Number(l.unit_price), 0)
-    const fresh = all.filter((o) => o.created_by === 'friend' && osloDay(o.created_at) === today)
+    const fresh = all.filter((o) => {
+      const t = new Date(o.created_at)
+      return o.created_by === 'friend' && t > since && t <= until
+    })
     if (fresh.length === 0) return null
     const freshSum = fresh.reduce((s, o) => s + amount(o), 0)
     const unpaid = all.filter((o) => o.type === 'friend' && !o.paid_to_parent_at)
@@ -175,10 +190,10 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
       )
       .join('')
     return wrap(
-      `${fresh.length === 1 ? '1 ny bestilling' : `${fresh.length} nye bestillinger`} i dag (${kr(freshSum)})`,
-      `<h1 style="font-size:20px;margin:0 0 12px">Nye bestillinger i dag, ${esc(parentName.split(' ')[0])}</h1>
+      `${fresh.length === 1 ? '1 ny bestilling' : `${fresh.length} nye bestillinger`} siden sist (${kr(freshSum)})`,
+      `<h1 style="font-size:20px;margin:0 0 12px">Nye bestillinger, ${esc(parentName.split(' ')[0])}</h1>
 <table style="width:100%;font-size:15px;border-collapse:collapse">${rows}
-<tr><td style="padding-top:8px;font-weight:700;border-top:1px solid #dedad2">I dag</td><td style="padding-top:8px;text-align:right;font-weight:700;border-top:1px solid #dedad2">${kr(freshSum)}</td></tr></table>
+<tr><td style="padding-top:8px;font-weight:700;border-top:1px solid #dedad2">Nye totalt</td><td style="padding-top:8px;text-align:right;font-weight:700;border-top:1px solid #dedad2">${kr(freshSum)}</td></tr></table>
 <p>Totalt bestilt via deg: <strong>${kr(totals?.owed ?? 0)}</strong>.${
         unpaid.length
           ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => `${esc(o.code)} ${esc(o.buyer_first_name)}`).join(', ')}.`

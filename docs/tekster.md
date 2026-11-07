@@ -137,7 +137,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | F17 | Order row | K7 · Kari / 2 × *Kaffe…* / 240 kr / 2 stk |
 | F18 | Order row tags | Egen · Ekstra · via lenken |
 | F19 | Order row actions | Betalt · Levert · Påminnelse · Gi til venn · Endre |
-| F20 | Bottom | Venner ser navnet ditt og nummeret +47 912 34 568 når de bestiller. Betalingskoden din til admin er D-1. |
+| F20 | Bottom | Venner ser navnet ditt og nummeret +47 912 34 568 når de bestiller. Svarer de på en e-post fra appen, går svaret til e-postadressen din. Betalingskoden din til admin er D-1. |
 | F21 | Locked | Bestillingene er låst. Varene er bestilt fra leverandøren. Du kan fortsatt krysse av betalt og levert. |
 | F22 | Finished | Dugnaden er avsluttet. |
 | F23 | Goods sent | Varene dine er sendt fra de ansvarlige (7. november 2026). |
@@ -253,7 +253,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | K3 | Friend paid (opt-in) | **Takk! Betalingen for K7 er registrert** · Takk, Kari! · Ola Hansen har registrert at du har betalt 240 kr for bestilling K7. · Se status på bestillingen |
 | K4 | Parent payment registered | **Betaling registrert: 1 440 kr av 1 440 kr** · Takk, Ola! · Vi har registrert betalingen din for *Kaffesalg*. Du har nå betalt **1 440 kr** av **1 440 kr**. · Det gjenstår … / Du har betalt … for mye. Vi tar kontakt. / Alt er betalt. Tusen takk! · Se dine bestillinger |
 | K5 | Goods sent | **Varene til *Kaffesalg* er på vei til deg** · Varene er på vei, Ola! · Varene for bestillingene dine er sendt til deg. Bruk pakkelisten for å fordele dem, og kryss av «levert» etter hvert. · Åpne pakkelisten · Til bestillingene dine |
-| K6 | Daily digest (20:00) | **3 nye bestillinger i dag (720 kr)** / **1 ny bestilling i dag (240 kr)** · Nye bestillinger i dag, Ola · I dag · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per. / Alle venner har betalt. · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din. |
+| K6 | Daily digest (20:00) | **3 nye bestillinger siden sist (720 kr)** / **1 ny bestilling siden sist (240 kr)** · Nye bestillinger, Ola · Nye totalt · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per. / Alle venner har betalt. · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din. |
 | K9 | Closing message (button on Oversikt) | **Kaffesalg: takk for innsatsen!** · Takk for innsatsen, Ola! · *the closing message* · Til laget totalt · 1 015 kr · Via deg: 765 kr · Se dine bestillinger |
 | K7 | Footer of K2–K6 | *Kaffesalg* er organisert av *Foreldre og supportere av Ready G2018*, ikke av klubben direkte. / *Alt overskudd går til …* / To parents: Kontakt: *Kari Nordmann* (svar på denne e-posten). To friends: Spørsmål? Svar på denne e-posten, så kommer den til Ola. |
 | K8 | Sender name | *Foreldre og supportere av Ready G2018* via ProDugnad |

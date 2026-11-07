@@ -7,6 +7,16 @@ export interface Env {
   VITE_SUPABASE_ANON_KEY?: string
 }
 
+/**
+ * Apps that build link previews (Messenger, WhatsApp, iMessage, SMS apps, Slack …).
+ * Only they get the filled-in tags; people just get the page, so a flood of visits
+ * can't use up the free Cloudflare and Supabase quotas.
+ */
+export function isPreviewBot(request: Request): boolean {
+  const ua = request.headers.get('user-agent') ?? ''
+  return /facebookexternalhit|facebot|whatsapp|twitterbot|slackbot|discordbot|linkedinbot|telegrambot|skypeuripreview|applebot|google|bingbot|embedly|pinterest|redditbot|snapchat|viber|signal|vkshare|bot|crawler|spider|preview/i.test(ua)
+}
+
 export interface Preview {
   title: string
   description: string

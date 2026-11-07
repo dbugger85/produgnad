@@ -531,3 +531,49 @@ describe('end of campaign', () => {
     }
   })
 })
+
+describe('review fixes (7 Nov)', () => {
+  test('per link: at most 10 orders with email an hour, 20 in total; one confirmation per address a day', async () => {
+    const { data: cpC } = await (await makeUser('parent-c')).client.rpc('join_campaign', {
+      p_join_code: campaign.join_code, p_name: 'Per Limit', p_phone: '93333333', p_child_first_name: 'Ida',
+    })
+    const linkC = (await service.from('campaign_parents').select('link_code').eq('id', cpC).single()).data.link_code
+    const order = (extra = {}) => anon().rpc('create_friend_order', {
+      p_link_code: linkC, p_first_name: 'Spam', p_lines: [{ product_id: tea.id, qty: 1 }], ...extra,
+    })
+    for (let i = 0; i < 10; i++) assert.ifError((await order({ p_email: 'victim@example.com', p_wants_email: true })).error)
+    expectError(await order({ p_email: 'victim@example.com', p_wants_email: true }), 'RATE_LIMIT')
+    for (let i = 0; i < 10; i++) assert.ifError((await order()).error)
+    expectError(await order(), 'RATE_LIMIT')
+    const mails = (await service.from('email_outbox').select('id').eq('kind', 'friend_order').eq('to_email', 'victim@example.com')).data
+    assert.equal(mails.length, 1)
+  })
+
+  test('names lose line breaks and control characters', async () => {
+    const r = (await anon().rpc('create_friend_order', { p_link_code: linkB, p_first_name: 'Ola\r\nBcc: x@y', p_lines: [{ product_id: tea.id, qty: 1 }] })).data
+    const o = (await service.from('orders').select('buyer_first_name').eq('status_token', r.status_token).single()).data
+    assert.ok(!/[\r\n]/.test(o.buyer_first_name))
+  })
+
+  test('deleting or shrinking an order made from extra stock puts the units back', async () => {
+    const extra = (await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_type: 'extra', p_lines: [{ product_id: tea.id, qty: 5 }] })).data
+    const qtyLeft = async () => (await service.from('order_lines').select('qty').eq('order_id', extra.id).eq('product_id', tea.id).maybeSingle()).data?.qty ?? 0
+    const given = (await parentA.client.rpc('assign_extra', { p_order_id: extra.id, p_buyer_first_name: 'Nabo', p_lines: [{ product_id: tea.id, qty: 3 }] })).data
+    assert.equal(await qtyLeft(), 2)
+    // Shrink 3 -> 1: two back
+    assert.ifError((await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_order_id: given.id, p_type: 'friend', p_buyer_first_name: 'Nabo', p_lines: [{ product_id: tea.id, qty: 1 }] })).error)
+    assert.equal(await qtyLeft(), 4)
+    // Grow 1 -> 6: needs 5 from extra but only 4 left
+    expectError(await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_order_id: given.id, p_type: 'friend', p_buyer_first_name: 'Nabo', p_lines: [{ product_id: tea.id, qty: 6 }] }), 'NOT_ENOUGH_EXTRA')
+    // Delete: the last one back
+    assert.ifError((await parentA.client.rpc('delete_order', { p_order_id: given.id })).error)
+    assert.equal(await qtyLeft(), 5)
+  })
+
+  test('the email queue: parents first, friends at most 40 a day', async () => {
+    const fnAnon = await anon().rpc('claim_outbox', { p_limit: 1 })
+    expectError(fnAnon)
+    expectError(await anon().rpc('release_outbox', { p_id: crypto.randomUUID() }))
+    expectError(await anon().rpc('visible_to_viewer', { p_visibility: 'all', p_insider: false }))
+  })
+})

@@ -39,7 +39,7 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | 0.7 | Secrets (Resend key for the email function) | Martin | set by owner 7 Nov, not yet confirmed by a real friend email |
 | 0.8 | Cloudflare Pages project `produgnad` (https://produgnad.pages.dev) + custom domain | Martin | done 7 Nov (dugnad.substitutor.no) |
 | 0.9 | DNS CNAME `dugnad` → `produgnad.pages.dev` | Martin | done 7 Nov |
-| 0.10 | Push database, deploy function, first admin, test on phone | Claude | database, function, first admin (martin.prokosch@gmail.com) done 7 Nov |
+| 0.10 | Push database, deploy function, first admin, test on phone | Claude | database, function, first admin (the owner) done 7 Nov |
 
 ## Phase 1 (MVP): built 7 November 2026, not yet tested end to end
 
@@ -72,3 +72,8 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 - **Reading Vipps screenshots** (brief §3.6): upload screenshots of the Vipps list, OCR in the browser with Tesseract.js, suggested matches by code and amount, confirmed with a tap. Images never leave the phone.
 
 - **Picture of the child with a campaign banner** (owner, 7 Nov 2026): the parent picks a photo of their child, and the app puts the campaign's banner on it (banner text/design set by the admin under Oppsett), ready to share on Facebook/Instagram/Messenger. The photo must never touch the server: it is combined in the browser (`<canvas>`) and only saved or shared from the phone (download / `navigator.share` with a file). Nothing is uploaded or stored.
+
+## Security review (Fable, 7 Nov 2026)
+
+Fixed the same day (migration `20261108000008_review_fixes.sql`, email functions, Pages Functions): email flooding through order links (per link per hour: 20 orders, 10 with email confirmation; 200 friend orders an hour in total; one confirmation per address per day), the email queue (parents' emails first, friends' at most 40 of 90 a day, quota errors go back in the queue, morning round at 06:00 UTC), new functions no longer callable by everyone by default (plus a pgTAP guard), extra stock returned when a given-away order is deleted or shrunk, digest covers orders since the last digest, same-moment double submits, locking in assign_extra, link previews only for preview apps, control characters stripped from names, quoted sender name, no Reply-To when admins are hidden, owner's email removed from this file.
+Left on purpose: captcha ("not a robot") on login and ordering. The owner lowers Supabase's login email limit instead.
