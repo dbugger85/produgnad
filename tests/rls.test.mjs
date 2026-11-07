@@ -368,3 +368,23 @@ describe('admin', () => {
     expectError(await admin.client.rpc('set_admin', { p_email: 'nobody@example.com', p_is_admin: true }), 'UNKNOWN_USER')
   })
 })
+
+describe('daily digest', () => {
+  test('only the service role can queue digests', async () => {
+    expectError(await anon().rpc('queue_daily_digests'))
+    expectError(await parentA.client.rpc('queue_daily_digests'))
+    expectError(await admin.client.rpc('queue_daily_digests'))
+  })
+
+  test('queues one digest per parent with friend orders today, never twice', async () => {
+    const first = await service.rpc('queue_daily_digests')
+    assert.ifError(first.error)
+    const rows = (await service.from('email_outbox').select('campaign_parent_id').eq('kind', 'digest').in('campaign_parent_id', [cpA, cpB])).data
+    // Both parents got friend orders through their link in these tests
+    assert.equal(rows.filter((r) => r.campaign_parent_id === cpA).length, 1)
+    assert.equal(rows.filter((r) => r.campaign_parent_id === cpB).length, 1)
+    await service.rpc('queue_daily_digests')
+    const again = (await service.from('email_outbox').select('id').eq('kind', 'digest').in('campaign_parent_id', [cpA, cpB])).data
+    assert.equal(again.length, 2)
+  })
+})

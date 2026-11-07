@@ -1,0 +1,22 @@
+name: Daily digest and keep-alive
+
+# Every evening: sends parents a summary of today's orders (from 20:00 Oslo time),
+# sends any emails still waiting, and keeps the free Supabase project from pausing.
+# Two times because GitHub uses UTC: 18:00 UTC is 20:00 in Norwegian summer, 19:00 UTC in winter.
+# The function itself only sends digests from 20:00 Oslo time, and never twice the same day.
+# Note: GitHub switches scheduled jobs off after 60 days without commits; a commit or
+# "Enable workflow" on the Actions page turns it back on.
+on:
+  schedule:
+    - cron: '0 18 * * *'
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call daily-digest
+        run: |
+          curl --fail-with-body -sS -X POST \
+            https://nnqpdzqzwzhogcbzriyn.supabase.co/functions/v1/daily-digest

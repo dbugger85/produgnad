@@ -54,7 +54,7 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 
 ## Still to do
 
-- Phase 2: daily parent digest + keep-alive cron (GitHub Actions), packing list per parent (print), assign extra stock to named buyers
+- Phase 2: packing list per parent (print), assign extra stock to named buyers (digest + keep-alive done 7 Nov: `daily-digest` function + `.github/workflows/daily.yml`)
 - Phase 3: screenshot matching (Tesseract.js), closing message by email, ledger CSV, data deletion, link previews
 
 ## Log

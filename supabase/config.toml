@@ -426,3 +426,6 @@ enabled = true
 
 [functions.send-emails]
 verify_jwt = false
+
+[functions.daily-digest]
+verify_jwt = false

@@ -127,6 +127,48 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
     )
   }
 
+  if (row.kind === 'digest') {
+    const osloDay = (d: string | Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Oslo' }).format(new Date(d))
+    const today = osloDay(new Date())
+    const { data: orders } = await db
+      .from('orders')
+      .select('code, type, buyer_first_name, created_by, created_at, paid_to_parent_at, order_lines(qty, unit_price, products(name))')
+      .eq('campaign_parent_id', cp.id)
+      .is('deleted_at', null)
+      .order('created_at')
+    type Line = { qty: number; unit_price: number; products: { name: string } }
+    type O = { code: string; type: string; buyer_first_name: string; created_by: string; created_at: string; paid_to_parent_at: string | null; order_lines: Line[] }
+    const all = (orders ?? []) as O[]
+    const amount = (o: O) => o.order_lines.reduce((s, l) => s + l.qty * Number(l.unit_price), 0)
+    const fresh = all.filter((o) => o.created_by === 'friend' && osloDay(o.created_at) === today)
+    if (fresh.length === 0) return null
+    const freshSum = fresh.reduce((s, o) => s + amount(o), 0)
+    const unpaid = all.filter((o) => o.type === 'friend' && !o.paid_to_parent_at)
+    const unpaidSum = unpaid.reduce((s, o) => s + amount(o), 0)
+    const { data: totals } = await db.from('v_parent_totals').select('*').eq('campaign_parent_id', cp.id).single()
+    const rows = fresh
+      .map(
+        (o) =>
+          `<tr><td style="padding:4px 0"><strong>${esc(o.code)}</strong> ${esc(o.buyer_first_name)}<br><span style="color:#5d6472;font-size:13px">${o.order_lines
+            .map((l) => `${l.qty} × ${esc(l.products.name)}`)
+            .join(', ')}</span></td><td style="text-align:right;vertical-align:top;padding:4px 0">${kr(amount(o))}</td></tr>`,
+      )
+      .join('')
+    return wrap(
+      `${fresh.length === 1 ? '1 ny bestilling' : `${fresh.length} nye bestillinger`} i dag (${kr(freshSum)})`,
+      `<h1 style="font-size:20px;margin:0 0 12px">Nye bestillinger i dag, ${esc(parentName.split(' ')[0])}</h1>
+<table style="width:100%;font-size:15px;border-collapse:collapse">${rows}
+<tr><td style="padding-top:8px;font-weight:700;border-top:1px solid #dedad2">I dag</td><td style="padding-top:8px;text-align:right;font-weight:700;border-top:1px solid #dedad2">${kr(freshSum)}</td></tr></table>
+<p>Totalt bestilt via deg: <strong>${kr(totals?.owed ?? 0)}</strong>.${
+        unpaid.length
+          ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => esc(o.buyer_first_name)).join(', ')}.`
+          : '<br>Alle kunder har betalt.'
+      }</p>
+${button(`${APP_URL}/forelder/${cp.id}`, 'Åpne bestillingene')}
+<p style="font-size:13px;color:#5d6472">Du får denne e-posten bare på dager med nye bestillinger via lenken din.</p>`,
+    )
+  }
+
   if (row.kind === 'goods_sent') {
     return wrap(
       `Varene til ${campaign.name} er på vei til deg`,

@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { Footer } from './components/Footer'
 import { RequireAdmin, RequireLogin } from './components/Guards'
 import { ErrorBox, Loading, Page } from './components/ui'
 import { AuthProvider } from './lib/auth'
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="*" element={<Page><ErrorBox>Fant ikke siden.</ErrorBox></Page>} />
           </Routes>
         </Suspense>
+        <Footer />
       </BrowserRouter>
     </AuthProvider>
   )
