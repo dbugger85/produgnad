@@ -1,8 +1,12 @@
 # ProDugnad: all texts
 
-Every text in the app, the emails and the link previews, as of 7 November 2026. Numbered so changes can be referred to ("#23 → …"). Words in *italics* are filled in by the app; the examples use Ola Hansen, Emma, Kari Nordmann and Ready G2018.
+Every text in the app, the emails and the link previews, as of 7 November 2026, with screenshots from the test data (tap a picture to see it full size). Numbered so changes can be referred to ("#23 → …"). Words in *italics* are filled in by the app; the examples use Ola Hansen, Emma, Kari Nordmann and Ready G2018.
 
 ## A. Friend order page (`/k/…`), the page most people see
+
+<p><a href="screenshots/a-bestillingsside.jpg"><img src="screenshots/a-bestillingsside.jpg" width="230" alt="Bestillingssiden" title="Bestillingssiden"></a> <a href="screenshots/a-din-bestilling-tidligere.jpg"><img src="screenshots/a-din-bestilling-tidligere.jpg" width="230" alt="Tidligere bestilling på samme telefon (A19)" title="Tidligere bestilling på samme telefon (A19)"></a></p>
+
+<sub>Bestillingssiden · Tidligere bestilling på samme telefon (A19)</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -28,6 +32,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 ## B. After ordering
 
+<p><a href="screenshots/b-etter-bestilling.jpg"><img src="screenshots/b-etter-bestilling.jpg" width="230" alt="Etter bestilling" title="Etter bestilling"></a></p>
+
+<sub>Etter bestilling</sub>
+
 | # | Where | Text |
 |---|---|---|
 | B1 | Heading | Takk, Kari! Bestillingen din er K7. |
@@ -39,6 +47,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 | B7 | Button | Bestill mer |
 
 ## C. Order status page (`/status/…`)
+
+<p><a href="screenshots/c-status.jpg"><img src="screenshots/c-status.jpg" width="230" alt="Statussiden" title="Statussiden"></a></p>
+
+<sub>Statussiden</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -52,6 +64,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 ## D. Shown at the bottom of public pages (transparency)
 
+<p><a href="screenshots/d-apenhet.jpg"><img src="screenshots/d-apenhet.jpg" width="230" alt="Åpenhet nederst på siden" title="Åpenhet nederst på siden"></a></p>
+
+<sub>Åpenhet nederst på siden</sub>
+
 | # | Where | Text |
 |---|---|---|
 | D1 | Organizer | Salget er organisert av **Foreldre og supportere av Ready G2018**, ikke av klubben direkte. |
@@ -62,6 +78,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 | D6 | Footer on every page | ProDugnad · Laget av samme folk som **Substitutor**, rettferdige bytter i barneidrett |
 
 ## E. Login and sign-up
+
+<p><a href="screenshots/e-forside.jpg"><img src="screenshots/e-forside.jpg" width="230" alt="Forside (ikke innlogget)" title="Forside (ikke innlogget)"></a> <a href="screenshots/e-logg-inn.jpg"><img src="screenshots/e-logg-inn.jpg" width="230" alt="Logg inn" title="Logg inn"></a> <a href="screenshots/e-logg-inn-kode.jpg"><img src="screenshots/e-logg-inn-kode.jpg" width="230" alt="Etter at koden er sendt" title="Etter at koden er sendt"></a> <a href="screenshots/e-bli-med-for-innlogging.jpg"><img src="screenshots/e-bli-med-for-innlogging.jpg" width="230" alt="Påmelding før innlogging" title="Påmelding før innlogging"></a> <a href="screenshots/e-bli-med-skjema.jpg"><img src="screenshots/e-bli-med-skjema.jpg" width="230" alt="Påmelding etter innlogging" title="Påmelding etter innlogging"></a></p>
+
+<sub>Forside (ikke innlogget) · Logg inn · Etter at koden er sendt · Påmelding før innlogging · Påmelding etter innlogging</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -93,6 +113,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 ## F. Parent page (`/forelder/…`)
 
+<p><a href="screenshots/f-forelderside.jpg"><img src="screenshots/f-forelderside.jpg" width="230" alt="Forelderside" title="Forelderside"></a> <a href="screenshots/f-qr-kode.jpg"><img src="screenshots/f-qr-kode.jpg" width="230" alt="QR-kode" title="QR-kode"></a> <a href="screenshots/f-forelderside-varer-sendt.jpg"><img src="screenshots/f-forelderside-varer-sendt.jpg" width="230" alt="Etter at varene er sendt og betalt" title="Etter at varene er sendt og betalt"></a></p>
+
+<sub>Forelderside · QR-kode · Etter at varene er sendt og betalt</sub>
+
 | # | Where | Text |
 |---|---|---|
 | F1 | Box title | Din bestillingslenke |
@@ -122,6 +146,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 ## G. Parent: new/edit order, give extra stock, packing list
 
+<p><a href="screenshots/g-ny-bestilling.jpg"><img src="screenshots/g-ny-bestilling.jpg" width="230" alt="Ny bestilling" title="Ny bestilling"></a> <a href="screenshots/g-gi-til-kunde.jpg"><img src="screenshots/g-gi-til-kunde.jpg" width="230" alt="Gi ekstra til kunde" title="Gi ekstra til kunde"></a> <a href="screenshots/g-pakkeliste.jpg"><img src="screenshots/g-pakkeliste.jpg" width="230" alt="Pakkeliste" title="Pakkeliste"></a></p>
+
+<sub>Ny bestilling · Gi ekstra til kunde · Pakkeliste</sub>
+
 | # | Where | Text |
 |---|---|---|
 | G1 | Title | Ny bestilling / Endre K7 |
@@ -143,6 +171,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 ## H. Admin: start page and Innstillinger
 
+<p><a href="screenshots/h-administrasjon.jpg"><img src="screenshots/h-administrasjon.jpg" width="230" alt="Administrasjon" title="Administrasjon"></a> <a href="screenshots/h-innstillinger.jpg"><img src="screenshots/h-innstillinger.jpg" width="230" alt="Innstillinger" title="Innstillinger"></a></p>
+
+<sub>Administrasjon · Innstillinger</sub>
+
 | # | Where | Text |
 |---|---|---|
 | H1 | Title + link | Administrasjon · Innstillinger |
@@ -161,6 +193,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 | H14 | Admin only | Denne siden er bare for administratorer. |
 
 ## I. Admin: a campaign
+
+<p><a href="screenshots/i-oversikt.jpg"><img src="screenshots/i-oversikt.jpg" width="230" alt="Oversikt" title="Oversikt"></a> <a href="screenshots/i-foreldre.jpg"><img src="screenshots/i-foreldre.jpg" width="230" alt="Foreldre (åpnet)" title="Foreldre (åpnet)"></a> <a href="screenshots/i-bestillinger.jpg"><img src="screenshots/i-bestillinger.jpg" width="230" alt="Bestillinger" title="Bestillinger"></a> <a href="screenshots/i-varer.jpg"><img src="screenshots/i-varer.jpg" width="230" alt="Varer" title="Varer"></a> <a href="screenshots/i-vare-endre.jpg"><img src="screenshots/i-vare-endre.jpg" width="230" alt="Endre vare med bilder" title="Endre vare med bilder"></a> <a href="screenshots/i-oppsett.jpg"><img src="screenshots/i-oppsett.jpg" width="230" alt="Oppsett" title="Oppsett"></a> <a href="screenshots/i-alle-pakkelister.jpg"><img src="screenshots/i-alle-pakkelister.jpg" width="230" alt="Alle pakkelister" title="Alle pakkelister"></a></p>
+
+<sub>Oversikt · Foreldre (åpnet) · Bestillinger · Varer · Endre vare med bilder · Oppsett · Alle pakkelister</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -191,6 +227,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 ## J. Default share texts (new campaigns; admins can change them under Oppsett)
 
+<p><a href="screenshots/j-delingstekst-kort.jpg"><img src="screenshots/j-delingstekst-kort.jpg" width="230" alt="Kort tekst (SMS)" title="Kort tekst (SMS)"></a> <a href="screenshots/j-delingstekst-lang.jpg"><img src="screenshots/j-delingstekst-lang.jpg" width="230" alt="Lang tekst (Facebook)" title="Lang tekst (Facebook)"></a></p>
+
+<sub>Kort tekst (SMS) · Lang tekst (Facebook)</sub>
+
 | # | Where | Text |
 |---|---|---|
 | J1 | Short (SMS) | Dugnaden du faktisk trenger! {barn} og resten av {lag} selger {produkter} til lagkassen. Bestill innen {frist} her: {lenke} Tusen takk for støtten! |
@@ -199,6 +239,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 | J4 | Payment reminder | Hei! Bestillingen din {kode} er {beløp}. Vipps til {vipps} med melding {kode}. Takk! |
 
 ## K. Emails
+
+<p><a href="screenshots/k-epost-innlogging.jpg"><img src="screenshots/k-epost-innlogging.jpg" width="230" alt="K1 Innlogging" title="K1 Innlogging"></a> <a href="screenshots/k-epost-friend-order.jpg"><img src="screenshots/k-epost-friend-order.jpg" width="230" alt="K2 Bestilling" title="K2 Bestilling"></a> <a href="screenshots/k-epost-friend-paid.jpg"><img src="screenshots/k-epost-friend-paid.jpg" width="230" alt="K3 Betalt" title="K3 Betalt"></a> <a href="screenshots/k-epost-parent-payment.jpg"><img src="screenshots/k-epost-parent-payment.jpg" width="230" alt="K4 Betaling registrert" title="K4 Betaling registrert"></a> <a href="screenshots/k-epost-goods-sent.jpg"><img src="screenshots/k-epost-goods-sent.jpg" width="230" alt="K5 Varer sendt" title="K5 Varer sendt"></a> <a href="screenshots/k-epost-digest.jpg"><img src="screenshots/k-epost-digest.jpg" width="230" alt="K6 Daglig oppsummering" title="K6 Daglig oppsummering"></a></p>
+
+<sub>K1 Innlogging · K2 Bestilling · K3 Betalt · K4 Betaling registrert · K5 Varer sendt · K6 Daglig oppsummering</sub>
 
 | # | Email | Subject / text |
 |---|---|---|
@@ -213,6 +257,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 ## L. Link previews (Messenger, WhatsApp, SMS)
 
+<p><a href="screenshots/l-forhandsvisning-bestilling.jpg"><img src="screenshots/l-forhandsvisning-bestilling.jpg" width="230" alt="L1 Bestillingslenke" title="L1 Bestillingslenke"></a> <a href="screenshots/l-forhandsvisning-pamelding.jpg"><img src="screenshots/l-forhandsvisning-pamelding.jpg" width="230" alt="L2 Påmeldingslenke" title="L2 Påmeldingslenke"></a> <a href="screenshots/l-forhandsvisning-standard.jpg"><img src="screenshots/l-forhandsvisning-standard.jpg" width="230" alt="L3 Alt annet" title="L3 Alt annet"></a></p>
+
+<sub>L1 Bestillingslenke · L2 Påmeldingslenke · L3 Alt annet</sub>
+
 | # | Link | Title / text |
 |---|---|---|
 | L1 | Order link | **Kaffesalg – bestill via Ola Hansen** · Foreldre og supportere av Ready G2018. Bestill via Ola Hansen, forelder til Emma. *Alt overskudd …* 50 kr av hver kaffe, filtermalt 500 g går til laget. |
@@ -221,6 +269,10 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 | L4 | Default picture | PRODUGNAD · Bestill og støtt laget. Enkelt, uten innlogging, og du betaler med Vipps. |
 
 ## M. Error messages
+
+<p><a href="screenshots/m-feil-uten-navn.jpg"><img src="screenshots/m-feil-uten-navn.jpg" width="230" alt="Bestill uten navn" title="Bestill uten navn"></a> <a href="screenshots/m-feil-lenke.jpg"><img src="screenshots/m-feil-lenke.jpg" width="230" alt="Feil lenke" title="Feil lenke"></a> <a href="screenshots/m-side-finnes-ikke.jpg"><img src="screenshots/m-side-finnes-ikke.jpg" width="230" alt="Side finnes ikke" title="Side finnes ikke"></a></p>
+
+<sub>Bestill uten navn · Feil lenke · Side finnes ikke</sub>
 
 | # | When | Text |
 |---|---|---|

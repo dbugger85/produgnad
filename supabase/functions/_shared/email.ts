@@ -161,7 +161,7 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
 <tr><td style="padding-top:8px;font-weight:700;border-top:1px solid #dedad2">I dag</td><td style="padding-top:8px;text-align:right;font-weight:700;border-top:1px solid #dedad2">${kr(freshSum)}</td></tr></table>
 <p>Totalt bestilt via deg: <strong>${kr(totals?.owed ?? 0)}</strong>.${
         unpaid.length
-          ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => esc(o.buyer_first_name)).join(', ')}.`
+          ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => `${esc(o.code)} ${esc(o.buyer_first_name)}`).join(', ')}.`
           : '<br>Alle kunder har betalt.'
       }</p>
 ${button(`${APP_URL}/forelder/${cp.id}`, 'Åpne bestillingene')}
