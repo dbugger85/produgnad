@@ -99,7 +99,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         <Field label="Navn på dugnaden">
           <Input value={form.name} onChange={(e) => set('name', e.target.value)} required />
         </Field>
-        <Field label="Laget" hint="For eksempel G2012. Brukes som {lag} i tekstene">
+        <Field label="Laget" hint="For eksempel Ready G2018. Brukes som {lag} i tekstene">
           <Input value={form.team_name} onChange={(e) => set('team_name', e.target.value)} />
         </Field>
         <Field label="Hvem som organiserer" hint="Vises på alle sider. Skriv at det er foreldre/supportere, ikke klubben">

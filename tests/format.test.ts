@@ -37,10 +37,10 @@ test('days until deadline counts in Oslo time', () => {
 test('templates fill known placeholders and keep unknown ones', () => {
   const out = fillTemplate('Hei! {barn} i {lag} selger {produkter}. {ukjent} {lenke}', {
     barn: 'Emma',
-    lag: 'G2012',
+    lag: 'Ready G2018',
     produkter: 'kaffe',
     lenke: 'https://x/k/ABC',
   })
-  assert.equal(out, 'Hei! Emma i G2012 selger kaffe. {ukjent} https://x/k/ABC')
+  assert.equal(out, 'Hei! Emma i Ready G2018 selger kaffe. {ukjent} https://x/k/ABC')
   assert.equal(fillTemplate('{beløp} til {vipps}', { beløp: '240 kr', vipps: '912 34 567' }), '240 kr til 912 34 567')
 })

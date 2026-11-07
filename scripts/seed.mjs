@@ -77,15 +77,15 @@ const { data: campaign, error: cErr } = await admin
   .from('campaigns')
   .insert({
     name: 'Kaffesalg høsten 2026',
-    team_name: 'G2012',
-    organizer_label: 'Foreldre og supportere av G2012',
+    team_name: 'Ready G2018',
+    organizer_label: 'Foreldre og supportere av Ready G2018',
     purpose_text: 'Alt overskudd går til cupavgifter og reiser for laget i 2027.',
     target_amount: 30000,
     deadline,
     admin_vipps_name: 'Kari Nordmann',
     admin_vipps_phone: '91234567',
     contact_admin_user_id: adminId,
-    join_code: 'G2012KAF',
+    join_code: 'G2018KAF',
     closing_message: '',
   })
   .select()
@@ -116,9 +116,9 @@ for (const { color, ...p } of productRows) {
 }
 
 const ola = await as('ola@example.com')
-const olaCp = (await ola.rpc('join_campaign', { p_join_code: 'G2012KAF', p_name: 'Ola Hansen', p_phone: '91234568', p_child_first_name: 'Emma' })).data
+const olaCp = (await ola.rpc('join_campaign', { p_join_code: 'G2018KAF', p_name: 'Ola Hansen', p_phone: '91234568', p_child_first_name: 'Emma' })).data
 const lise = await as('lise@example.com')
-const liseCp = (await lise.rpc('join_campaign', { p_join_code: 'G2012KAF', p_name: 'Lise Berg', p_phone: '92345678', p_child_first_name: 'Jonas' })).data
+const liseCp = (await lise.rpc('join_campaign', { p_join_code: 'G2018KAF', p_name: 'Lise Berg', p_phone: '92345678', p_child_first_name: 'Jonas' })).data
 
 const { data: links } = await admin.from('campaign_parents').select('id, link_code, payment_code').in('id', [olaCp, liseCp])
 const olaLink = links.find((l) => l.id === olaCp)
@@ -152,7 +152,7 @@ await lise.rpc('save_order', {
 console.log(`
 Seeded dummy campaign "${campaign.name}".
   Friend order page (Ola):  http://localhost:5173/k/${olaLink.link_code}
-  Parent sign-up:           http://localhost:5173/bli-med/G2012KAF
+  Parent sign-up:           http://localhost:5173/bli-med/G2018KAF
   Log in as admin@example.com, ola@example.com or lise@example.com.
   The login code arrives in the local mail viewer: http://127.0.0.1:54324
 `)
