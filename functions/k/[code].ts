@@ -1,42 +1,19 @@
 // /k/<link code>: a parent's order link. Preview with the campaign, the parent and the first product picture.
-import { defaultPictureFor, defaultPreviewUrl } from '../../src/lib/defaultPictures'
-import { imageUrl, isPreviewBot, kr, rpc, withPreview, type Env } from '../../functions-lib/preview'
-
-interface LinkPage {
-  campaign: { name: string; organizer_label: string; purpose_text: string }
-  parent: { name: string; child_first_name: string }
-  products: { name: string; price: number; to_team_amount: number; images: { path: string; width: number | null; height: number | null }[] }[]
-}
+import { buildLinkPreview, type PreviewInput } from '../../src/lib/linkPreview'
+import { imageUrl, isPreviewBot, rpc, withPreview, type Env } from '../../functions-lib/preview'
 
 export const onRequest = async (context: { request: Request; env: Env; params: { code: string }; next: () => Promise<Response> }) => {
   const response = await context.next()
   if (!isPreviewBot(context.request)) return response
-  const data = await rpc<LinkPage>(context.env, 'public_campaign_by_link', { p_link_code: context.params.code })
+  const data = await rpc<PreviewInput>(context.env, 'public_campaign_by_link', { p_link_code: context.params.code })
   if (!data?.campaign) return response
 
-  const { campaign, parent, products } = data
-  const via = parent.child_first_name ? `${parent.name}, forelder til ${parent.child_first_name}` : parent.name
-  const first = products.find((p) => p.images.length > 0)
-  const image = first?.images[0]
-  const perUnit = products.find((p) => p.to_team_amount > 0)
-  const description = [
-    `${campaign.organizer_label}. Bestill via ${via}.`,
-    campaign.purpose_text,
-    perUnit ? `${kr(perUnit.to_team_amount)} av hver ${perUnit.name.toLowerCase()} går til laget.` : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
-
-  // No uploaded JPEG/PNG: a standard picture (coffee, tea, socks, toilet paper) if the first product has one
-  const own = image && /\.(jpe?g|png)$/i.test(image.path) ? image : undefined
-  const standard = !own ? products.map((p) => defaultPictureFor(p.name)).find(Boolean) : null
-
+  const p = buildLinkPreview(data)
   return withPreview(response, context.request.url, {
-    title: `${campaign.name} – bestill via ${parent.name}`,
-    description,
-    // Only JPEG/PNG: some apps (WhatsApp) don't show WebP previews. Otherwise the default picture.
-    image: own ? imageUrl(context.env, own.path) : standard ? new URL(defaultPreviewUrl(standard), context.request.url).href : undefined,
-    imageWidth: own ? (own.width ?? undefined) : standard ? 1200 : undefined,
-    imageHeight: own ? (own.height ?? undefined) : standard ? 630 : undefined,
+    title: p.title,
+    description: p.description,
+    image: !p.image ? undefined : p.image.kind === 'upload' ? imageUrl(context.env, p.image.path) : new URL(p.image.path, context.request.url).href,
+    imageWidth: p.image?.width,
+    imageHeight: p.image?.height,
   })
 }

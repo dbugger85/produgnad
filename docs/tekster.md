@@ -111,9 +111,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 ## F. Parent page (`/forelder/…`)
 
-<p><a href="screenshots/f-forelderside.jpg"><img src="screenshots/f-forelderside.jpg" width="230" alt="Forelderside" title="Forelderside"></a> <a href="screenshots/f-qr-kode.jpg"><img src="screenshots/f-qr-kode.jpg" width="230" alt="QR-kode" title="QR-kode"></a> <a href="screenshots/f-forelderside-varer-sendt.jpg"><img src="screenshots/f-forelderside-varer-sendt.jpg" width="230" alt="Etter at varene er sendt og betalt" title="Etter at varene er sendt og betalt"></a></p>
+<p><a href="screenshots/f-forelderside.jpg"><img src="screenshots/f-forelderside.jpg" width="230" alt="Forelderside" title="Forelderside"></a> <a href="screenshots/f-delingskort.jpg"><img src="screenshots/f-delingskort.jpg" width="230" alt="Forhåndsvisning av lenken" title="Forhåndsvisning av lenken"></a> <a href="screenshots/f-qr-kode.jpg"><img src="screenshots/f-qr-kode.jpg" width="230" alt="QR-kode" title="QR-kode"></a> <a href="screenshots/f-forelderside-varer-sendt.jpg"><img src="screenshots/f-forelderside-varer-sendt.jpg" width="230" alt="Etter at varene er sendt og betalt" title="Etter at varene er sendt og betalt"></a></p>
 
-<sub>Forelderside · QR-kode · Etter at varene er sendt og betalt</sub>
+<sub>Forelderside · Forhåndsvisning av lenken · QR-kode · Etter at varene er sendt og betalt</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -124,6 +124,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | F4 | Box title | Del med venner og familie |
 | F5 | Choice | Kort (SMS) · Lang (Facebook) |
 | F6 | Buttons | Del · Kopier / Kopiert ✓ |
+| F6b | Under the share text | *a chat card with the link, picture, title and text as Messenger/WhatsApp show it* · Slik ser lenken ut når den deles |
 | F7 | Shown 3 days before deadline | Påminnelse om fristen |
 | F8 | Box title | Oppgjør med de ansvarlige |
 | F9 | Rows | Totalt bestilt via deg · Betalt til admin · Gjenstår · Ubetalt fra venner |

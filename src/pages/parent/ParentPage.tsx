@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { CopyButton } from '../../components/CopyButton'
 import { ProgressBar } from '../../components/ProgressBar'
+import { SharePreview } from '../../components/SharePreview'
 import { ShareBox } from '../../components/ShareBox'
 import { Badge, Button, Card, ErrorBox, Loading, Notice, Page, TopBar } from '../../components/ui'
 import { VippsSimple } from '../../components/VippsSimple'
@@ -118,6 +119,21 @@ export default function ParentPage() {
             </Button>
           </div>
           <ShareBox text={fill(campaign, shareKind, vars)} rows={shareKind === 'short' ? 5 : 10} />
+          {page && (
+            <SharePreview
+              link={link}
+              input={{
+                campaign: page.campaign,
+                parent: { name: cp.profiles.name, child_first_name: cp.child_first_name },
+                // The apps only see what everyone may see
+                products: page.products.map((p) => ({
+                  name: p.name,
+                  to_team_amount: campaign.contribution_visibility === 'all' ? p.to_team_amount : null,
+                  images: p.images,
+                })),
+              }}
+            />
+          )}
           {showReminder && (
             <div className="space-y-2 border-t border-line pt-3">
               <h3 className="font-semibold">Påminnelse om fristen</h3>
