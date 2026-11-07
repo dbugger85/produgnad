@@ -28,4 +28,5 @@ Read `docs/brief.md` (the spec) and `docs/plan.md` (approved plan, decisions log
 - `src/pages/FriendOrderPage.tsx` the page most people see
 - `src/pages/parent/`, `src/pages/admin/`
 - `functions/` (Cloudflare Pages Functions) + `functions-lib/preview.ts`: link previews (Open Graph) for `/k/<code>` and `/bli-med/<code>`, filled in before the app loads; default tags and `og-default.png` in `index.html`. Test locally with `npx wrangler pages dev dist`
+- `supabase/functions/invite-admin`: admins add an admin by email (creates the user if needed, sets is_admin, queues an `admin_invite` email); checks the caller's JWT itself (deployed with --no-verify-jwt)
 - `supabase/functions/daily-digest` + `.github/workflows/daily.yml`: parent digest at 20:00 Oslo time and keep-alive; `_shared/outbox.ts` sends the email queue

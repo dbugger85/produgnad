@@ -13,7 +13,24 @@ export interface Rendered {
   text: string
 }
 
+// Not tied to a campaign: someone was made admin
+function renderAdminInvite(row: OutboxRow & { to_email?: string }): Rendered {
+  const login = `${APP_URL}/logg-inn?e=${encodeURIComponent(row.to_email ?? '')}`
+  const html = `<!doctype html><html lang="nb"><body style="margin:0;background:#f1eee8;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#121a26">
+<div style="max-width:560px;margin:0 auto;padding:24px 16px">
+<p style="margin:0 0 12px"><img src="${APP_URL}/email-logo.png" width="180" height="48" alt="ProDugnad" style="display:block;border:0"></p>
+<div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e7e5e4">
+<h1 style="font-size:20px;margin:0 0 12px">Du er lagt til som administrator</h1>
+<p>Du kan nå sette opp dugnader, varer og foreldre, og registrere betalinger i ProDugnad.</p>
+<p>Logg inn med denne e-postadressen. Du får en kode på e-post, ikke noe passord.</p>
+${button(login, 'Logg inn')}
+<p style="font-size:13px;color:#57534e">Fyll gjerne inn navn, rolle og telefon under Innstillinger når du er logget inn.</p>
+</div></div></body></html>`
+  return { fromName: 'ProDugnad', replyTo: null, subject: 'Du er lagt til som administrator i ProDugnad', html, text: htmlToText(html) }
+}
+
 interface OutboxRow {
+  to_email?: string
   created_at?: string
   kind: string
   campaign_id: string | null
@@ -72,6 +89,7 @@ function button(href: string, label: string) {
 }
 
 export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<Rendered | null> {
+  if (row.kind === 'admin_invite') return renderAdminInvite(row)
   const { data: campaign } = await db.from('campaigns').select('*').eq('id', row.campaign_id).single()
   if (!campaign) return null
   const { data: contact } = campaign.contact_admin_user_id

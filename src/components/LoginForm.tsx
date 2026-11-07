@@ -8,7 +8,7 @@ import { Button, ErrorBox, Field, Input } from './ui'
  * the code works even when the link opens in another browser (e.g. inside Messenger).
  */
 export function LoginForm({ next, onDone }: { next: string; onDone?: () => void }) {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(() => new URLSearchParams(window.location.search).get('e') ?? '')
   const [sent, setSent] = useState(false)
   const [code, setCode] = useState('')
   const [busy, setBusy] = useState(false)

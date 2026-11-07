@@ -21,6 +21,7 @@ const messages: Record<string, string> = {
   CAMPAIGN_NOT_CLOSED: 'Dugnaden må være avsluttet først.',
   NO_CLOSING_MESSAGE: 'Skriv en avslutningsmelding under Oppsett først.',
   UNKNOWN_CAMPAIGN: 'Fant ikke dugnaden.',
+  CREATE_FAILED: 'Klarte ikke å opprette brukeren. Prøv igjen.',
   NOT_EXTRA_ORDER: 'Dette er ikke en ekstrabestilling.',
   NOT_ENOUGH_EXTRA: 'Du har ikke så mange igjen av ekstrabestillingen.',
 }

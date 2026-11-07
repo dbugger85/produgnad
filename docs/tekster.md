@@ -187,8 +187,8 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | H9 | Tick box | Vis telefonnummeret mitt sammen med navnet |
 | H10 | Box title | Administratorer |
 | H11 | Admin row | *Kari Nordmann* · kasserer · telefon skjult · *e-post* · Fjern |
-| H12 | Field + hint | Legg til admin (e-post) · Personen må ha logget inn én gang først, på /logg-inn |
-| H13 | Button | Legg til |
+| H12 | Field + hint | Legg til admin (e-post) · Personen får en e-post med lenke for å logge inn |
+| H13 | Button + result | Legg til og send invitasjon · *ola@…* er lagt til og har fått en e-post. / *ola@…* var allerede admin. Vi har sendt en ny e-post. |
 | H14 | Admin only | Denne siden er bare for administratorer. |
 
 ## I. Admin: a campaign
@@ -242,9 +242,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 ## K. Emails
 
-<p><a href="screenshots/k-epost-innlogging.jpg"><img src="screenshots/k-epost-innlogging.jpg" width="230" alt="K1 Innlogging" title="K1 Innlogging"></a> <a href="screenshots/k-epost-friend-order.jpg"><img src="screenshots/k-epost-friend-order.jpg" width="230" alt="K2 Bestilling" title="K2 Bestilling"></a> <a href="screenshots/k-epost-friend-paid.jpg"><img src="screenshots/k-epost-friend-paid.jpg" width="230" alt="K3 Betalt" title="K3 Betalt"></a> <a href="screenshots/k-epost-parent-payment.jpg"><img src="screenshots/k-epost-parent-payment.jpg" width="230" alt="K4 Betaling registrert" title="K4 Betaling registrert"></a> <a href="screenshots/k-epost-goods-sent.jpg"><img src="screenshots/k-epost-goods-sent.jpg" width="230" alt="K5 Varer sendt" title="K5 Varer sendt"></a> <a href="screenshots/k-epost-digest.jpg"><img src="screenshots/k-epost-digest.jpg" width="230" alt="K6 Daglig oppsummering" title="K6 Daglig oppsummering"></a> <a href="screenshots/k-epost-closing.jpg"><img src="screenshots/k-epost-closing.jpg" width="230" alt="K9 Avslutning" title="K9 Avslutning"></a></p>
+<p><a href="screenshots/k-epost-innlogging.jpg"><img src="screenshots/k-epost-innlogging.jpg" width="230" alt="K1 Innlogging" title="K1 Innlogging"></a> <a href="screenshots/k-epost-friend-order.jpg"><img src="screenshots/k-epost-friend-order.jpg" width="230" alt="K2 Bestilling" title="K2 Bestilling"></a> <a href="screenshots/k-epost-friend-paid.jpg"><img src="screenshots/k-epost-friend-paid.jpg" width="230" alt="K3 Betalt" title="K3 Betalt"></a> <a href="screenshots/k-epost-parent-payment.jpg"><img src="screenshots/k-epost-parent-payment.jpg" width="230" alt="K4 Betaling registrert" title="K4 Betaling registrert"></a> <a href="screenshots/k-epost-goods-sent.jpg"><img src="screenshots/k-epost-goods-sent.jpg" width="230" alt="K5 Varer sendt" title="K5 Varer sendt"></a> <a href="screenshots/k-epost-digest.jpg"><img src="screenshots/k-epost-digest.jpg" width="230" alt="K6 Daglig oppsummering" title="K6 Daglig oppsummering"></a> <a href="screenshots/k-epost-closing.jpg"><img src="screenshots/k-epost-closing.jpg" width="230" alt="K9 Avslutning" title="K9 Avslutning"></a> <a href="screenshots/k-epost-admin-invite.jpg"><img src="screenshots/k-epost-admin-invite.jpg" width="230" alt="K10 Admin-invitasjon" title="K10 Admin-invitasjon"></a></p>
 
-<sub>K1 Innlogging · K2 Bestilling · K3 Betalt · K4 Betaling registrert · K5 Varer sendt · K6 Daglig oppsummering · K9 Avslutning</sub>
+<sub>K1 Innlogging · K2 Bestilling · K3 Betalt · K4 Betaling registrert · K5 Varer sendt · K6 Daglig oppsummering · K9 Avslutning · K10 Admin-invitasjon</sub>
 
 | # | Email | Subject / text |
 |---|---|---|
@@ -255,6 +255,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | K5 | Goods sent | **Varene til *Kaffesalg* er på vei til deg** · Varene er på vei, Ola! · Varene for bestillingene dine er sendt til deg. Bruk pakkelisten for å fordele dem, og kryss av «levert» etter hvert. · Åpne pakkelisten · Til bestillingene dine |
 | K6 | Daily digest (20:00) | **3 nye bestillinger siden sist (720 kr)** / **1 ny bestilling siden sist (240 kr)** · Nye bestillinger, Ola · Nye totalt · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per. / Alle venner har betalt. · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din. |
 | K9 | Closing message (button on Oversikt) | **Kaffesalg: takk for innsatsen!** · Takk for innsatsen, Ola! · *the closing message* · Til laget totalt · 1 015 kr · Via deg: 765 kr · Se dine bestillinger |
+| K10 | Admin invitation (Innstillinger → Legg til) | **Du er lagt til som administrator i ProDugnad** · Du er lagt til som administrator · Du kan nå sette opp dugnader, varer og foreldre, og registrere betalinger i ProDugnad. · Logg inn med denne e-postadressen. Du får en kode på e-post, ikke noe passord. · Logg inn · Fyll gjerne inn navn, rolle og telefon under Innstillinger når du er logget inn. |
 | K7 | Footer of K2–K6 | *Kaffesalg* er organisert av *Foreldre og supportere av Ready G2018*, ikke av klubben direkte. / *Alt overskudd går til …* / To parents: Kontakt: *Kari Nordmann* (svar på denne e-posten). To friends: Spørsmål? Svar på denne e-posten, så kommer den til Ola. |
 | K8 | Sender name | *Foreldre og supportere av Ready G2018* via ProDugnad |
 

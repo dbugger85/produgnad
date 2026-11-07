@@ -37,6 +37,28 @@ export default function PeoplePage() {
     await loadAdmins()
   }
 
+  const [invited, setInvited] = useState('')
+
+  async function invite() {
+    setError('')
+    setInvited('')
+    const email = newEmail.trim().toLowerCase()
+    const { data, error } = await supabase.functions.invoke('invite-admin', { body: { email } })
+    if (error) {
+      // The function answers with a short code (NOT_ALLOWED, INVALID_EMAIL …) in the body
+      let code = ''
+      try {
+        code = ((await (error as { context?: Response }).context?.json()) as { error?: string })?.error ?? ''
+      } catch {
+        // No readable body
+      }
+      return setError(errorText(code || error))
+    }
+    setNewEmail('')
+    setInvited(data?.already ? `${email} var allerede admin. Vi har sendt en ny e-post.` : `${email} er lagt til og har fått en e-post.`)
+    await loadAdmins()
+  }
+
   async function setAdmin(email: string, value: boolean) {
     setError('')
     const { error } = await supabase.rpc('set_admin', { p_email: email, p_is_admin: value })
@@ -97,15 +119,16 @@ export default function PeoplePage() {
             className="space-y-2 border-t border-line pt-3"
             onSubmit={(e) => {
               e.preventDefault()
-              void setAdmin(newEmail, true)
+              void invite()
             }}
           >
-            <Field label="Legg til admin (e-post)" hint="Personen må ha logget inn én gang først, på /logg-inn">
+            <Field label="Legg til admin (e-post)" hint="Personen får en e-post med lenke for å logge inn">
               <Input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
             </Field>
             <Button type="submit" variant="secondary" disabled={!newEmail.includes('@')}>
-              Legg til
+              Legg til og send invitasjon
             </Button>
+            {invited && <p className="text-sm text-green-800">{invited}</p>}
           </form>
           <ErrorBox>{error}</ErrorBox>
         </Card>
