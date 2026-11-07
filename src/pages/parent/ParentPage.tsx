@@ -68,7 +68,9 @@ export default function ParentPage() {
     <>
       <TopBar title={campaign.name} back={profile?.is_admin ? '/admin' : undefined} />
       <Page>
-        {page && <ProgressBar raised={page.campaign.raised} target={page.campaign.target_amount} />}
+        {page && page.campaign.raised !== null && (
+          <ProgressBar raised={page.campaign.raised} target={page.campaign.target_amount ?? 0} />
+        )}
         {campaign.locked_at && !campaign.closed_at && (
           <Notice>Bestillingene er låst. Varene er bestilt fra leverandøren. Du kan fortsatt krysse av betalt og levert.</Notice>
         )}

@@ -15,14 +15,16 @@ export interface PublicCampaign {
   team_name: string
   organizer_label: string
   purpose_text: string
-  target_amount: number
+  /** Only for parents in the campaign and admins; null for friends */
+  target_amount: number | null
   deadline: string | null
   locked: boolean
   closed: boolean
   closing_message: string
   accepting_orders: boolean
   max_qty_per_line: number
-  raised: number
+  /** Money to the team so far; only for parents in the campaign and admins, null for friends */
+  raised: number | null
   admins: PublicAdmin[]
 }
 

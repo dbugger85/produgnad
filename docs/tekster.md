@@ -10,7 +10,6 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 | A2 | Title | *Kaffesalg høsten 2026* |
 | A3 | Under the title | Du bestiller via **Ola Hansen**, forelder til Emma. |
 | A4 | Under that | *Alt overskudd går til cupavgifter og reiser for laget i 2027.* |
-| A5 | Progress bar | **18 400 kr** samlet inn av 30 000 kr |
 | A6 | Above the products | Bestill innen 20. november 2026. |
 | A7 | Product card | *Kaffe, filtermalt 500 g* / *Mellomristet, fra lokal brenner* / *120 kr* |
 | A8 | Total box | Totalt |
@@ -48,6 +47,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 | C3 | Progress steps | Registrert · Betalt · På vei · Levert |
 | C4 | List | 2 × *Kaffe, filtermalt 500 g* · Totalt |
 | C5 | Link | Til bestillingssiden → |
+| C7 | Progress bar | Not shown to friends (only parents and admins: **18 400 kr** til laget av 30 000 kr) |
 | C6 | Wrong link | Fant ikke bestillingen. Sjekk at du har hele lenken. |
 
 ## D. Shown at the bottom of public pages (transparency)

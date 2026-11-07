@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { ProgressBar } from '../components/ProgressBar'
 import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Card, ErrorBox, Loading, Logo, Page } from '../components/ui'
 import { VippsBox } from '../components/VippsBox'
@@ -87,7 +86,6 @@ export default function OrderStatusPage() {
         <VippsBox amount={order.amount} name={parent.name} phoneNumber={parent.phone} code={order.code} />
       )}
 
-      <ProgressBar raised={campaign.raised} target={campaign.target_amount} />
       <Link to={`/k/${parent.link_code}`} className="block font-semibold text-brand">
         Til bestillingssiden →
       </Link>

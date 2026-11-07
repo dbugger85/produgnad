@@ -111,7 +111,14 @@ describe('friend (no login)', () => {
     const adminRow = data.campaign.admins.find((x) => x.name === 'Admin Test')
     assert.ok(adminRow)
     assert.equal(adminRow.phone, null)
-    assert.equal(Number(data.campaign.raised), 100)
+    // The progress bar is only for parents and admins
+    assert.equal(data.campaign.raised, null)
+    assert.equal(data.campaign.target_amount, null)
+    const asParent = (await parentA.client.rpc('public_campaign_by_link', { p_link_code: linkA })).data
+    assert.equal(Number(asParent.campaign.raised), 100)
+    assert.equal(Number(asParent.campaign.target_amount), 1000)
+    const asOutsider = (await outsider.client.rpc('public_campaign_by_link', { p_link_code: linkA })).data
+    assert.equal(asOutsider.campaign.raised, null)
   })
 
   test('unknown link gives nothing', async () => {
@@ -301,7 +308,7 @@ describe('admin', () => {
     const lines = (await service.from('order_lines').select('qty, unit_to_team, orders!inner(campaign_id, deleted_at)')
       .eq('orders.campaign_id', campaign.id).is('orders.deleted_at', null)).data
     const expected = lines.reduce((s, l) => s + l.qty * Number(l.unit_to_team), 0)
-    const pub = (await anon().rpc('public_campaign_by_link', { p_link_code: linkA })).data
+    const pub = (await admin.client.rpc('public_campaign_by_link', { p_link_code: linkA })).data
     assert.equal(Number(pub.campaign.raised), expected)
     const view = (await admin.client.from('v_campaign_progress').select('raised').eq('campaign_id', campaign.id).single()).data
     assert.equal(Number(view.raised), expected)

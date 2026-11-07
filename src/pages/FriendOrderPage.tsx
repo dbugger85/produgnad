@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { CopyButton } from '../components/CopyButton'
 import { ProductPicker, quantitiesToLines, quantitiesTotal, type Quantities } from '../components/ProductPicker'
-import { ProgressBar } from '../components/ProgressBar'
 import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Button, Card, ErrorBox, Field, Input, Loading, Logo, Notice, Page, Title } from '../components/ui'
 import { VippsBox } from '../components/VippsBox'
@@ -108,7 +107,6 @@ export default function FriendOrderPage() {
           {childText}.
         </p>
         {campaign.purpose_text && <p className="text-ink">{campaign.purpose_text}</p>}
-        <ProgressBar raised={campaign.raised} target={campaign.target_amount} />
       </header>
 
       <ClosingMessage campaign={campaign} />

@@ -16,6 +16,7 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | Admin public info | Name, role title and phone (only if opted in) stored on `profiles`, shown on all campaigns |
 | Progress bar | Counts all orders, including `own` and `extra` |
 | Login link | No visible "Logg inn" on the friend page |
+| Progress bar | Money to the team (profit), not sales. Only parents and admins see it; friends get no amount at all (owner, 7 Nov; deviates from the brief's transparency list) |
 | Picture formats | Large product pictures are JPEG (not WebP), thumbnails WebP: WhatsApp and others don't show WebP link previews (7 Nov) |
 | Order codes | `K` + counter per parent; payment codes `D-` + counter per campaign; link codes 6 random characters without O/0/I/1/L |
 | Emails | `email_outbox` table (queue + log, unique dedupe key) instead of `email_log` |
