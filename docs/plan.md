@@ -28,14 +28,14 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 |---|---|---|---|
 | 0.1 | GitHub repo | Claude | done |
 | 0.2 | Code skeleton, migrations, seed, tests, CI | Claude | done |
-| 0.3 | Supabase project (EU Frankfurt) | Martin | |
+| 0.3 | Supabase project `nnqpdzqzwzhogcbzriyn` (created in London, eu-west-2; owner chose to keep it: UK has EU adequacy) | Martin | done |
 | 0.4 | Resend account + domain `substitutor.no` | Martin | |
 | 0.5 | DNS at Domeneshop for Resend (+ DMARC) | Martin, rows from Claude | |
 | 0.6 | Supabase auth: custom SMTP, site URL, redirect URLs, email template, rate limit | Martin, values from Claude | |
 | 0.7 | Secrets (Resend key for the email function) | Martin | |
 | 0.8 | Cloudflare Pages project + custom domain | Martin | |
 | 0.9 | DNS CNAME `dugnad` → `<project>.pages.dev` | Martin | |
-| 0.10 | Push database, deploy function, first admin, test on phone | Claude | |
+| 0.10 | Push database, deploy function, first admin, test on phone | Claude | database + function done 7 Nov |
 
 ## Phase 1 (MVP): built 7 November 2026, not yet tested end to end
 
