@@ -139,6 +139,7 @@ execute function public.handle_user_email_change();
 create function public.campaigns_before_insert()
 returns trigger
 language plpgsql
+security definer
 set search_path = ''
 as $$
 begin
