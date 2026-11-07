@@ -74,7 +74,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
   }
   // Emails to parents: replies to the contact admin
   const wrap = (subject: string, body: string): Rendered => {
-    const line = contact?.name ? `Kontakt: ${esc(contact.name)} (svar på denne e-posten).` : ''
+    const line = contact?.name && campaign.admins_visibility !== 'none' ? `Kontakt: ${esc(contact.name)} (svar på denne e-posten).` : ''
     const html = layout(campaign, line, body)
     return { ...base, subject, html, text: htmlToText(html) }
   }
@@ -86,8 +86,10 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
     .single()
   if (!cp) return null
   const parentName: string = cp.profiles?.name ?? ''
-  // Emails to friends: replies go to the parent they ordered through, not to the admins
+  // Emails to friends: replies go to the parent they ordered through, unless the campaign shows
+  // its admins to everyone (Oppsett → Ansvarlige og kontakt = Alle)
   const wrapFriend = (subject: string, body: string): Rendered => {
+    if (campaign.admins_visibility === 'all' && contact?.email) return wrap(subject, body)
     const first = parentName.split(' ')[0]
     const line = first ? `Spørsmål? Svar på denne e-posten, så kommer den til ${esc(first)}.` : ''
     const html = layout(campaign, line, body)

@@ -440,3 +440,42 @@ describe('extra stock', () => {
     }
   })
 })
+
+describe('what friends see (Oppsett → Hva som vises)', () => {
+  const look = async (c) => (await c.rpc('public_campaign_by_link', { p_link_code: linkA })).data
+  const set = (fields) => admin.client.from('campaigns').update(fields).eq('id', campaign.id)
+
+  test('default: progress, contribution and admins only for parents and admins', async () => {
+    const f = await look(anon())
+    assert.equal(f.campaign.raised, null)
+    assert.deepEqual(f.campaign.admins, [])
+    assert.ok(f.products.every((p) => p.to_team_amount === null))
+    const p = await look(parentA.client)
+    assert.notEqual(p.campaign.raised, null)
+    assert.ok(p.campaign.admins.length > 0)
+    assert.ok(p.products.some((x) => Number(x.to_team_amount) > 0))
+  })
+
+  test("'all' shows them to friends, 'none' hides them from parents too", async () => {
+    try {
+      assert.ifError((await set({ progress_visibility: 'all', contribution_visibility: 'all', admins_visibility: 'all' })).error)
+      const f = await look(anon())
+      assert.notEqual(f.campaign.raised, null)
+      assert.ok(f.campaign.admins.length > 0)
+      assert.ok(f.products.some((x) => Number(x.to_team_amount) > 0))
+
+      assert.ifError((await set({ progress_visibility: 'none', contribution_visibility: 'none', admins_visibility: 'none' })).error)
+      const p = await look(parentA.client)
+      assert.equal(p.campaign.raised, null)
+      assert.deepEqual(p.campaign.admins, [])
+      assert.ok(p.products.every((x) => x.to_team_amount === null))
+      // Admins still see everything in their own views
+      const v = (await admin.client.from('v_campaign_progress').select('raised').eq('campaign_id', campaign.id).single()).data
+      assert.notEqual(v.raised, null)
+
+      expectError(await set({ progress_visibility: 'everyone' }))
+    } finally {
+      await set({ progress_visibility: 'parents', contribution_visibility: 'parents', admins_visibility: 'parents' })
+    }
+  })
+})

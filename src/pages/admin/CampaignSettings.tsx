@@ -5,7 +5,7 @@ import { useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { DEFAULT_TEMPLATES, PLACEHOLDERS } from '../../lib/share'
 import { supabase } from '../../lib/supabase'
-import type { Campaign, Profile } from '../../lib/types'
+import type { Campaign, Profile, Visibility } from '../../lib/types'
 
 type Form = Omit<Campaign, 'id' | 'join_code' | 'locked_at' | 'closed_at'>
 
@@ -26,6 +26,9 @@ function emptyForm(userId: string | undefined): Form {
     payment_reminder_template: DEFAULT_TEMPLATES.paymentReminder,
     closing_message: '',
     max_qty_per_line: 20,
+    progress_visibility: 'parents',
+    contribution_visibility: 'parents',
+    admins_visibility: 'parents',
   }
 }
 
@@ -71,6 +74,9 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
       payment_reminder_template: form.payment_reminder_template,
       closing_message: form.closing_message,
       max_qty_per_line: Number(form.max_qty_per_line) || 20,
+      progress_visibility: form.progress_visibility,
+      contribution_visibility: form.contribution_visibility,
+      admins_visibility: form.admins_visibility,
     }
     if (campaign) {
       const { error } = await supabase.from('campaigns').update(row).eq('id', campaign.id)
@@ -181,6 +187,29 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         </Field>
       </Card>
 
+      <Card className="space-y-4">
+        <h2 className="text-lg font-bold">Hva som vises</h2>
+        <VisibilityChoice
+          label="Fremdrift"
+          hint="Linjen med penger til laget og målet, for eksempel «815 kr til laget av 30 000 kr»"
+          value={form.progress_visibility}
+          onChange={(v) => set('progress_visibility', v)}
+        />
+        <VisibilityChoice
+          label="Bidrag per vare"
+          hint="For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles"
+          value={form.contribution_visibility}
+          onChange={(v) => set('contribution_visibility', v)}
+        />
+        <VisibilityChoice
+          label="Ansvarlige og kontakt"
+          hint="Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer kunder på e-post til kontaktpersonen, ellers til forelderen"
+          value={form.admins_visibility}
+          onChange={(v) => set('admins_visibility', v)}
+        />
+        <p className="text-xs text-muted">Som admin ser du alltid alt under Oversikt</p>
+      </Card>
+
       <Card className="space-y-3">
         <h2 className="text-lg font-bold">Avslutning</h2>
         <Field label="Avslutningsmelding" hint="Vises på alle sider når dugnaden er avsluttet: hvor mye som ble samlet inn og hva det betaler">
@@ -204,5 +233,44 @@ export default function NewCampaignPage() {
         <CampaignSettings />
       </Page>
     </>
+  )
+}
+
+const VISIBILITY_OPTIONS: { value: Visibility; label: string }[] = [
+  { value: 'none', label: 'Ikke vist' },
+  { value: 'parents', label: 'Bare foreldre og admin' },
+  { value: 'all', label: 'Alle, også kunder' },
+]
+
+function VisibilityChoice({
+  label,
+  hint,
+  value,
+  onChange,
+}: {
+  label: string
+  hint: string
+  value: Visibility
+  onChange: (v: Visibility) => void
+}) {
+  return (
+    <fieldset className="space-y-1.5">
+      <legend className="text-sm font-semibold text-ink">{label}</legend>
+      <div className="grid grid-cols-3 gap-1.5" role="radiogroup" aria-label={label}>
+        {VISIBILITY_OPTIONS.map((o) => (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={value === o.value}
+            onClick={() => onChange(o.value)}
+            className={`min-h-12 rounded-xl px-2 text-sm leading-tight font-semibold ${value === o.value ? 'bg-brand text-white' : 'bg-cream text-ink ring-1 ring-line'}`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-muted">{hint}</p>
+    </fieldset>
   )
 }

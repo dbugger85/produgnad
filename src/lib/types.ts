@@ -47,7 +47,8 @@ export interface PublicProduct {
   name: string
   description: string
   price: number
-  to_team_amount: number
+  /** Null when the campaign doesn't show the contribution to this viewer */
+  to_team_amount: number | null
   images: ProductImage[]
 }
 
@@ -98,7 +99,13 @@ export interface Campaign {
   payment_reminder_template: string
   closing_message: string
   max_qty_per_line: number
+  progress_visibility: Visibility
+  contribution_visibility: Visibility
+  admins_visibility: Visibility
 }
+
+/** Who sees the progress bar / the per-product contribution: nobody, parents (and admins), or everyone */
+export type Visibility = 'none' | 'parents' | 'all'
 
 export interface Product {
   id: string

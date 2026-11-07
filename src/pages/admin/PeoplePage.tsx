@@ -58,7 +58,7 @@ export default function PeoplePage() {
             }}
           >
             <h2 className="text-lg font-bold">Din profil</h2>
-            <p className="text-sm text-muted">Navnet og rollen din vises for foreldrene i dugnaden, ikke for kundene.</p>
+            <p className="text-sm text-muted">Navnet og rollen din vises for de som får se «Ansvarlige og kontakt» (velges under Oppsett i hver dugnad; vanligvis bare foreldrene).</p>
             <Field label="Navn">
               <Input value={name} onChange={(e) => { setName(e.target.value); setSaved(false) }} />
             </Field>
@@ -70,7 +70,7 @@ export default function PeoplePage() {
             </Field>
             <label className="flex items-center gap-2">
               <input type="checkbox" className="h-5 w-5" checked={showPhone} onChange={(e) => { setShowPhone(e.target.checked); setSaved(false) }} />
-              Vis telefonnummeret mitt for foreldrene
+              Vis telefonnummeret mitt sammen med navnet
             </label>
             <Button type="submit">{saved ? 'Lagret ✓' : 'Lagre'}</Button>
           </form>

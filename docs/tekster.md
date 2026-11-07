@@ -183,9 +183,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | H4 | Campaign card | *Kaffesalg* · Frist 14. november 2026 / Ingen frist · Åpen / Låst / Avsluttet |
 | H5 | Empty | Ingen dugnader ennå. |
 | H6 | Innstillinger, box title | Din profil |
-| H7 | Text | Navnet og rollen din vises for foreldrene i dugnaden, ikke for kundene. |
+| H7 | Text | Navnet og rollen din vises for de som får se «Ansvarlige og kontakt» (velges under Oppsett i hver dugnad; vanligvis bare foreldrene). |
 | H8 | Fields | Navn · Rolle (For eksempel kasserer eller koordinator) · Telefon |
-| H9 | Tick box | Vis telefonnummeret mitt for foreldrene |
+| H9 | Tick box | Vis telefonnummeret mitt sammen med navnet |
 | H10 | Box title | Administratorer |
 | H11 | Admin row | *Kari Nordmann* · kasserer · telefon skjult · *e-post* · Fjern |
 | H12 | Field + hint | Legg til admin (e-post) · Personen må ha logget inn én gang først, på /logg-inn |
@@ -194,9 +194,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 ## I. Admin: a campaign
 
-<p><a href="screenshots/i-oversikt.jpg"><img src="screenshots/i-oversikt.jpg" width="230" alt="Oversikt" title="Oversikt"></a> <a href="screenshots/i-foreldre.jpg"><img src="screenshots/i-foreldre.jpg" width="230" alt="Foreldre (åpnet)" title="Foreldre (åpnet)"></a> <a href="screenshots/i-bestillinger.jpg"><img src="screenshots/i-bestillinger.jpg" width="230" alt="Bestillinger" title="Bestillinger"></a> <a href="screenshots/i-varer.jpg"><img src="screenshots/i-varer.jpg" width="230" alt="Varer" title="Varer"></a> <a href="screenshots/i-vare-endre.jpg"><img src="screenshots/i-vare-endre.jpg" width="230" alt="Endre vare med bilder" title="Endre vare med bilder"></a> <a href="screenshots/i-oppsett.jpg"><img src="screenshots/i-oppsett.jpg" width="230" alt="Oppsett" title="Oppsett"></a> <a href="screenshots/i-alle-pakkelister.jpg"><img src="screenshots/i-alle-pakkelister.jpg" width="230" alt="Alle pakkelister" title="Alle pakkelister"></a></p>
+<p><a href="screenshots/i-oversikt.jpg"><img src="screenshots/i-oversikt.jpg" width="230" alt="Oversikt" title="Oversikt"></a> <a href="screenshots/i-foreldre.jpg"><img src="screenshots/i-foreldre.jpg" width="230" alt="Foreldre (åpnet)" title="Foreldre (åpnet)"></a> <a href="screenshots/i-bestillinger.jpg"><img src="screenshots/i-bestillinger.jpg" width="230" alt="Bestillinger" title="Bestillinger"></a> <a href="screenshots/i-varer.jpg"><img src="screenshots/i-varer.jpg" width="230" alt="Varer" title="Varer"></a> <a href="screenshots/i-vare-endre.jpg"><img src="screenshots/i-vare-endre.jpg" width="230" alt="Endre vare med bilder" title="Endre vare med bilder"></a> <a href="screenshots/i-oppsett.jpg"><img src="screenshots/i-oppsett.jpg" width="230" alt="Oppsett" title="Oppsett"></a> <a href="screenshots/i-oppsett-hva-som-vises.jpg"><img src="screenshots/i-oppsett-hva-som-vises.jpg" width="230" alt="Hva som vises" title="Hva som vises"></a> <a href="screenshots/i-alle-pakkelister.jpg"><img src="screenshots/i-alle-pakkelister.jpg" width="230" alt="Alle pakkelister" title="Alle pakkelister"></a></p>
 
-<sub>Oversikt · Foreldre (åpnet) · Bestillinger · Varer · Endre vare med bilder · Oppsett · Alle pakkelister</sub>
+<sub>Oversikt · Foreldre (åpnet) · Bestillinger · Varer · Endre vare med bilder · Oppsett · Hva som vises · Alle pakkelister</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -221,6 +221,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | I19 | Oppsett: fields | Navn på dugnaden · Laget (For eksempel Ready G2018. Brukes som {lag} i tekstene) · Hvem som organiserer (Vises på alle sider. Skriv at det er foreldre/supportere, ikke klubben) · Hva pengene går til · Mål (kr til laget) · Bestillingsfrist · Maks antall per vare i én bestilling |
 | I20 | Oppsett: payment | Foreldrene vippser det de skylder hit, med betalingskoden sin som melding. · Vipps-navn · Vipps-nummer · Kontaktperson for e-post (Svar på e-poster fra appen går til denne personen) |
 | I21 | Oppsett: texts | Du kan bruke {barn}, {lag}, {produkter}, {frist}, {lenke}, {forelder}, {beløp}, {kode}, {vipps}. Foreldrene kan endre teksten før de deler. · Kort tekst (SMS, chat) · Lang tekst (Facebook) · Påminnelse om frist (Vises for foreldrene de siste tre dagene før fristen) · Betalingspåminnelse (Per ubetalt bestilling. «Hei!» blir til «Hei Kari!») |
+| I25 | Oppsett: Hva som vises | Fremdrift (Linjen med penger til laget og målet, for eksempel «815 kr til laget av 30 000 kr») · Bidrag per vare (For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles) · Ansvarlige og kontakt (Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer kunder på e-post til kontaktpersonen, ellers til forelderen) · Ikke vist / Bare foreldre og admin / Alle, også kunder · Som admin ser du alltid alt under Oversikt |
 | I22 | Oppsett: closing | Avslutningsmelding (Vises på alle sider når dugnaden er avsluttet: hvor mye som ble samlet inn og hva det betaler) |
 | I23 | Oppsett: button | Opprett dugnaden / Lagre / Lagret ✓ |
 | I24 | New campaign: defaults | Kaffesalg · Foreldre og supportere av … · Alt overskudd går til cupavgifter og reiser for laget. |

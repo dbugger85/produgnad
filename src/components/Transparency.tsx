@@ -30,7 +30,7 @@ export function Transparency({
       )}
       {campaign.purpose_text && <p>{campaign.purpose_text}</p>}
       {products
-        .filter((p) => Number(p.to_team_amount) > 0)
+        .filter((p) => p.to_team_amount !== null && Number(p.to_team_amount) > 0)
         .map((p) => (
           <p key={p.name}>
             {kr(p.to_team_amount)} av hver {p.name.toLowerCase()} på {kr(p.price)} går til laget.
