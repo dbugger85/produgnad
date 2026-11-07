@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Start local Supabase
+        run: npx supabase start -x studio,imgproxy,realtime,logflare,vector,supavisor,edge-runtime,postgres-meta
+      - name: Database guard tests
+        run: npx supabase test db
+      - name: Security tests (friend, parent, admin)
+        run: npm run test:db

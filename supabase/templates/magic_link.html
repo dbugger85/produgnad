@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="nb">
+  <body style="margin:0;background:#faf7f2;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#1c1917">
+    <div style="max-width:520px;margin:0 auto;padding:24px 16px">
+      <div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e7e5e4">
+        <h1 style="font-size:20px;margin:0 0 12px">Logg inn på dugnaden</h1>
+        <p>Skriv inn denne koden på siden du har åpen:</p>
+        <p style="font-size:32px;font-weight:700;letter-spacing:8px;margin:12px 0">{{ .Token }}</p>
+        <p>Eller trykk her for å logge inn:</p>
+        <p>
+          <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#12603f;color:#fff;text-decoration:none;font-weight:600;padding:10px 16px;border-radius:10px">Logg inn</a>
+        </p>
+        <p style="font-size:13px;color:#57534e">Koden virker i én time. Har du ikke bedt om denne e-posten, kan du se bort fra den.</p>
+      </div>
+      <p style="font-size:13px;color:#57534e">Sendt av ProDugnad for foreldre og supportere som driver dugnad.</p>
+    </div>
+  </body>
+</html>

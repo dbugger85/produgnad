@@ -1,0 +1,28 @@
+# ProDugnad – notes for Claude
+
+Read `docs/brief.md` (the spec) and `docs/plan.md` (approved plan, decisions log) before larger changes.
+
+## Rules
+- UI text in Norwegian bokmål; code, comments, commit messages in English.
+- Formats: amounts `1 440 kr` via `kr()` in `src/lib/format.ts`; dates `20. november 2026` via `longDate()`.
+- Every public page and email shows the organizer label ("…supportere av G2012", never the club as organizer), the admins (phone only if `show_phone_public`), the parent, and the purpose.
+- Short labels, hints and button side-texts end without a full stop.
+- No real personal data or Vipps screenshots in the repo. Dummy data only (`scripts/seed.mjs`).
+- Ask the owner before creating accounts, deploying or pushing.
+
+## Security model
+- Friends (anon) never touch tables. They use three `security definer` functions: `public_campaign_by_link`, `create_friend_order`, `order_status_by_token` (plus `public_campaign_by_join`).
+- Parents read their own rows through RLS; all parent writes go through functions (`join_campaign`, `save_order`, `set_order_paid`, `set_order_delivered`, `delete_order`) that check ownership and the lock.
+- Admins (`profiles.is_admin`) read and write everything. One team per install, so admins see all campaigns.
+- Errors from SQL are short codes (`CAMPAIGN_LOCKED` …) translated in `src/lib/errors.ts`.
+- Emails: SQL inserts rows in `email_outbox` (unique `dedupe_key`); the Edge Function `send-emails` renders and sends them via Resend, max 90 per day. Without `RESEND_API_KEY` it only logs (dry run).
+- New table? Enable RLS, revoke from anon, add policies, and add cases to `tests/rls.test.mjs`. `supabase/tests/rls_enabled.test.sql` fails if RLS is off anywhere.
+
+## Commands
+`npm run db:start`, `npm run db:reset`, `npm run seed`, `npm run dev`, `npm test`, `npm run test:db`, `npx supabase test db`, `npm run build`.
+
+## Where things are
+- `supabase/migrations/` schema → functions/views → RPCs → RLS/grants/storage
+- `supabase/functions/send-emails` + `_shared/email.ts` email texts
+- `src/pages/FriendOrderPage.tsx` the page most people see
+- `src/pages/parent/`, `src/pages/admin/`
