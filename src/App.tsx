@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { Footer } from './components/Footer'
 import { RequireAdmin, RequireLogin } from './components/Guards'
 import { ErrorBox, Loading, Page } from './components/ui'
@@ -25,6 +26,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ErrorBoundary>
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route path="/k/:code" element={<FriendOrderPage />} />
@@ -45,6 +47,7 @@ export default function App() {
             <Route path="*" element={<Page><ErrorBox>Fant ikke siden.</ErrorBox></Page>} />
           </Routes>
         </Suspense>
+        </ErrorBoundary>
         <Footer />
       </BrowserRouter>
     </AuthProvider>
