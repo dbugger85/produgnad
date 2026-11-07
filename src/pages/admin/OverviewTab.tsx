@@ -33,6 +33,11 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
     <div className="space-y-4">
       <Card className="space-y-3">
         <ProgressBar raised={Number(progress?.raised ?? 0)} target={Number(campaign.target_amount)} />
+        {!(Number(campaign.target_amount) > 0) && (
+          <Link to="?fane=oppsett" className="block text-sm text-brand">
+            Sett et mål under Oppsett for å vise fremdrift →
+          </Link>
+        )}
         <dl className="grid grid-cols-2 gap-y-1 text-sm">
           <dt>Salg totalt</dt>
           <dd className="text-right font-semibold">{kr(progress?.sales)}</dd>

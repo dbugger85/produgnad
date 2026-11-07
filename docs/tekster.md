@@ -204,6 +204,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | # | Where | Text |
 |---|---|---|
 | I1 | Tabs | Oversikt · Foreldre · Bestillinger · Varer · Oppsett |
+| I2b | Oversikt, no target | **450 kr** til laget (no bar) · Sett et mål under Oppsett for å vise fremdrift → |
 | I2 | Oversikt rows | Salg totalt · Betalt fra foreldre (0 kr av 1 970 kr) · Foreldre · Bestillinger · Frist |
 | I3 | Sign-up box | Påmeldingslenke for foreldre · Kopier lenke · Bli med som selger selv → / Du er med som selger: mine bestillinger → · Del denne i foreldregruppa. Alle med lenken kan melde seg på som selger |
 | I4 | Supplier box | Til leverandøren · *14 stk* · Ingen bestillinger ennå. |
