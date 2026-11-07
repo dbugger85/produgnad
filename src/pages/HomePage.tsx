@@ -41,7 +41,8 @@ export default function HomePage() {
     )
   }
 
-  if (!profile?.is_admin && mine && mine.length === 1) return <Navigate to={`/forelder/${mine[0].id}`} replace />
+  if (profile?.is_admin) return <Navigate to="/admin" replace />
+  if (mine && mine.length === 1) return <Navigate to={`/forelder/${mine[0].id}`} replace />
 
   return (
     <Page>

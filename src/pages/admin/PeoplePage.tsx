@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Card, ErrorBox, Field, Input, Page, TopBar } from '../../components/ui'
-import { useAuth } from '../../lib/auth'
+import { signOut, useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { phone } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
@@ -109,6 +109,9 @@ export default function PeoplePage() {
           </form>
           <ErrorBox>{error}</ErrorBox>
         </Card>
+        <Button variant="ghost" onClick={() => void signOut()}>
+          Logg ut
+        </Button>
       </Page>
     </>
   )

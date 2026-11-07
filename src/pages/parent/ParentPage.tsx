@@ -5,6 +5,7 @@ import { ProgressBar } from '../../components/ProgressBar'
 import { ShareBox } from '../../components/ShareBox'
 import { Badge, Button, Card, ErrorBox, Loading, Notice, Page, TopBar } from '../../components/ui'
 import { VippsBox } from '../../components/VippsBox'
+import { signOut, useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { daysUntil, kr, longDate, phone } from '../../lib/format'
 import { useParentData } from '../../lib/parentData'
@@ -18,6 +19,7 @@ type Filter = 'alle' | 'ubetalt' | 'ikke-levert'
 export default function ParentPage() {
   const { cpId = '' } = useParams()
   const { data, error, reload } = useParentData(cpId)
+  const { profile } = useAuth()
   const [filter, setFilter] = useState<Filter>('alle')
   const [shareKind, setShareKind] = useState<'short' | 'long'>('short')
   const [actionError, setActionError] = useState('')
@@ -64,7 +66,7 @@ export default function ParentPage() {
 
   return (
     <>
-      <TopBar title={campaign.name} back="/" />
+      <TopBar title={campaign.name} back={profile?.is_admin ? '/admin' : undefined} />
       <Page>
         {page && <ProgressBar raised={page.campaign.raised} target={page.campaign.target_amount} />}
         {campaign.locked_at && !campaign.closed_at && (
@@ -191,6 +193,9 @@ export default function ParentPage() {
           Kunder ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Betalingskoden din til admin er{' '}
           {cp.payment_code}.
         </p>
+        <Button variant="ghost" onClick={() => void signOut()}>
+          Logg ut
+        </Button>
       </Page>
     </>
   )
