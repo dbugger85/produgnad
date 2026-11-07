@@ -28,7 +28,7 @@ export default function AdminHome() {
 
   return (
     <>
-      <TopBar title="Admin" right={<Link to="/admin/folk" className="text-sm font-semibold text-brand">Innstillinger</Link>} />
+      <TopBar title="Administrasjon" right={<Link to="/admin/folk" className="text-sm font-semibold text-brand">Innstillinger</Link>} />
       <Page>
         {mine.map((m) => (
           <Link key={m.id} to={`/forelder/${m.id}`} className="block">
