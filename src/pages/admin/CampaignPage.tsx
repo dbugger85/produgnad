@@ -12,7 +12,7 @@ const TABS = [
   { key: 'foreldre', label: 'Foreldre' },
   { key: 'bestillinger', label: 'Bestillinger' },
   { key: 'produkter', label: 'Varer' },
-  { key: 'innstillinger', label: 'Innstillinger' },
+  { key: 'oppsett', label: 'Oppsett' },
 ] as const
 
 export default function CampaignPage() {
@@ -47,7 +47,7 @@ export default function CampaignPage() {
         {tab === 'foreldre' && <ParentsTab data={data} reload={reload} />}
         {tab === 'bestillinger' && <OrdersTab data={data} reload={reload} />}
         {tab === 'produkter' && <ProductsTab campaignId={id} products={data.products} reload={reload} />}
-        {tab === 'innstillinger' && <CampaignSettings key={data.campaign.id} campaign={data.campaign} onSaved={reload} />}
+        {tab === 'oppsett' && <CampaignSettings key={data.campaign.id} campaign={data.campaign} onSaved={reload} />}
         <Link to="/admin" className="block pt-4 text-sm text-muted">
           ← Alle dugnader
         </Link>
