@@ -96,11 +96,16 @@ const productRows = [
   { name: 'Kaffe, filtermalt 500 g', description: 'Mellomristet, fra lokal brenner', price: 120, to_team_amount: 50, sort_order: 0, color: [107, 66, 38] },
   { name: 'Kaffe, hele bønner 500 g', description: 'Mørkristet espressobønner', price: 130, to_team_amount: 55, sort_order: 1, color: [60, 40, 30] },
   { name: 'Te, 100 g', description: 'Grønn te med sitron', price: 80, to_team_amount: 30, sort_order: 2, color: [90, 140, 80] },
+  // No picture of their own: these show the standard pictures (public/defaults)
+  { name: 'Sokker, 3-pakning', description: 'Gode sportssokker, str. 36–46', price: 150, to_team_amount: 60, sort_order: 3 },
+  { name: 'Toalettpapir, 24 ruller', description: 'Mykt og slitesterkt', price: 200, to_team_amount: 70, sort_order: 4 },
 ]
 const products = []
 for (const { color, ...p } of productRows) {
   const { data, error } = await admin.from('products').insert({ ...p, campaign_id: campaign.id }).select().single()
   if (error) throw error
+  products.push(data)
+  if (!color) continue
   const base = `${campaign.id}/${data.id}/seed`
   await admin.storage.from('product-images').upload(`${base}.png`, png(600, color), { contentType: 'image/png', upsert: true })
   await admin.storage.from('product-images').upload(`${base}-thumb.png`, png(200, color), { contentType: 'image/png', upsert: true })
@@ -112,7 +117,6 @@ for (const { color, ...p } of productRows) {
     height: 600,
     sort_order: 0,
   })
-  products.push(data)
 }
 
 const ola = await as('ola@example.com')

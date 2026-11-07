@@ -18,6 +18,7 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | Progress bar | Counts all orders, including `own` and `extra` |
 | Login link | No visible "Logg inn" on the friend page |
 | Progress bar | Money to the team (profit), not sales (shown per the setting above) |
+| Standard pictures | Products without a picture get a drawn standard picture from the name: kaffe, te, sokker, toalettpapir (`src/lib/defaultPictures.ts`, `public/defaults`), also in link previews (owner, 7 Nov) |
 | Picture formats | Large product pictures are JPEG (not WebP), thumbnails WebP: WhatsApp and others don't show WebP link previews (7 Nov) |
 | Order codes | `K` + counter per parent; payment codes `D-` + counter per campaign; link codes 6 random characters without O/0/I/1/L |
 | Emails | `email_outbox` table (queue + log, unique dedupe key) instead of `email_log` |

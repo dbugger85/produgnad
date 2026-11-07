@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BagIcon, Badge, Button, Card, ErrorBox, Field, Input, TextArea } from '../../components/ui'
+import { defaultPictureFor, defaultPictureUrl } from '../../lib/defaultPictures'
 import { errorText } from '../../lib/errors'
 import { kr } from '../../lib/format'
 import { newId } from '../../lib/id'
@@ -37,6 +38,8 @@ export function ProductsTab({
           <Card key={p.id} className="flex gap-3">
             {p.product_images?.[0] ? (
               <img src={imageUrl(p.product_images[0].thumb_path)} alt="" className="h-20 w-20 rounded-xl object-cover" />
+            ) : defaultPictureFor(p.name) ? (
+              <img src={defaultPictureUrl(defaultPictureFor(p.name)!)} alt="" className="h-20 w-20 rounded-xl object-cover" />
             ) : (
               <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-brand-soft text-brand/40">
                 <BagIcon className="h-12 w-12" />
@@ -245,7 +248,10 @@ function ImageManager({ product, reload }: { product: Product; reload: () => Pro
   return (
     <div className="space-y-2 border-t border-line pt-3">
       <h3 className="font-semibold">Bilder</h3>
-      <p className="text-xs text-muted">Første bilde er hovedbildet. Bruk egne bilder eller bilder leverandøren lar oss bruke.</p>
+      <p className="text-xs text-muted">
+        Første bilde er hovedbildet. Bruk egne bilder eller bilder leverandøren lar oss bruke.
+        {images.length === 0 && defaultPictureFor(product.name) && ' Uten eget bilde brukes et standardbilde'}
+      </p>
       <div className="grid grid-cols-3 gap-2">
         {images.map((img, i) => (
           <div key={img.id} className="space-y-1">

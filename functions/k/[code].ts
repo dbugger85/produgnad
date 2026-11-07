@@ -1,4 +1,5 @@
 // /k/<link code>: a parent's order link. Preview with the campaign, the parent and the first product picture.
+import { defaultPictureFor, defaultPreviewUrl } from '../../src/lib/defaultPictures'
 import { imageUrl, kr, rpc, withPreview, type Env } from '../../functions-lib/preview'
 
 interface LinkPage {
@@ -25,12 +26,16 @@ export const onRequest = async (context: { request: Request; env: Env; params: {
     .filter(Boolean)
     .join(' ')
 
+  // No uploaded JPEG/PNG: a standard picture (coffee, tea, socks, toilet paper) if the first product has one
+  const own = image && /\.(jpe?g|png)$/i.test(image.path) ? image : undefined
+  const standard = !own ? products.map((p) => defaultPictureFor(p.name)).find(Boolean) : null
+
   return withPreview(response, context.request.url, {
     title: `${campaign.name} – bestill via ${parent.name}`,
     description,
     // Only JPEG/PNG: some apps (WhatsApp) don't show WebP previews. Otherwise the default picture.
-    image: image && /\.(jpe?g|png)$/i.test(image.path) ? imageUrl(context.env, image.path) : undefined,
-    imageWidth: image?.width ?? undefined,
-    imageHeight: image?.height ?? undefined,
+    image: own ? imageUrl(context.env, own.path) : standard ? new URL(defaultPreviewUrl(standard), context.request.url).href : undefined,
+    imageWidth: own ? (own.width ?? undefined) : standard ? 1200 : undefined,
+    imageHeight: own ? (own.height ?? undefined) : standard ? 630 : undefined,
   })
 }

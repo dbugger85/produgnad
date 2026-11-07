@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { daysUntil, kr, longDate, phone, phoneDigits, plainAmount, weekdayDate } from '../src/lib/format.ts'
 import { fillTemplate } from '../src/lib/share.ts'
+import { defaultPictureFor } from '../src/lib/defaultPictures.ts'
 
 const nbsp = (s: string) => s.replace(/ /g, ' ')
 
@@ -43,4 +44,18 @@ test('templates fill known placeholders and keep unknown ones', () => {
   })
   assert.equal(out, 'Hei! Emma i Ready G2018 selger kaffe. {ukjent} https://x/k/ABC')
   assert.equal(fillTemplate('{beløp} til {vipps}', { beløp: '240 kr', vipps: '912 34 567' }), '240 kr til 912 34 567')
+})
+
+test('standard pictures are chosen from the product name', () => {
+  assert.equal(defaultPictureFor('Kaffe, filtermalt 500 g'), 'kaffe')
+  assert.equal(defaultPictureFor('Espressobønner'), 'kaffe')
+  assert.equal(defaultPictureFor('Te, 100 g'), 'te')
+  assert.equal(defaultPictureFor('Grønn te med sitron'), 'te')
+  assert.equal(defaultPictureFor('Urtete'), 'te')
+  assert.equal(defaultPictureFor('Sokker, 3-pakning'), 'sokker')
+  assert.equal(defaultPictureFor('Toalettpapir 24 ruller'), 'toalettpapir')
+  assert.equal(defaultPictureFor('Dopapir'), 'toalettpapir')
+  assert.equal(defaultPictureFor('Tekstilpose'), null)
+  assert.equal(defaultPictureFor('Lodd'), null)
+  assert.equal(defaultPictureFor('Kakebokser'), null)
 })

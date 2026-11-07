@@ -5,6 +5,7 @@ import type { PublicProduct } from '../lib/types'
 import { ImageViewer } from './ImageViewer'
 import { QtyStepper } from './QtyStepper'
 import { BagIcon } from './ui'
+import { defaultPictureFor, defaultPictureUrl } from '../lib/defaultPictures'
 
 export type Quantities = Record<string, number>
 
@@ -35,6 +36,12 @@ export function ProductPicker({
               >
                 <img src={imageUrl(main.thumb)} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
               </button>
+            ) : defaultPictureFor(p.name) ? (
+              <img
+                src={defaultPictureUrl(defaultPictureFor(p.name)!)}
+                alt=""
+                className="h-24 w-24 shrink-0 rounded-xl object-cover"
+              />
             ) : (
               <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand/40">
                 <BagIcon className="h-14 w-14" />
