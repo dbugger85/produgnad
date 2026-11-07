@@ -93,13 +93,10 @@ export default function ParentPage() {
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">Din bestillingslenke</h2>
           <p className="break-all rounded-lg bg-cream p-2 font-mono text-sm">{link}</p>
-          <div className="grid grid-cols-4 gap-1.5">
+          <div className="grid grid-cols-3 gap-1.5">
             <CopyButton value={link} label="Kopier" className="w-full" />
             <Link to={`/k/${cp.link_code}`} className={linkButton}>
               Åpne
-            </Link>
-            <Link to={`/pakkeliste/${cp.id}`} className={linkButton}>
-              Pakkeliste
             </Link>
             <button type="button" className={linkButton} onClick={() => setShowQr((v) => !v)} aria-expanded={showQr}>
               QR
@@ -186,11 +183,18 @@ export default function ParentPage() {
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold">Bestillinger ({orders.length})</h2>
-            {open && (
-              <Link to={`/forelder/${cp.id}/ny`}>
-                <Button>+ Ny</Button>
-              </Link>
-            )}
+            <div className="flex gap-2">
+              {orders.length > 0 && (
+                <Link to={`/pakkeliste/${cp.id}`}>
+                  <Button variant="secondary">Pakkeliste</Button>
+                </Link>
+              )}
+              {open && (
+                <Link to={`/forelder/${cp.id}/ny`}>
+                  <Button>+ Ny</Button>
+                </Link>
+              )}
+            </div>
           </div>
           <div className="flex gap-1 text-sm">
             {(['alle', 'ubetalt', 'ikke-levert'] as Filter[]).map((f) => (

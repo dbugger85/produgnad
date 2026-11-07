@@ -120,7 +120,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 |---|---|---|
 | F0 | Top (follows Fremdrift) | **765 kr** til laget via deg · av 1 850 kr solgt · *progress bar* · For hele dugnaden |
 | F1 | Box title | Din bestillingslenke |
-| F2 | Buttons (one row) | Kopier · Åpne · Pakkeliste · QR |
+| F2 | Buttons (one row) | Kopier · Åpne · QR |
 | F3 | QR print heading | *Kaffesalg* – bestill via *Ola Hansen* · Skriv ut |
 | F4 | Box title | Del med venner og familie |
 | F5 | Choice | Kort (SMS) · Lang (Facebook) |
@@ -133,7 +133,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | F11 | Under it | Betal gjerne samlet når fristen er ute. Du kan betale i flere deler; skriv D-1 i meldingen hver gang. |
 | F12 | Paid too much | Du har betalt 200 kr for mye. Ta kontakt med de ansvarlige. |
 | F13 | Payments list | 7. november 2026: 1 440 kr registrert |
-| F14 | List title + button | Bestillinger (4) · + Ny |
+| F14 | List title + buttons | Bestillinger (4) · Pakkeliste · + Ny |
 | F15 | Filter | Alle · Ubetalt · Ikke levert |
 | F16 | Empty list | Ingen bestillinger her ennå. |
 | F17 | Order row | K7 · Kari / 2 × *Kaffe…* / 240 kr / 2 stk |
