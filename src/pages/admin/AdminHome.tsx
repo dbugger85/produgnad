@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { Badge, Button, Card, Loading, Page, TopBar } from '../../components/ui'
+import { Badge, Card, Loading, Page, TopBar } from '../../components/ui'
 import { useAuth } from '../../lib/auth'
 import { longDate } from '../../lib/format'
 import { cached, remember } from '../../lib/pageCache'
@@ -52,8 +52,9 @@ export default function AdminHome() {
         <section className="space-y-2">
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Dugnader jeg administrerer</h2>
-            <Link to="/admin/ny" className="block w-fit">
-              <Button className="min-h-10 shrink-0 whitespace-nowrap px-4 text-sm">+ Ny</Button>
+            {/* Small, so the heading keeps the same distance to the cards as the one above */}
+            <Link to="/admin/ny" className="-my-1 shrink-0 rounded-full bg-brand px-3.5 py-1 text-sm font-semibold text-white">
+              Ny
             </Link>
           </div>
         {campaigns === null ? (
