@@ -8,9 +8,14 @@ import { supabase } from '../../lib/supabase'
 
 export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
   const [open, setOpen] = useState<string | null>(null)
+  const [sortBy, setSortBy] = useState<'name' | 'team'>('name')
   const rows = data.parents
     .map((p) => ({ parent: p, totals: data.totals.find((t) => t.campaign_parent_id === p.id) }))
-    .sort((a, b) => a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb'))
+    .sort((a, b) =>
+      sortBy === 'team'
+        ? Number(b.totals?.to_team ?? 0) - Number(a.totals?.to_team ?? 0)
+        : a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb'),
+    )
 
   const printAll = (
     <Link to={`/admin/d/${data.campaign.id}/pakkelister`} className="block w-fit font-semibold text-brand">
@@ -21,7 +26,23 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
 
   return (
     <div className="space-y-2">
-      {printAll}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {printAll}
+        <div className="flex gap-1 text-sm" role="radiogroup" aria-label="Sorter">
+          {(['name', 'team'] as const).map((k) => (
+            <button
+              key={k}
+              type="button"
+              role="radio"
+              aria-checked={sortBy === k}
+              onClick={() => setSortBy(k)}
+              className={`rounded-full px-3 py-1 ${sortBy === k ? 'bg-ink text-white' : 'bg-line'}`}
+            >
+              {k === 'name' ? 'Navn' : 'Mest til laget'}
+            </button>
+          ))}
+        </div>
+      </div>
       {rows.map(({ parent, totals }) => {
         const diff = Number(totals?.diff ?? 0)
         return (
@@ -33,10 +54,11 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
                 </div>
                 <div className="text-sm text-muted">
                   {parent.child_first_name && `${parent.child_first_name} · `}
-                  {totals?.order_count ?? 0} {totals?.order_count === 1 ? 'bestilling' : 'bestillinger'}
+                  {totals?.order_count ?? 0} {totals?.order_count === 1 ? 'bestilling' : 'bestillinger'} ·{' '}
+                  <strong className="text-ink">{kr(totals?.to_team)}</strong> til laget
                 </div>
               </div>
-              <div className="text-right text-sm">
+              <div className="shrink-0 space-y-1 text-right text-sm whitespace-nowrap">
                 <div>
                   {kr(totals?.paid)} / {kr(totals?.owed)}
                 </div>

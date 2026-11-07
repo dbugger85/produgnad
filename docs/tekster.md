@@ -117,6 +117,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 | # | Where | Text |
 |---|---|---|
+| F0 | Top (follows Fremdrift) | **765 kr** til laget via deg · av 1 850 kr solgt · *progress bar* · For hele dugnaden |
 | F1 | Box title | Din bestillingslenke |
 | F2 | Buttons | Kopier lenke · Åpne siden · Pakkeliste · QR-kode / Skjul QR-kode |
 | F3 | QR print heading | *Kaffesalg* – bestill via *Ola Hansen* · Skriv ut |
@@ -206,7 +207,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | I6 | Status, locked | Låst 7. november 2026. Foreldre kan ikke legge til eller endre bestillinger. · Lås opp · Avslutt dugnaden |
 | I7 | Status, finished | Avsluttet 7. november 2026. · Åpne igjen |
 | I8 | Confirms | Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå. · Låse opp bestillingene igjen? · Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider. · Åpne dugnaden igjen? |
-| I9 | Foreldre tab | Skriv ut alle pakkelister → · Ola Hansen D-1 · Emma · 4 bestillinger · 0 kr / 1 370 kr · Oppgjort / Skylder 1 370 kr / Betalt 200 kr for mye |
+| I9 | Foreldre tab | Skriv ut alle pakkelister → · Navn / Mest til laget · Emma · 6 bestillinger · **765 kr** til laget · Ola Hansen D-1 · Emma · 4 bestillinger · 0 kr / 1 370 kr · Oppgjort / Skylder 1 370 kr / Betalt 200 kr for mye |
 | I10 | Opened parent | Betalinger · Ingen registrert. · Beløp (kr) · Dato · Registrer betaling fra Ola · Slett · Merk varer sendt / Varer sendt 7. november 2026 (angre) · Pakkeliste · Se forelderens side → |
 | I11 | Confirms | Slette denne betalingen? · Merke at varene er sendt til Ola Hansen? Forelderen får e-post. |
 | I12 | Empty | Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt. |

@@ -175,6 +175,8 @@ export interface ParentTotals {
   diff: number
   friend_unpaid: number
   order_count: number
+  /** Money to the team from this parent's orders */
+  to_team: number
 }
 
 export interface ParentPayment {

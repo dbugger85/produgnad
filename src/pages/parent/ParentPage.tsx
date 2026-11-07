@@ -70,7 +70,14 @@ export default function ParentPage() {
       <TopBar title={campaign.name} back={profile?.is_admin ? '/admin' : undefined} />
       <Page>
         {page && page.campaign.raised !== null && (
-          <ProgressBar raised={page.campaign.raised} target={page.campaign.target_amount ?? 0} />
+          <Card className="space-y-3">
+            <p className="text-lg">
+              <strong className="text-2xl">{kr(totals?.to_team)}</strong> til laget via deg
+              <span className="block text-sm text-muted">av {kr(totals?.owed)} solgt</span>
+            </p>
+            <ProgressBar raised={page.campaign.raised} target={page.campaign.target_amount ?? 0} />
+            <p className="-mt-1 text-xs text-muted">For hele dugnaden</p>
+          </Card>
         )}
         {campaign.locked_at && !campaign.closed_at && (
           <Notice>Bestillingene er låst. Varene er bestilt fra leverandøren. Du kan fortsatt krysse av betalt og levert.</Notice>

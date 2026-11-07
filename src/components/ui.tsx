@@ -101,7 +101,7 @@ export function Badge({ children, tone = 'stone' }: { children: ReactNode; tone?
     amber: 'bg-amber-100 text-amber-900',
     blue: 'bg-sky-100 text-sky-900',
   }
-  return <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${tones[tone]}`}>{children}</span>
+  return <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold whitespace-nowrap ${tones[tone]}`}>{children}</span>
 }
 
 export function Logo({ size = 34 }: { size?: number }) {

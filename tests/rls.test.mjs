@@ -479,3 +479,14 @@ describe('what friends see (Oppsett → Hva som vises)', () => {
     }
   })
 })
+
+describe('money to the team per parent', () => {
+  test('v_parent_totals.to_team = sum of qty × to-team over the parent\'s orders', async () => {
+    const lines = (await service.from('order_lines').select('qty, unit_to_team, orders!inner(campaign_parent_id, deleted_at)')
+      .eq('orders.campaign_parent_id', cpA).is('orders.deleted_at', null)).data
+    const expected = lines.reduce((s, l) => s + l.qty * Number(l.unit_to_team), 0)
+    const own = (await parentA.client.from('v_parent_totals').select('to_team').eq('campaign_parent_id', cpA).single()).data
+    assert.equal(Number(own.to_team), expected)
+    expectNoRows(await parentA.client.from('v_parent_totals').select('to_team').eq('campaign_parent_id', cpB))
+  })
+})

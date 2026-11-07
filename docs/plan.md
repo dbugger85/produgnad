@@ -64,3 +64,7 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 
 - 7 Nov 2026: look borrowed from Substitutor but light; then switched to ready.no navy (#002e5f) to tell it apart. Logo: shopping bag with heart. Name shown as PRODUGNAD with PRO in faded navy. Phone numbers +47 912 34 567, amounts with kr. "ikke av klubben direkte". Admin page = "Administrasjon"; settings = "Innstillinger"; campaign settings tab = "Oppsett". Admins skip the front page.
 - Next: owner's end-to-end test on a phone, then keep-alive cron (Supabase pauses after 7 idle days), link preview, packing list, extra stock, then phase 3.
+
+## Ideas (not built)
+
+- **Picture of the child with a campaign banner** (owner, 7 Nov 2026): the parent picks a photo of their child, and the app puts the campaign's banner on it (banner text/design set by the admin under Oppsett), ready to share on Facebook/Instagram/Messenger. The photo must never touch the server: it is combined in the browser (`<canvas>`) and only saved or shared from the phone (download / `navigator.share` with a file). Nothing is uploaded or stored.
