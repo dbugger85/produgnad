@@ -19,10 +19,10 @@ export function VippsBox({
         Vipps <strong>{kr(amount)}</strong> til <strong>{name}</strong>, <strong className="whitespace-nowrap">{phone(phoneNumber)}</strong>, melding{' '}
         <strong>{code}</strong>
       </p>
-      <div className="grid grid-cols-[1fr_1.45fr_1fr] gap-2 text-center text-sm">
+      <div className="grid grid-cols-[1fr_1.7fr_0.8fr] gap-2 text-center text-sm">
         <div className="space-y-1">
           <div className="text-muted">Beløp</div>
-          <CopyButton value={plainAmount(amount)} label={plainAmount(amount)} className="w-full" />
+          <CopyButton value={plainAmount(amount)} label={kr(amount)} className="w-full" />
         </div>
         <div className="space-y-1">
           <div className="text-muted">Nummer</div>

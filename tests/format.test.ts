@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { daysUntil, kr, longDate, phone, plainAmount, weekdayDate } from '../src/lib/format.ts'
+import { daysUntil, kr, longDate, phone, phoneDigits, plainAmount, weekdayDate } from '../src/lib/format.ts'
 import { fillTemplate } from '../src/lib/share.ts'
 
 const nbsp = (s: string) => s.replace(/ /g, ' ')
@@ -19,9 +19,13 @@ test('dates are Norwegian', () => {
   assert.equal(longDate(null), '')
 })
 
-test('phone numbers are grouped 3-2-3', () => {
-  assert.equal(phone('91234567'), '912 34 567')
-  assert.equal(phone('+47 912 34 567'), '+47 912 34 567')
+test('phone numbers get +47 and are grouped 3-2-3', () => {
+  assert.equal(nbsp(phone('91234567')), '+47 912 34 567')
+  assert.equal(nbsp(phone('912 34 567')), '+47 912 34 567')
+  assert.equal(nbsp(phone('+47 912 34 567')), '+47 912 34 567')
+  assert.equal(nbsp(phone('004791234567')), '+47 912 34 567')
+  assert.equal(phone('+46 70 123 45 67'), '+46 70 123 45 67')
+  assert.equal(phoneDigits('+47 912 34 567'), '91234567')
 })
 
 test('days until deadline counts in Oslo time', () => {

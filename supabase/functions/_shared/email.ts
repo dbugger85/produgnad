@@ -21,9 +21,11 @@ interface OutboxRow {
 
 const nf = new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 2 })
 const kr = (n: number | string) => `${nf.format(Number(n))} kr`
+// Same rules as phone() in src/lib/format.ts: "+47 912 34 567"
 const phone = (p: string) => {
-  const d = (p ?? '').replace(/\D/g, '')
-  return d.length === 8 ? `${d.slice(0, 3)} ${d.slice(3, 5)} ${d.slice(5)}` : p
+  const raw = (p ?? '').replace(/[^\d+]/g, '')
+  const d = raw.replace(/^(\+47|0047)/, '')
+  return /^\d{8}$/.test(d) ? `+47\u00a0${d.slice(0, 3)}\u00a0${d.slice(3, 5)}\u00a0${d.slice(5)}` : (p ?? '').trim()
 }
 const esc = (s: string) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)

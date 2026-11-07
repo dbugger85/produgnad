@@ -53,15 +53,19 @@ export function shortDateTimeText(value: string | Date | null | undefined): stri
   return value ? shortDateTime.format(toDate(value)) : ''
 }
 
-/** "91234567" -> "912 34 567" */
-export function phone(value: string | null | undefined): string {
-  const digits = (value ?? '').replace(/\D/g, '')
-  if (digits.length === 8) return `${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5)}`
-  return value ?? ''
+/** Norwegian number without country code: "+47 912 34 567" -> "91234567". Other countries are kept. */
+export function phoneDigits(value: string | null | undefined): string {
+  const raw = (value ?? '').replace(/[^\d+]/g, '')
+  const local = raw.replace(/^(\+47|0047)/, '')
+  if (/^\d{8}$/.test(local)) return local
+  return raw
 }
 
-export function phoneDigits(value: string | null | undefined): string {
-  return (value ?? '').replace(/\D/g, '')
+/** "91234567" -> "+47 912 34 567", with non-breaking spaces so it never wraps. Numbers with another country code are shown as typed. */
+export function phone(value: string | null | undefined): string {
+  const digits = phoneDigits(value)
+  if (/^\d{8}$/.test(digits)) return `+47\u00a0${digits.slice(0, 3)}\u00a0${digits.slice(3, 5)}\u00a0${digits.slice(5)}`
+  return (value ?? '').trim()
 }
 
 /** Days from today (Oslo) until a date-only string. Negative when past. */
