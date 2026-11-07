@@ -178,7 +178,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 |---|---|---|
 | H1 | Title + link | Administrasjon · Innstillinger |
 | H2 | Sections | Dugnader jeg er med på (*Kaffesalg* · Mine bestillinger (Sofie) →) · Dugnader jeg administrerer |
-| H3 | Button | + Ny dugnad |
+| H3 | Button | + Ny |
 | H4 | Campaign card | *Kaffesalg* · Frist 14. november 2026 / Ingen frist · Åpen / Låst / Avsluttet |
 | H5 | Empty | Ingen dugnader ennå. |
 | H6 | Innstillinger, box title | Din profil |
@@ -201,7 +201,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 |---|---|---|
 | I1 | Tabs | Oversikt · Foreldre · Bestillinger · Varer · Oppsett |
 | I2 | Oversikt rows | Salg totalt · Betalt fra foreldre (0 kr av 1 970 kr) · Foreldre · Bestillinger · Frist |
-| I3 | Sign-up box | Påmeldingslenke for foreldre · Kopier lenke · Del denne i foreldregruppa. Alle med lenken kan melde seg på som selger |
+| I3 | Sign-up box | Påmeldingslenke for foreldre · Kopier lenke · Bli med som selger selv → / Du er med som selger: mine bestillinger → · Del denne i foreldregruppa. Alle med lenken kan melde seg på som selger |
 | I4 | Supplier box | Til leverandøren · *14 stk* · Ingen bestillinger ennå. |
 | I5 | Status box | Status · Lås når varene er bestilt fra leverandøren. · Lås bestillingene |
 | I6 | Status, locked | Låst 7. november 2026. Foreldre kan ikke legge til eller endre bestillinger. · Lås opp · Avslutt dugnaden |

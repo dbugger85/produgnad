@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import { CopyButton } from '../../components/CopyButton'
 import { ProgressBar } from '../../components/ProgressBar'
 import { Button, Card, ErrorBox, Notice } from '../../components/ui'
 import type { AdminData } from '../../lib/adminData'
+import { useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { kr, longDate } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
@@ -10,6 +12,9 @@ import { supabase } from '../../lib/supabase'
 export function OverviewTab({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
   const { campaign, progress, parents, orders, totals, products, supplier } = data
   const [error, setError] = useState('')
+  const { session } = useAuth()
+  // The admin's own seller row in this campaign, if they have joined
+  const myCp = parents.find((p) => p.parent_user_id === session?.user.id)?.id
   const joinLink = `${window.location.origin}/bli-med/${campaign.join_code}`
   const owed = totals.reduce((s, t) => s + Number(t.owed), 0)
   const paid = totals.reduce((s, t) => s + Number(t.paid), 0)
@@ -45,7 +50,18 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
       <Card className="space-y-2">
         <h2 className="text-lg font-bold">Påmeldingslenke for foreldre</h2>
         <p className="break-all rounded-lg bg-cream p-2 font-mono text-sm">{joinLink}</p>
-        <CopyButton value={joinLink} label="Kopier lenke" />
+        <div className="flex flex-wrap items-center gap-3">
+          <CopyButton value={joinLink} label="Kopier lenke" />
+          {myCp ? (
+            <Link to={`/forelder/${myCp}`} className="text-sm font-semibold text-brand">
+              Du er med som selger: mine bestillinger →
+            </Link>
+          ) : (
+            <Link to={`/bli-med/${campaign.join_code}`} className="text-sm font-semibold text-brand">
+              Bli med som selger selv →
+            </Link>
+          )}
+        </div>
         <p className="text-xs text-muted">Del denne i foreldregruppa. Alle med lenken kan melde seg på som selger</p>
       </Card>
 

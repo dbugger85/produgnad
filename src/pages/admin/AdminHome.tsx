@@ -50,7 +50,7 @@ export default function AdminHome() {
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Dugnader jeg administrerer</h2>
             <Link to="/admin/ny" className="block w-fit">
-              <Button className="min-h-10 shrink-0 whitespace-nowrap px-4 text-sm">+ Ny dugnad</Button>
+              <Button className="min-h-10 shrink-0 whitespace-nowrap px-4 text-sm">+ Ny</Button>
             </Link>
           </div>
         {campaigns === null ? (
