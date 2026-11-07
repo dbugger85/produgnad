@@ -193,8 +193,8 @@ Every text in the app, the emails and the link previews, as of 7 November 2026. 
 
 | # | Where | Text |
 |---|---|---|
-| J1 | Short (SMS) | Hei! {barn} i {lag} selger {produkter} for å samle inn penger til cuper og reiser. Bestill innen {frist} her: {lenke} Tusen takk for støtten! |
-| J2 | Long (Facebook) | Hei alle sammen! / {barn} og resten av {lag} har dugnad for å samle inn penger til cupavgifter og reiser. / Vi selger: {produkter} / Bestill innen {frist} her: {lenke} / Du betaler med Vipps til meg ({forelder}, {vipps}) når du har bestilt, og jeg leverer varene når de kommer. / Tusen takk for at du støtter laget! |
+| J1 | Short (SMS) | Dugnaden du faktisk trenger! {barn} og resten av {lag} selger {produkter} til lagkassen. Bestill innen {frist} her: {lenke} Tusen takk for støtten! |
+| J2 | Long (Facebook) | Hei alle sammen! / Dugnaden du faktisk trenger! {barn} og resten av {lag} har dugnad til lagkassen. / Vi selger: {produkter} / Bestill innen {frist} her: {lenke} / Du betaler med Vipps til meg ({forelder}, {vipps}) når du har bestilt, og jeg leverer varene når de kommer. / Tusen takk for at du støtter {barn} og laget! |
 | J3 | Deadline reminder | Hei! Bare en påminnelse: fristen for å bestille fra {lag} sin dugnad er {frist}. Bestill her: {lenke} Takk! |
 | J4 | Payment reminder | Hei! Bestillingen din {kode} er {beløp}. Vipps til {vipps} med melding {kode}. Takk! |
 

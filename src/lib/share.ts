@@ -44,9 +44,9 @@ export async function copyText(text: string): Promise<boolean> {
 
 export const DEFAULT_TEMPLATES = {
   short:
-    'Hei! {barn} i {lag} selger {produkter} for å samle inn penger til cuper og reiser. Bestill innen {frist} her: {lenke} Tusen takk for støtten!',
+    'Dugnaden du faktisk trenger! {barn} og resten av {lag} selger {produkter} til lagkassen. Bestill innen {frist} her: {lenke} Tusen takk for støtten!',
   long:
-    'Hei alle sammen!\n\n{barn} og resten av {lag} har dugnad for å samle inn penger til cupavgifter og reiser.\n\nVi selger: {produkter}\n\nBestill innen {frist} her: {lenke}\n\nDu betaler med Vipps til meg ({forelder}, {vipps}) når du har bestilt, og jeg leverer varene når de kommer.\n\nTusen takk for at du støtter laget!',
+    'Hei alle sammen!\n\nDugnaden du faktisk trenger! {barn} og resten av {lag} har dugnad til lagkassen.\n\nVi selger: {produkter}\n\nBestill innen {frist} her: {lenke}\n\nDu betaler med Vipps til meg ({forelder}, {vipps}) når du har bestilt, og jeg leverer varene når de kommer.\n\nTusen takk for at du støtter {barn} og laget!',
   reminder:
     'Hei! Bare en påminnelse: fristen for å bestille fra {lag} sin dugnad er {frist}. Bestill her: {lenke} Takk!',
   paymentReminder: 'Hei! Bestillingen din {kode} er {beløp}. Vipps til {vipps} med melding {kode}. Takk!',
