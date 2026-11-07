@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
+import { forgetAll } from './pageCache'
 import { supabase } from './supabase'
 import type { Profile } from './types'
 
@@ -59,5 +60,6 @@ export function useAuth() {
 }
 
 export async function signOut() {
+  forgetAll()
   await supabase.auth.signOut()
 }

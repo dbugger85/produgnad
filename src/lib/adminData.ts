@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { cached, remember } from './pageCache'
 import { supabase } from './supabase'
 import type { Campaign, CampaignParent, Order, ParentPayment, ParentTotals, Product } from './types'
 
@@ -14,7 +15,7 @@ export interface AdminData {
 }
 
 export function useAdminData(campaignId: string) {
-  const [data, setData] = useState<AdminData | null | undefined>(undefined)
+  const [data, setData] = useState<AdminData | null | undefined>(() => cached<AdminData>(`admin:${campaignId}`))
   const [error, setError] = useState('')
 
   const load = useCallback(async () => {
@@ -41,7 +42,7 @@ export function useAdminData(campaignId: string) {
     ])
     const firstError = [products, parents, totals, orders, payments, progress, supplier].find((r) => r.error)?.error
     if (firstError) setError(firstError.message)
-    setData({
+    setData(remember(`admin:${campaignId}`, {
       campaign: campaign as Campaign,
       products: ((products.data as Product[]) ?? []).map((p) => ({
         ...p,
@@ -53,7 +54,7 @@ export function useAdminData(campaignId: string) {
       payments: (payments.data as ParentPayment[]) ?? [],
       progress: (progress.data as AdminData['progress']) ?? null,
       supplier: (supplier.data as AdminData['supplier']) ?? [],
-    })
+    }))
   }, [campaignId])
 
   useEffect(() => {

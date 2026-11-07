@@ -12,12 +12,11 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | Email | Resend, also as Supabase's SMTP for login emails (Supabase's own sender only reaches project team members) |
 | Login | Email with a 6-digit code **and** a link, because links from Messenger often open in another browser |
 | Parent sign-up | Through `/bli-med/<join_code>`, a link admins share. Anyone with the link can sign up |
-| Admins | Global (`profiles.is_admin`), one team per install. First admin set by SQL; others added from the admin page after they have logged in once |
-| Admin public info | Name, role title and phone (only if opted in) stored on `profiles`, shown on all campaigns |
+| Admins | Global (`profiles.is_admin`), one team per install. First admin set by SQL; others invited by email from Innstillinger or made admin on Personer (`invite-admin`, 7 Nov) |
+| Admin public info | Name, role title and phone (only if opted in) stored on `profiles`; who sees them is the Ansvarlige og kontakt setting |
 | What friends see | Setting per campaign under Oppsett → Hva som vises: Fremdrift, Bidrag per vare, Ansvarlige og kontakt; each Ikke vist / Bare foreldre og admin (default) / Alle. Friend emails reply to the contact admin only with Ansvarlige = Alle, else to the parent (owner, 7 Nov; deviates from the brief's transparency list) |
-| Progress bar | Counts all orders, including `own` and `extra` |
+| Progress bar | Counts all orders, including `own` and `extra`; money to the team (profit), not sales; no bar without a target, just the amount (7 Nov) |
 | Login link | No visible "Logg inn" on the friend page |
-| Progress bar | Money to the team (profit), not sales (shown per the setting above) |
 | Standard pictures | Products without a picture get a drawn standard picture from the name: kaffe, te, sokker (`src/lib/defaultPictures.ts`; toilet paper removed, owner 7 Nov, `public/defaults`), also in link previews (owner, 7 Nov) |
 | Picture formats | Large product pictures are JPEG (not WebP), thumbnails WebP: WhatsApp and others don't show WebP link previews (7 Nov) |
 | Order codes | `K` + counter per parent; payment codes `D-` + counter per campaign; link codes 6 random characters without O/0/I/1/L |
@@ -41,7 +40,7 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | 0.9 | DNS CNAME `dugnad` → `produgnad.pages.dev` | Martin | done 7 Nov |
 | 0.10 | Push database, deploy function, first admin, test on phone | Claude | database, function, first admin (the owner) done 7 Nov |
 
-## Phase 1 (MVP): built 7 November 2026, not yet tested end to end
+## Phase 1 (MVP): built 7 November 2026, tested with dummy data on the laptop; the owner's real test run with the live campaign is under way
 
 - Campaign and product setup, product pictures with in-browser resize (1 200 px + 400 px thumbnail, WebP/JPEG, < 200 kB)
 - Parent sign-up, personal link, payment code
@@ -64,7 +63,10 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 ## Log
 
 - 7 Nov 2026: look borrowed from Substitutor but light; then switched to ready.no navy (#002e5f) to tell it apart. Logo: shopping bag with heart. Name shown as PRODUGNAD with PRO in faded navy. Phone numbers +47 912 34 567, amounts with kr. "ikke av klubben direkte". Admin page = "Administrasjon"; settings = "Innstillinger"; campaign settings tab = "Oppsett". Admins skip the front page.
-- Next: owner's end-to-end test on a phone, then keep-alive cron (Supabase pauses after 7 idle days), link preview, packing list, extra stock, then phase 3.
+- Next (old): owner's end-to-end test on a phone, then keep-alive cron (Supabase pauses after 7 idle days), link preview, packing list, extra stock, then phase 3.
+
+- 7 Nov 2026, later: what friends see is a setting (Hva som vises); simpler page after ordering and status page (one Vipps block: amount + name, number with Kopier, message code), same block on the parent page and in emails; "Venn" instead of "Kunde"; money to the team per parent (parent page + admin list sortable); standard pictures for coffee, tea, socks; closing message by email and deleting friends' data; security review by Fable and fixes; invite admins by email; Personer page; link preview card on the parent page; bar on the parent's own order link; friends' pages always load as a friend; own confirm dialog; admin start page with "Dugnader jeg er med på" / "Dugnader jeg administrerer" / Annet; smoother page changes (preloaded code, remembered data, delayed "Laster", fade-in).
+- **Next:** the owner's real test run on a phone with the live campaign (join, order as a friend, tick paid, register payment, lock, close). Owner: set Supabase Auth → Rate Limits → emails per hour to 10.
 
 ## Ideas (not built; may never be built)
 

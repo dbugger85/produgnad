@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { ConfirmProvider } from './components/Confirm'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -9,22 +9,47 @@ import { AuthProvider } from './lib/auth'
 import FriendOrderPage from './pages/FriendOrderPage'
 import OrderStatusPage from './pages/OrderStatusPage'
 
-// Friends only load the order and status pages; the rest loads on demand.
-const HomePage = lazy(() => import('./pages/HomePage'))
-const LoginPage = lazy(() => import('./pages/LoginPage'))
-const JoinPage = lazy(() => import('./pages/JoinPage'))
-const ParentPage = lazy(() => import('./pages/parent/ParentPage'))
-const OrderEditorPage = lazy(() => import('./pages/parent/OrderEditorPage'))
-const AdminHome = lazy(() => import('./pages/admin/AdminHome'))
-const NewCampaignPage = lazy(() => import('./pages/admin/CampaignSettings'))
-const CampaignPage = lazy(() => import('./pages/admin/CampaignPage'))
-const PeoplePage = lazy(() => import('./pages/admin/PeoplePage'))
-const PersonsPage = lazy(() => import('./pages/admin/PersonsPage'))
-const PackingPage = lazy(() => import('./pages/PackingPage'))
-const AllPackingPage = lazy(() => import('./pages/admin/AllPackingPage'))
-const AssignExtraPage = lazy(() => import('./pages/parent/AssignExtraPage'))
+// Friends only load the order and status pages first; the rest is fetched in the background
+// right after, so later page changes don't wait for code.
+const loadHomePage = () => import('./pages/HomePage')
+const loadLoginPage = () => import('./pages/LoginPage')
+const loadJoinPage = () => import('./pages/JoinPage')
+const loadParentPage = () => import('./pages/parent/ParentPage')
+const loadOrderEditorPage = () => import('./pages/parent/OrderEditorPage')
+const loadAdminHome = () => import('./pages/admin/AdminHome')
+const loadNewCampaignPage = () => import('./pages/admin/CampaignSettings')
+const loadCampaignPage = () => import('./pages/admin/CampaignPage')
+const loadPeoplePage = () => import('./pages/admin/PeoplePage')
+const loadPersonsPage = () => import('./pages/admin/PersonsPage')
+const loadPackingPage = () => import('./pages/PackingPage')
+const loadAllPackingPage = () => import('./pages/admin/AllPackingPage')
+const loadAssignExtraPage = () => import('./pages/parent/AssignExtraPage')
+
+function preloadPages() {
+  for (const load of [loadHomePage, loadLoginPage, loadJoinPage, loadParentPage, loadOrderEditorPage, loadAdminHome, loadNewCampaignPage, loadCampaignPage, loadPeoplePage, loadPersonsPage, loadPackingPage, loadAllPackingPage, loadAssignExtraPage]) void load().catch(() => {})
+}
+const HomePage = lazy(loadHomePage)
+const LoginPage = lazy(loadLoginPage)
+const JoinPage = lazy(loadJoinPage)
+const ParentPage = lazy(loadParentPage)
+const OrderEditorPage = lazy(loadOrderEditorPage)
+const AdminHome = lazy(loadAdminHome)
+const NewCampaignPage = lazy(loadNewCampaignPage)
+const CampaignPage = lazy(loadCampaignPage)
+const PeoplePage = lazy(loadPeoplePage)
+const PersonsPage = lazy(loadPersonsPage)
+const PackingPage = lazy(loadPackingPage)
+const AllPackingPage = lazy(loadAllPackingPage)
+const AssignExtraPage = lazy(loadAssignExtraPage)
 
 export default function App() {
+  useEffect(() => {
+    // Friends on the order or status page don't need the rest: save their mobile data
+    if (/^\/(k|status)\//.test(window.location.pathname)) return
+    const idle = (window as { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback
+    const id = idle ? idle(preloadPages) : window.setTimeout(preloadPages, 1500)
+    return () => window.clearTimeout(id)
+  }, [])
   return (
     <AuthProvider>
       <ConfirmProvider>

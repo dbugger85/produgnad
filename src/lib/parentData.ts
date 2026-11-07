@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { cached, remember } from './pageCache'
 import { supabase } from './supabase'
 import type { Campaign, CampaignParent, LinkPage, Order, ParentPayment, ParentTotals } from './types'
 
@@ -12,7 +13,7 @@ export interface ParentData {
 
 /** Everything the parent page needs, for one campaign_parents row. */
 export function useParentData(cpId: string) {
-  const [data, setData] = useState<ParentData | null | undefined>(undefined)
+  const [data, setData] = useState<ParentData | null | undefined>(() => cached<ParentData>(`parent:${cpId}`))
   const [error, setError] = useState('')
 
   const load = useCallback(async () => {
@@ -34,13 +35,13 @@ export function useParentData(cpId: string) {
       supabase.from('parent_payments').select('*').eq('campaign_parent_id', cpId).order('paid_on'),
       supabase.rpc('public_campaign_by_link', { p_link_code: cp.link_code }),
     ])
-    setData({
+    setData(remember(`parent:${cpId}`, {
       cp: cp as ParentData['cp'],
       orders: (orders.data as Order[]) ?? [],
       totals: (totals.data as ParentTotals) ?? null,
       payments: (payments.data as ParentPayment[]) ?? [],
       page: (page.data as LinkPage) ?? null,
-    })
+    }))
   }, [cpId])
 
   useEffect(() => {

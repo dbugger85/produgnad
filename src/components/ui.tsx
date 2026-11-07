@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
+import { useEffect, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from 'react'
 import { Link } from 'react-router'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
@@ -31,7 +31,7 @@ export function Card({ children, className = '' }: { children: ReactNode; classN
 }
 
 export function Page({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
-  return <main className={`mx-auto w-full ${wide ? 'max-w-4xl' : 'max-w-xl'} space-y-4 px-4 py-5`}>{children}</main>
+  return <main className={`page-in mx-auto w-full ${wide ? 'max-w-4xl' : 'max-w-xl'} space-y-4 px-4 py-5`}>{children}</main>
 }
 
 export function TopBar({ title, back, right, wide = false }: { title: string; back?: string; right?: ReactNode; wide?: boolean }) {
@@ -81,8 +81,14 @@ export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...props} className={`${inputClass} ${props.className ?? ''}`} />
 }
 
+/** Shown only if loading takes more than half a second, so quick page changes don't flash it. */
 export function Loading({ text = 'Laster …' }: { text?: string }) {
-  return <p className="py-10 text-center text-muted">{text}</p>
+  const [show, setShow] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setShow(true), 500)
+    return () => clearTimeout(t)
+  }, [])
+  return <p className={`py-10 text-center text-muted transition-opacity duration-300 ${show ? 'opacity-100' : 'opacity-0'}`}>{text}</p>
 }
 
 export function ErrorBox({ children }: { children: ReactNode }) {

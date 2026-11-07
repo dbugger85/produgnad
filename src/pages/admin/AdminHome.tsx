@@ -3,27 +3,30 @@ import { Link } from 'react-router'
 import { Badge, Button, Card, Loading, Page, TopBar } from '../../components/ui'
 import { useAuth } from '../../lib/auth'
 import { longDate } from '../../lib/format'
+import { cached, remember } from '../../lib/pageCache'
 import { supabase } from '../../lib/supabase'
 import type { Campaign } from '../../lib/types'
 
 export default function AdminHome() {
   const { session } = useAuth()
-  const [campaigns, setCampaigns] = useState<Campaign[] | null>(null)
-  const [mine, setMine] = useState<{ id: string; child_first_name: string; campaigns: { name: string } | null }[]>([])
+  const [campaigns, setCampaigns] = useState<Campaign[] | null>(() => cached<Campaign[]>('admin:campaigns') ?? null)
+  const [mine, setMine] = useState<{ id: string; child_first_name: string; campaigns: { name: string } | null }[]>(
+    () => cached('admin:mine') ?? [],
+  )
   useEffect(() => {
     if (!session) return
     supabase
       .from('campaign_parents')
       .select('id, child_first_name, campaigns(name)')
       .eq('parent_user_id', session.user.id)
-      .then(({ data }) => setMine((data as unknown as typeof mine) ?? []))
+      .then(({ data }) => setMine(remember('admin:mine', (data as unknown as typeof mine) ?? [])))
   }, [session])
   useEffect(() => {
     supabase
       .from('campaigns')
       .select('*')
       .order('created_at', { ascending: false })
-      .then(({ data }) => setCampaigns((data as Campaign[]) ?? []))
+      .then(({ data }) => setCampaigns(remember('admin:campaigns', (data as Campaign[]) ?? [])))
   }, [])
 
   return (
