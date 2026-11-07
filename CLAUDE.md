@@ -27,3 +27,5 @@ Read `docs/brief.md` (the spec) and `docs/plan.md` (approved plan, decisions log
 - `supabase/functions/send-emails` + `_shared/email.ts` email texts
 - `src/pages/FriendOrderPage.tsx` the page most people see
 - `src/pages/parent/`, `src/pages/admin/`
+- `functions/` (Cloudflare Pages Functions) + `functions-lib/preview.ts`: link previews (Open Graph) for `/k/<code>` and `/bli-med/<code>`, filled in before the app loads; default tags and `og-default.png` in `index.html`. Test locally with `npx wrangler pages dev dist`
+- `supabase/functions/daily-digest` + `.github/workflows/daily.yml`: parent digest at 20:00 Oslo time and keep-alive; `_shared/outbox.ts` sends the email queue
