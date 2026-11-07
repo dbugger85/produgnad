@@ -5,7 +5,7 @@ import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Card, ErrorBox, Loading, Logo, Page } from '../components/ui'
 import { VippsSimple } from '../components/VippsSimple'
 import { kr, longDate } from '../lib/format'
-import { supabase } from '../lib/supabase'
+import { publicClient } from '../lib/supabase'
 import { STATUS_LABEL, type StatusPage } from '../lib/types'
 
 export default function OrderStatusPage() {
@@ -17,7 +17,7 @@ export default function OrderStatusPage() {
       setOrder(null)
       return
     }
-    supabase.rpc('order_status_by_token', { p_token: token }).then(({ data }) => setOrder((data as StatusPage) ?? null))
+    publicClient.rpc('order_status_by_token', { p_token: token }).then(({ data }) => setOrder((data as StatusPage) ?? null))
   }, [token])
 
   if (order === undefined) return <Loading />

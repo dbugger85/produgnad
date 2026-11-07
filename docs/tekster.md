@@ -27,6 +27,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | A16 | Ordering closed (deadline) | Fristen for å bestille har gått ut. |
 | A17 | Ordering closed (locked) | Bestillingen er stengt fordi varene er bestilt fra leverandøren. |
 | A18 | Ordering closed (finished) | Dugnaden er avsluttet. |
+| A21 | Logged-in parent on their own link (bar at the top) | **Dette er din bestillingsside**, slik vennene dine ser den · ← Tilbake til mine bestillinger |
 | A19 | Earlier order on this phone | Din bestilling **K7**: betaling ikke registrert ennå / betalt / på vei / levert · Se → |
 | A20 | Wrong link | Fant ikke denne lenken. Sjekk at du har hele lenken. |
 

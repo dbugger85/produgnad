@@ -5,11 +5,12 @@ import { ProgressBar } from '../components/ProgressBar'
 import { ProductPicker, quantitiesToLines, quantitiesTotal, type Quantities } from '../components/ProductPicker'
 import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Button, Card, ErrorBox, Field, Input, Loading, Logo, Notice, Page, Title } from '../components/ui'
+import { useAuth } from '../lib/auth'
 import { errorText } from '../lib/errors'
 import { kr, longDate } from '../lib/format'
 import { newId } from '../lib/id'
 import { ordersForLink, rememberOrder, type LocalOrder } from '../lib/localOrders'
-import { supabase } from '../lib/supabase'
+import { publicClient, supabase } from '../lib/supabase'
 import { STATUS_LABEL, type FriendStatus, type LinkPage, type PublicParent } from '../lib/types'
 
 interface Placed {
@@ -37,8 +38,22 @@ export default function FriendOrderPage() {
   const [error, setError] = useState('')
   const [placed, setPlaced] = useState<Placed | null>(null)
 
+  // A logged-in parent opening their own link gets a bar with the way back
+  const { session } = useAuth()
+  const [ownCp, setOwnCp] = useState<string | null>(null)
   useEffect(() => {
-    supabase.rpc('public_campaign_by_link', { p_link_code: code }).then(({ data, error }) => {
+    if (!session) return setOwnCp(null)
+    supabase
+      .from('campaign_parents')
+      .select('id')
+      .eq('link_code', code.toUpperCase())
+      .eq('parent_user_id', session.user.id)
+      .maybeSingle()
+      .then(({ data }) => setOwnCp(data?.id ?? null))
+  }, [session, code])
+
+  useEffect(() => {
+    publicClient.rpc('public_campaign_by_link', { p_link_code: code }).then(({ data, error }) => {
       if (error) setLoadError(errorText(error))
       setPage((data as LinkPage | null) ?? null)
     })
@@ -63,7 +78,7 @@ export default function FriendOrderPage() {
     if (!firstName.trim()) return setError('Skriv inn fornavnet ditt.')
     if (total <= 0) return setError('Velg minst én vare.')
     setSending(true)
-    const { data, error } = await supabase.rpc('create_friend_order', {
+    const { data, error } = await publicClient.rpc('create_friend_order', {
       p_link_code: code,
       p_first_name: firstName.trim(),
       p_lines: quantitiesToLines(quantities),
@@ -96,6 +111,16 @@ export default function FriendOrderPage() {
 
   return (
     <Page>
+      {ownCp && (
+        <div className="-mt-1 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-brand px-3 py-2 text-sm text-white">
+          <span>
+            <strong>Dette er din bestillingsside</strong>, slik vennene dine ser den
+          </span>
+          <Link to={`/forelder/${ownCp}`} className="font-semibold whitespace-nowrap underline underline-offset-2">
+            ← Tilbake til mine bestillinger
+          </Link>
+        </div>
+      )}
       <header className="space-y-2">
         <div className="flex items-center gap-2.5">
           <Logo size={28} />
@@ -225,7 +250,7 @@ function MyOrders({ linkCode }: { linkCode: string }) {
     if (local.length === 0) return
     Promise.all(
       local.map(async (o) => {
-        const { data } = await supabase.rpc('order_status_by_token', { p_token: o.status_token })
+        const { data } = await publicClient.rpc('order_status_by_token', { p_token: o.status_token })
         return data ? { ...o, status: (data as { status: FriendStatus }).status } : null
       }),
     ).then((list) => setRows(list.filter((x): x is LocalOrder & { status: FriendStatus } => x !== null)))

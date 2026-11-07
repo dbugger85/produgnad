@@ -17,3 +17,11 @@ export function imageUrl(path: string | null | undefined): string {
   if (!path) return ''
   return `${url}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`
 }
+
+/**
+ * A client without login. The friends' pages (order page, status page) use it, so parents and
+ * admins see exactly what friends see, not the parents' version with progress and admins.
+ */
+export const publicClient = createClient(url, key, {
+  auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'produgnad-public' },
+})
