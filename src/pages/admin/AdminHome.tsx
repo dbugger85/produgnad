@@ -71,15 +71,24 @@ export default function AdminHome() {
           ))
         )}
         </section>
-        <Link to="/admin/personer" className="block">
-          <Card className="flex items-center justify-between gap-2">
-            <div>
-              <div className="font-bold">Personer</div>
-              <div className="text-sm text-muted">Alle foreldre og admins, og hvem som er admin</div>
-            </div>
-            <span className="text-xl text-brand">→</span>
-          </Card>
-        </Link>
+        <section className="space-y-2 border-t border-line pt-4">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Annet</h2>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/admin/personer"
+              className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-2xl px-4 font-semibold text-brand ring-1 ring-brand/30"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <circle cx="9" cy="8" r="3.5" />
+                <path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5" />
+                <circle cx="17" cy="9" r="2.6" />
+                <path d="M16.5 14.6c2.7.2 4.4 1.9 5 4.9" />
+              </svg>
+              Personer
+            </Link>
+            <p className="text-sm text-muted">Alle foreldre og admins, og hvem som er admin</p>
+          </div>
+        </section>
       </Page>
     </>
   )
