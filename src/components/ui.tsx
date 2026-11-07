@@ -34,10 +34,10 @@ export function Page({ children, wide = false }: { children: ReactNode; wide?: b
   return <main className={`mx-auto w-full ${wide ? 'max-w-4xl' : 'max-w-xl'} space-y-4 px-4 py-5`}>{children}</main>
 }
 
-export function TopBar({ title, back, right }: { title: string; back?: string; right?: ReactNode }) {
+export function TopBar({ title, back, right, wide = false }: { title: string; back?: string; right?: ReactNode; wide?: boolean }) {
   return (
     <header className="no-print sticky top-0 z-10 border-b border-line/70 bg-cream/90">
-      <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-3">
+      <div className={`mx-auto flex ${wide ? 'max-w-4xl' : 'max-w-xl'} items-center gap-3 px-4 py-3`}>
         {back ? (
           <Link to={back} className="-ml-2 flex h-11 w-11 items-center justify-center rounded-full text-2xl text-brand" aria-label="Tilbake">
             ←

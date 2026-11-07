@@ -34,7 +34,7 @@ export default function HomePage() {
           Et enkelt verktøy for dugnader i barne- og ungdomsidrett. Har du fått en bestillingslenke fra en forelder,
           åpner du den lenken direkte.
         </p>
-        <Link to="/logg-inn">
+        <Link to="/logg-inn" className="block w-fit">
           <Button>Logg inn som forelder eller admin</Button>
         </Link>
       </Page>

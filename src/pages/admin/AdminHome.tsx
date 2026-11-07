@@ -19,7 +19,7 @@ export default function AdminHome() {
     <>
       <TopBar title="Admin" back="/" right={<Link to="/admin/folk" className="text-sm font-semibold text-brand">Admins og profil</Link>} />
       <Page>
-        <Link to="/admin/ny">
+        <Link to="/admin/ny" className="block w-fit">
           <Button>+ Ny dugnad</Button>
         </Link>
         {campaigns === null ? (

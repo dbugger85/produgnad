@@ -26,7 +26,7 @@ export default function CampaignPage() {
 
   return (
     <>
-      <TopBar title={data.campaign.name} back="/admin" />
+      <TopBar title={data.campaign.name} back="/admin" wide />
       <nav className="no-print sticky top-[53px] z-10 overflow-x-auto border-b border-line bg-cream">
         <div className="mx-auto flex max-w-4xl gap-1 px-2">
           {TABS.map((t) => (
