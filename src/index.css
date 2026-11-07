@@ -76,3 +76,17 @@ a {
     display: none;
   }
 }
+
+/* Packing lists: one parent per printed page */
+@media print {
+  .packing {
+    break-after: page;
+    font-size: 12pt;
+  }
+  .packing:last-child {
+    break-after: auto;
+  }
+  @page {
+    margin: 14mm;
+  }
+}

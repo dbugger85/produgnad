@@ -83,6 +83,9 @@ export default function ParentPage() {
             <Link to={`/k/${cp.link_code}`} className="min-h-9 rounded-lg px-3 py-1 text-sm font-semibold text-brand">
               Åpne siden
             </Link>
+            <Link to={`/pakkeliste/${cp.id}`} className="min-h-9 rounded-lg px-3 py-1 text-sm font-semibold text-brand">
+              Pakkeliste
+            </Link>
             <button type="button" className="min-h-9 rounded-lg px-3 py-1 text-sm font-semibold text-brand" onClick={() => setShowQr((v) => !v)}>
               {showQr ? 'Skjul QR-kode' : 'QR-kode'}
             </button>
@@ -177,6 +180,7 @@ export default function ParentPage() {
               order={o}
               cpId={cp.id}
               editable={open}
+              canGive={!campaign.closed_at}
               productNames={Object.fromEntries((page?.products ?? []).map((p) => [p.id, p.name]))}
               reminder={fill(campaign, 'paymentReminder', {
                 ...vars,
@@ -205,6 +209,7 @@ function OrderRow({
   order,
   cpId,
   editable,
+  canGive,
   productNames,
   reminder,
   onPaid,
@@ -213,6 +218,7 @@ function OrderRow({
   order: Order
   cpId: string
   editable: boolean
+  canGive: boolean
   productNames: Record<string, string>
   reminder: string
   onPaid: (paid: boolean) => void
@@ -266,6 +272,11 @@ function OrderRow({
           <button type="button" className="text-sm font-semibold text-brand" onClick={() => setShowReminder((v) => !v)}>
             Påminnelse
           </button>
+        )}
+        {order.type === 'extra' && canGive && (
+          <Link to={`/forelder/${cpId}/fra-ekstra/${order.id}`} className="text-sm font-semibold text-brand">
+            Gi til kunde
+          </Link>
         )}
         {editable && (
           <Link to={`/forelder/${cpId}/ordre/${order.id}`} className="ml-auto text-sm font-semibold text-brand">

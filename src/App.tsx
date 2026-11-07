@@ -17,6 +17,9 @@ const AdminHome = lazy(() => import('./pages/admin/AdminHome'))
 const NewCampaignPage = lazy(() => import('./pages/admin/CampaignSettings'))
 const CampaignPage = lazy(() => import('./pages/admin/CampaignPage'))
 const PeoplePage = lazy(() => import('./pages/admin/PeoplePage'))
+const PackingPage = lazy(() => import('./pages/PackingPage'))
+const AllPackingPage = lazy(() => import('./pages/admin/AllPackingPage'))
+const AssignExtraPage = lazy(() => import('./pages/parent/AssignExtraPage'))
 
 export default function App() {
   return (
@@ -32,6 +35,9 @@ export default function App() {
             <Route path="/forelder/:cpId" element={<RequireLogin><ParentPage /></RequireLogin>} />
             <Route path="/forelder/:cpId/ny" element={<RequireLogin><OrderEditorPage /></RequireLogin>} />
             <Route path="/forelder/:cpId/ordre/:orderId" element={<RequireLogin><OrderEditorPage /></RequireLogin>} />
+            <Route path="/forelder/:cpId/fra-ekstra/:orderId" element={<RequireLogin><AssignExtraPage /></RequireLogin>} />
+            <Route path="/pakkeliste/:cpId" element={<RequireLogin><PackingPage /></RequireLogin>} />
+            <Route path="/admin/d/:id/pakkelister" element={<RequireAdmin><AllPackingPage /></RequireAdmin>} />
             <Route path="/admin" element={<RequireAdmin><AdminHome /></RequireAdmin>} />
             <Route path="/admin/ny" element={<RequireAdmin><NewCampaignPage /></RequireAdmin>} />
             <Route path="/admin/d/:id" element={<RequireAdmin><CampaignPage /></RequireAdmin>} />

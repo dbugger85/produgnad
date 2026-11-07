@@ -12,10 +12,16 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
     .map((p) => ({ parent: p, totals: data.totals.find((t) => t.campaign_parent_id === p.id) }))
     .sort((a, b) => a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb'))
 
+  const printAll = (
+    <Link to={`/admin/d/${data.campaign.id}/pakkelister`} className="block w-fit font-semibold text-brand">
+      Skriv ut alle pakkelister →
+    </Link>
+  )
   if (rows.length === 0) return <p className="text-muted">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt.</p>
 
   return (
     <div className="space-y-2">
+      {printAll}
       {rows.map(({ parent, totals }) => {
         const diff = Number(totals?.diff ?? 0)
         return (
@@ -127,6 +133,9 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
         <Button variant="secondary" onClick={() => void toggleSent()}>
           {parent.goods_sent_at ? `Varer sendt ${longDate(parent.goods_sent_at)} (angre)` : 'Merk varer sendt'}
         </Button>
+        <Link to={`/pakkeliste/${parent.id}`} className="inline-flex min-h-11 items-center px-2 font-semibold text-brand">
+          Pakkeliste
+        </Link>
         <Link to={`/forelder/${parent.id}`} className="inline-flex min-h-11 items-center px-2 font-semibold text-brand">
           Se forelderens side →
         </Link>

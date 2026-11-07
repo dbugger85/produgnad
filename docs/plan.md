@@ -55,7 +55,7 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 
 ## Still to do
 
-- Phase 2: packing list per parent (print), assign extra stock to named buyers (digest + keep-alive done 7 Nov: `daily-digest` function + `.github/workflows/daily.yml`)
+- Phase 2: done 7 Nov (digest + keep-alive: `daily-digest` + `.github/workflows/daily.yml`; packing lists `/pakkeliste/<cp>` and `/admin/d/<id>/pakkelister`; extra stock `assign_extra`, allowed after the lock)
 - Phase 3: screenshot matching (Tesseract.js), closing message by email, ledger CSV, data deletion (link previews done 7 Nov: Cloudflare Pages Functions in `functions/`, default picture `public/og-default.png`)
 
 ## Log

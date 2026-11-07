@@ -388,3 +388,45 @@ describe('daily digest', () => {
     assert.equal(again.length, 2)
   })
 })
+
+describe('extra stock', () => {
+  test('parent gives extra units to a named buyer; totals stay the same', async () => {
+    const extra = await parentA.client.rpc('save_order', {
+      p_campaign_parent_id: cpA, p_type: 'extra', p_lines: [{ product_id: coffee.id, qty: 5 }, { product_id: tea.id, qty: 1 }],
+    })
+    assert.ifError(extra.error)
+    const before = (await parentA.client.from('v_parent_totals').select('owed').eq('campaign_parent_id', cpA).single()).data
+
+    const given = await parentA.client.rpc('assign_extra', {
+      p_order_id: extra.data.id, p_buyer_first_name: 'Nabo', p_lines: [{ product_id: coffee.id, qty: 2 }], p_paid: true,
+    })
+    assert.ifError(given.error)
+    const left = (await parentA.client.from('order_lines').select('product_id, qty').eq('order_id', extra.data.id)).data
+    assert.equal(left.find((l) => l.product_id === coffee.id).qty, 3)
+    const o = (await parentA.client.from('orders').select('type, buyer_first_name, paid_to_parent_at, assigned_from_order_id').eq('id', given.data.id).single()).data
+    assert.equal(o.type, 'friend')
+    assert.equal(o.buyer_first_name, 'Nabo')
+    assert.ok(o.paid_to_parent_at)
+    assert.equal(o.assigned_from_order_id, extra.data.id)
+    const after = (await parentA.client.from('v_parent_totals').select('owed').eq('campaign_parent_id', cpA).single()).data
+    assert.equal(Number(after.owed), Number(before.owed))
+
+    expectError(await parentA.client.rpc('assign_extra', { p_order_id: extra.data.id, p_buyer_first_name: 'X', p_lines: [{ product_id: coffee.id, qty: 4 }] }), 'NOT_ENOUGH_EXTRA')
+    expectError(await parentA.client.rpc('assign_extra', { p_order_id: extra.data.id, p_buyer_first_name: ' ', p_lines: [{ product_id: coffee.id, qty: 1 }] }), 'INVALID_NAME')
+    expectError(await parentB.client.rpc('assign_extra', { p_order_id: extra.data.id, p_buyer_first_name: 'X', p_lines: [{ product_id: coffee.id, qty: 1 }] }), 'NOT_ALLOWED')
+    expectError(await anon().rpc('assign_extra', { p_order_id: extra.data.id, p_buyer_first_name: 'X', p_lines: [{ product_id: coffee.id, qty: 1 }] }))
+
+    // Works after the lock; giving away the rest uses the extra order up
+    await admin.client.from('campaigns').update({ locked_at: new Date().toISOString() }).eq('id', campaign.id)
+    try {
+      const rest = await parentA.client.rpc('assign_extra', {
+        p_order_id: extra.data.id, p_buyer_first_name: 'Tante', p_lines: [{ product_id: coffee.id, qty: 3 }, { product_id: tea.id, qty: 1 }],
+      })
+      assert.ifError(rest.error)
+      const gone = (await service.from('orders').select('deleted_at').eq('id', extra.data.id).single()).data
+      assert.ok(gone.deleted_at)
+    } finally {
+      await admin.client.from('campaigns').update({ locked_at: null }).eq('id', campaign.id)
+    }
+  })
+})
