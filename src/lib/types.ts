@@ -102,6 +102,7 @@ export interface Campaign {
   progress_visibility: Visibility
   contribution_visibility: Visibility
   admins_visibility: Visibility
+  anonymized_at: string | null
 }
 
 /** Who sees the progress bar / the per-product contribution: nobody, parents (and admins), or everyone */

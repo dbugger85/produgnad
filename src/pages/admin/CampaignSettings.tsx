@@ -7,7 +7,7 @@ import { DEFAULT_TEMPLATES, PLACEHOLDERS } from '../../lib/share'
 import { supabase } from '../../lib/supabase'
 import type { Campaign, Profile, Visibility } from '../../lib/types'
 
-type Form = Omit<Campaign, 'id' | 'join_code' | 'locked_at' | 'closed_at'>
+type Form = Omit<Campaign, 'id' | 'join_code' | 'locked_at' | 'closed_at' | 'anonymized_at'>
 
 function emptyForm(userId: string | undefined): Form {
   return {

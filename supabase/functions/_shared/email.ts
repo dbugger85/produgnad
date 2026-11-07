@@ -189,6 +189,25 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Åpne bestillingene')}
     )
   }
 
+  if (row.kind === 'closing') {
+    const [{ data: progress }, { data: totals }] = await Promise.all([
+      db.from('v_campaign_progress').select('raised').eq('campaign_id', campaign.id).single(),
+      db.from('v_parent_totals').select('to_team').eq('campaign_parent_id', cp.id).single(),
+    ])
+    const raised = Number(progress?.raised ?? 0)
+    const mine = Number(totals?.to_team ?? 0)
+    return wrap(
+      `${campaign.name}: takk for innsatsen!`,
+      `<h1 style="font-size:20px;margin:0 0 12px">Takk for innsatsen, ${esc(parentName.split(' ')[0])}!</h1>
+<p style="white-space:pre-line">${esc(campaign.closing_message)}</p>
+<div style="text-align:center;background:#f1eee8;border:1px solid #dedad2;border-radius:14px;padding:16px 12px;margin:14px 0">
+<p style="font-size:15px;margin:0 0 4px">Til laget totalt</p>
+<p style="font-size:28px;font-weight:700;margin:0 0 10px">${kr(raised)}</p>
+${mine > 0 ? `<p style="font-size:15px;margin:0">Via deg: <strong>${kr(mine)}</strong></p>` : ''}</div>
+${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
+    )
+  }
+
   if (row.kind === 'goods_sent') {
     return wrap(
       `Varene til ${campaign.name} er på vei til deg`,

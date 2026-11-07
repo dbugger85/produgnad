@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CopyButton } from '../../components/CopyButton'
 import { ProgressBar } from '../../components/ProgressBar'
 import { Button, Card, ErrorBox, Notice } from '../../components/ui'
@@ -76,6 +76,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
         {campaign.closed_at ? (
           <>
             <Notice>Avsluttet {longDate(campaign.closed_at)}.</Notice>
+            <Wrapup data={data} reload={reload} />
             <Button variant="secondary" onClick={() => void update({ closed_at: null }, 'Åpne dugnaden igjen?')}>
               Åpne igjen
             </Button>
@@ -116,6 +117,90 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
           </>
         )}
       </Card>
+    </div>
+  )
+}
+
+/** After closing: the closing message by email, and deleting the friends' personal data. */
+function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
+  const { campaign, parents } = data
+  const [sent, setSent] = useState<number | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    supabase
+      .from('email_outbox')
+      .select('id', { count: 'exact', head: true })
+      .eq('campaign_id', campaign.id)
+      .eq('kind', 'closing')
+      .then(({ count }) => setSent(count ?? 0))
+  }, [campaign.id, message])
+
+  const withEmail = parents.filter((p) => p.profiles.email).length
+
+  async function sendClosing() {
+    if (!confirm(`Sende avslutningsmeldingen på e-post til ${withEmail} foreldre?`)) return
+    setError('')
+    setBusy(true)
+    const { data: n, error } = await supabase.rpc('queue_closing_emails', { p_campaign_id: campaign.id })
+    if (error) {
+      setBusy(false)
+      return setError(errorText(error))
+    }
+    // Send right away (20 per call); anything left goes with the evening job
+    for (let i = 0; i < 3; i++) await supabase.functions.invoke('send-emails').catch(() => {})
+    setBusy(false)
+    setMessage(n ? `Sendt til ${n} foreldre.` : 'Alle foreldrene har allerede fått avslutningsmeldingen.')
+  }
+
+  async function anonymize() {
+    if (!confirm('Slette vennenes personopplysninger? Fornavn blir «Venn», og e-postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres.')) return
+    setError('')
+    setBusy(true)
+    const { error } = await supabase.rpc('anonymize_friends', { p_campaign_id: campaign.id })
+    setBusy(false)
+    if (error) return setError(errorText(error))
+    await reload()
+  }
+
+  return (
+    <div className="space-y-4 border-t border-line pt-3">
+      <div className="space-y-2">
+        <h3 className="font-semibold">Avslutningsmelding på e-post</h3>
+        {!campaign.closing_message.trim() ? (
+          <p className="text-sm text-muted">Skriv en avslutningsmelding under Oppsett først</p>
+        ) : (
+          <>
+            <p className="text-sm text-muted">
+              Foreldrene får meldingen din, hvor mye dugnaden samlet inn til laget, og hvor mye som kom via dem
+            </p>
+            {sent !== null && sent > 0 && <p className="text-sm">Sendt til {sent} foreldre.</p>}
+            <Button onClick={() => void sendClosing()} disabled={busy || withEmail === 0}>
+              {sent ? 'Send til foreldre som ikke har fått den' : `Send til ${withEmail} foreldre`}
+            </Button>
+          </>
+        )}
+        {message && <p className="text-sm text-green-800">{message}</p>}
+      </div>
+
+      <div className="space-y-2">
+        <h3 className="font-semibold">Vennenes personopplysninger</h3>
+        {campaign.anonymized_at ? (
+          <p className="text-sm">Slettet {longDate(campaign.anonymized_at)}. Beløp og betalinger er beholdt.</p>
+        ) : (
+          <>
+            <p className="text-sm text-muted">
+              Slett fornavn, e-postadresser og notater fra vennene når varene er levert og alt er betalt, slik personvernteksten lover
+            </p>
+            <Button variant="danger" onClick={() => void anonymize()} disabled={busy}>
+              Slett vennenes personopplysninger
+            </Button>
+          </>
+        )}
+      </div>
+      <ErrorBox>{error}</ErrorBox>
     </div>
   )
 }

@@ -18,6 +18,9 @@ const messages: Record<string, string> = {
   UNKNOWN_ORDER: 'Fant ikke bestillingen.',
   UNKNOWN_USER: 'Fant ingen bruker med den e-postadressen. Personen må logge inn én gang først.',
   LAST_ADMIN: 'Det må være minst én admin.',
+  CAMPAIGN_NOT_CLOSED: 'Dugnaden må være avsluttet først.',
+  NO_CLOSING_MESSAGE: 'Skriv en avslutningsmelding under Oppsett først.',
+  UNKNOWN_CAMPAIGN: 'Fant ikke dugnaden.',
   NOT_EXTRA_ORDER: 'Dette er ikke en ekstrabestilling.',
   NOT_ENOUGH_EXTRA: 'Du har ikke så mange igjen av ekstrabestillingen.',
 }

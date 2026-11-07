@@ -59,13 +59,16 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 ## Still to do
 
 - Phase 2: done 7 Nov (digest + keep-alive: `daily-digest` + `.github/workflows/daily.yml`; packing lists `/pakkeliste/<cp>` and `/admin/d/<id>/pakkelister`; extra stock `assign_extra`, allowed after the lock)
-- Phase 3: screenshot matching (Tesseract.js), closing message by email, ledger CSV, data deletion (link previews done 7 Nov: Cloudflare Pages Functions in `functions/`, default picture `public/og-default.png`)
+- Phase 3: done 7 Nov: link previews (Cloudflare Pages Functions in `functions/`, default picture `public/og-default.png`), closing message by email (`queue_closing_emails`, once per parent) and deleting friends' data (`anonymize_friends`, keeps totals), both on Oversikt after closing. Ledger CSV and screenshot matching moved to the idea list (owner, 7 Nov)
 
 ## Log
 
 - 7 Nov 2026: look borrowed from Substitutor but light; then switched to ready.no navy (#002e5f) to tell it apart. Logo: shopping bag with heart. Name shown as PRODUGNAD with PRO in faded navy. Phone numbers +47 912 34 567, amounts with kr. "ikke av klubben direkte". Admin page = "Administrasjon"; settings = "Innstillinger"; campaign settings tab = "Oppsett". Admins skip the front page.
 - Next: owner's end-to-end test on a phone, then keep-alive cron (Supabase pauses after 7 idle days), link preview, packing list, extra stock, then phase 3.
 
-## Ideas (not built)
+## Ideas (not built; may never be built)
+
+- **Ledger CSV for the treasurer**: per parent, amount owed, payments with date and amount (brief §3.1).
+- **Reading Vipps screenshots** (brief §3.6): upload screenshots of the Vipps list, OCR in the browser with Tesseract.js, suggested matches by code and amount, confirmed with a tap. Images never leave the phone.
 
 - **Picture of the child with a campaign banner** (owner, 7 Nov 2026): the parent picks a photo of their child, and the app puts the campaign's banner on it (banner text/design set by the admin under Oppsett), ready to share on Facebook/Instagram/Messenger. The photo must never touch the server: it is combined in the browser (`<canvas>`) and only saved or shared from the phone (download / `navigator.share` with a file). Nothing is uploaded or stored.

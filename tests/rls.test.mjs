@@ -490,3 +490,44 @@ describe('money to the team per parent', () => {
     expectNoRows(await parentA.client.from('v_parent_totals').select('to_team').eq('campaign_parent_id', cpB))
   })
 })
+
+describe('end of campaign', () => {
+  test('closing email: admins only, needs a closed campaign with a message, once per parent', async () => {
+    expectError(await parentA.client.rpc('queue_closing_emails', { p_campaign_id: campaign.id }), 'NOT_ALLOWED')
+    expectError(await anon().rpc('queue_closing_emails', { p_campaign_id: campaign.id }))
+    expectError(await admin.client.rpc('queue_closing_emails', { p_campaign_id: campaign.id }), 'CAMPAIGN_NOT_CLOSED')
+    await admin.client.from('campaigns').update({ closed_at: new Date().toISOString(), closing_message: '' }).eq('id', campaign.id)
+    try {
+      expectError(await admin.client.rpc('queue_closing_emails', { p_campaign_id: campaign.id }), 'NO_CLOSING_MESSAGE')
+      await admin.client.from('campaigns').update({ closing_message: 'Vi samlet inn masse. Takk!' }).eq('id', campaign.id)
+      const first = await admin.client.rpc('queue_closing_emails', { p_campaign_id: campaign.id })
+      assert.ifError(first.error)
+      assert.equal(first.data, 2)
+      const again = await admin.client.rpc('queue_closing_emails', { p_campaign_id: campaign.id })
+      assert.equal(again.data, 0)
+    } finally {
+      await admin.client.from('campaigns').update({ closed_at: null }).eq('id', campaign.id)
+    }
+  })
+
+  test('deleting friends\' data keeps the totals', async () => {
+    expectError(await parentA.client.rpc('anonymize_friends', { p_campaign_id: campaign.id }), 'NOT_ALLOWED')
+    expectError(await admin.client.rpc('anonymize_friends', { p_campaign_id: campaign.id }), 'CAMPAIGN_NOT_CLOSED')
+    const before = (await admin.client.from('v_parent_totals').select('campaign_parent_id, owed, paid, to_team').eq('campaign_id', campaign.id).order('campaign_parent_id')).data
+    await admin.client.from('campaigns').update({ closed_at: new Date().toISOString() }).eq('id', campaign.id)
+    try {
+      assert.ifError((await admin.client.rpc('anonymize_friends', { p_campaign_id: campaign.id })).error)
+      const orders = (await service.from('orders').select('type, buyer_first_name, email, note').eq('campaign_id', campaign.id)).data
+      assert.ok(orders.every((o) => o.email === null && o.note === ''))
+      assert.ok(orders.filter((o) => o.type === 'friend').every((o) => o.buyer_first_name === 'Venn'))
+      const friendMails = (await service.from('email_outbox').select('id').eq('campaign_id', campaign.id).in('kind', ['friend_order', 'friend_paid'])).data
+      assert.equal(friendMails.length, 0)
+      const after = (await admin.client.from('v_parent_totals').select('campaign_parent_id, owed, paid, to_team').eq('campaign_id', campaign.id).order('campaign_parent_id')).data
+      assert.deepEqual(after, before)
+      const c = (await admin.client.from('campaigns').select('anonymized_at').eq('id', campaign.id).single()).data
+      assert.ok(c.anonymized_at)
+    } finally {
+      await admin.client.from('campaigns').update({ closed_at: null }).eq('id', campaign.id)
+    }
+  })
+})
