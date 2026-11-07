@@ -68,8 +68,8 @@ async function resizeFrom(
 }
 
 export async function prepareProductImage(file: File): Promise<{ main: Resized; thumb: Resized }> {
-  if (!file.type.startsWith('image/')) throw new Error('Filen er ikke et bilde.')
-  if (file.size > 25 * 1024 * 1024) throw new Error('Bildet er for stort.')
+  if (!file.type.startsWith('image/')) throw new Error('Filen er ikke et bilde')
+  if (file.size > 25 * 1024 * 1024) throw new Error('Bildet er for stort')
   const source = await loadBitmap(file)
   const main = await resizeFrom(source, 1200, 200 * 1024, false)
   const thumb = await resizeFrom(source, 400, 60 * 1024, true)

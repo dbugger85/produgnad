@@ -36,7 +36,7 @@ export default function JoinPage() {
   if (campaign === null)
     return (
       <Page>
-        <ErrorBox>Fant ikke denne påmeldingslenken.</ErrorBox>
+        <ErrorBox>Fant ikke denne påmeldingslenken</ErrorBox>
       </Page>
     )
 
@@ -63,12 +63,12 @@ export default function JoinPage() {
           <p className="text-sm font-semibold text-brand">{campaign.organizer_label}</p>
         </div>
         <Title>Bli med som selger: {campaign.name}</Title>
-        {campaign.deadline && <p className="text-ink">Bestillingsfrist {longDate(campaign.deadline)}.</p>}
+        {campaign.deadline && <p className="text-ink">Bestillingsfrist {longDate(campaign.deadline)}</p>}
       </header>
 
       {!session ? (
         <Card className="space-y-3">
-          <p>Først logger du inn med e‑posten din. Du får en kode, ikke noe passord.</p>
+          <p>Først logger du inn med e‑posten din. Du får en kode, ikke noe passord</p>
           <LoginForm next={`/bli-med/${code}`} />
         </Card>
       ) : (

@@ -71,7 +71,7 @@ export default function PackingPage() {
   }
 
   if (data === undefined) return <Loading />
-  if (data === null) return <Page><ErrorBox>Fant ikke pakkelisten.</ErrorBox></Page>
+  if (data === null) return <Page><ErrorBox>Fant ikke pakkelisten</ErrorBox></Page>
 
   // Admins packing someone else's list go back to the list of all parents
   const own = data.parent.user_id === profile?.user_id

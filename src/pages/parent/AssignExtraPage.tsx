@@ -33,13 +33,13 @@ export default function AssignExtraPage() {
   }, [orderId])
 
   if (order === undefined) return <Loading />
-  if (order === null) return <Page><ErrorBox>Fant ikke ekstrabestillingen.</ErrorBox></Page>
+  if (order === null) return <Page><ErrorBox>Fant ikke ekstrabestillingen</ErrorBox></Page>
 
   const total = order.order_lines.reduce((s, l) => s + (qty[l.product_id] ?? 0) * Number(l.unit_price), 0)
 
   async function save() {
     setError('')
-    if (!name.trim()) return setError('Skriv inn fornavnet til vennen.')
+    if (!name.trim()) return setError('Skriv inn fornavnet til vennen')
     setBusy(true)
     const { error } = await supabase.rpc('assign_extra', {
       p_order_id: orderId,
@@ -56,7 +56,7 @@ export default function AssignExtraPage() {
     <>
       <TopBar title={`Gi bort fra ${order.code}`} back={`/forelder/${cpId}`} />
       <Page>
-        <p className="text-muted">Velg hvor mange som skal til en venn. De trekkes fra ekstrabestillingen, og totalen din endrer seg ikke.</p>
+        <p className="text-muted">Velg hvor mange som skal til en venn. De trekkes fra ekstrabestillingen, og totalen din endrer seg ikke</p>
         <form
           className="space-y-4"
           onSubmit={(e) => {

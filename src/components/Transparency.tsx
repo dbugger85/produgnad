@@ -13,7 +13,7 @@ export function Transparency({
     <section className="space-y-2 text-sm text-muted">
       <p>
         Salget er organisert av <strong className="text-ink">{campaign.organizer_label}</strong>, ikke av klubben
-        direkte.
+        direkte
       </p>
       {campaign.admins.length > 0 && (
         <p>
@@ -33,7 +33,7 @@ export function Transparency({
         .filter((p) => p.to_team_amount !== null && Number(p.to_team_amount) > 0)
         .map((p) => (
           <p key={p.name}>
-            {kr(p.to_team_amount)} av hver {p.name.toLowerCase()} på {kr(p.price)} går til laget.
+            {kr(p.to_team_amount)} av hver {p.name.toLowerCase()} på {kr(p.price)} går til laget
           </p>
         ))}
     </section>

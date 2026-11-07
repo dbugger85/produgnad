@@ -106,7 +106,7 @@ export function OrderPackingList({
     ...orders.filter((o) => o.type === 'friend').sort((a, b) => a.buyer_first_name.localeCompare(b.buyer_first_name, 'nb')),
     ...orders.filter((o) => o.type !== 'friend'),
   ]
-  if (sorted.length === 0) return <p className="text-muted">Ingen bestillinger.</p>
+  if (sorted.length === 0) return <p className="text-muted">Ingen bestillinger</p>
   return (
     <div className="space-y-2">
       {sorted.map((o) => {

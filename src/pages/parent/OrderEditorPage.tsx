@@ -38,7 +38,7 @@ export default function OrderEditorPage() {
         .select('campaign_id, campaigns(max_qty_per_line, locked_at, closed_at)')
         .eq('id', cpId)
         .maybeSingle()
-      if (!cp) return setError('Fant ikke dugnaden.')
+      if (!cp) return setError('Fant ikke dugnaden')
       const c = cp.campaigns as unknown as { max_qty_per_line: number; locked_at: string | null; closed_at: string | null }
       setMaxQty(c.max_qty_per_line)
       setLocked(!!c.locked_at || !!c.closed_at)
@@ -47,7 +47,7 @@ export default function OrderEditorPage() {
       if (orderId) {
         const { data } = await supabase.from('orders').select('*, order_lines(*)').eq('id', orderId).maybeSingle()
         existing = (data as Order) ?? null
-        if (!existing) return setError('Fant ikke bestillingen.')
+        if (!existing) return setError('Fant ikke bestillingen')
         setOrder(existing)
         setType(existing.type)
         setName(existing.buyer_first_name)
@@ -114,7 +114,7 @@ export default function OrderEditorPage() {
     <>
       <TopBar title={order ? `Endre ${order.code}` : 'Ny bestilling'} back={`/forelder/${cpId}`} />
       <Page>
-        {locked && <Notice>Bestillingene er låst. Bare admin kan endre nå.</Notice>}
+        {locked && <Notice>Bestillingene er låst. Bare admin kan endre nå</Notice>}
         <form
           className="space-y-4"
           onSubmit={(e) => {

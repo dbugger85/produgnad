@@ -79,7 +79,7 @@ const { data: campaign, error: cErr } = await admin
     name: 'Kaffesalg høsten 2026',
     team_name: 'Ready G2018',
     organizer_label: 'Foreldre og supportere av Ready G2018',
-    purpose_text: 'Alt overskudd går til cupavgifter og reiser for laget i 2027.',
+    purpose_text: 'Alt overskudd går til cupavgifter og reiser for laget i 2027',
     target_amount: 30000,
     deadline,
     admin_vipps_name: 'Kari Nordmann',
@@ -157,6 +157,6 @@ console.log(`
 Seeded dummy campaign "${campaign.name}".
   Friend order page (Ola):  http://localhost:5173/k/${olaLink.link_code}
   Parent sign-up:           http://localhost:5173/bli-med/G2018KAF
-  Log in as admin@example.com, ola@example.com or lise@example.com.
+  Log in as admin@example.com, ola@example.com or lise@example.com
   The login code arrives in the local mail viewer: http://127.0.0.1:54324
 `)

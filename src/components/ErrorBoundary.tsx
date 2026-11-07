@@ -40,8 +40,8 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { error: u
         <h1 className="font-display text-3xl uppercase tracking-wide">{stale ? 'Ny versjon' : 'Noe gikk galt'}</h1>
         <p className="text-muted">
           {stale
-            ? 'Appen er oppdatert. Last inn siden på nytt for å fortsette.'
-            : 'Siden kunne ikke vises. Prøv å laste inn på nytt. Hjelper ikke det, ta kontakt med de ansvarlige.'}
+            ? 'Appen er oppdatert. Last inn siden på nytt for å fortsette'
+            : 'Siden kunne ikke vises. Prøv å laste inn på nytt. Hjelper ikke det, ta kontakt med de ansvarlige'}
         </p>
         <button
           type="button"

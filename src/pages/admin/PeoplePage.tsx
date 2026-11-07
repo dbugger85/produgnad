@@ -56,7 +56,7 @@ export default function PeoplePage() {
       return setError(errorText(code || error))
     }
     setNewEmail('')
-    setInvited(data?.already ? `${email} var allerede admin. Vi har sendt en ny e‑post.` : `${email} er lagt til og har fått en e‑post.`)
+    setInvited(data?.already ? `${email} var allerede admin. Vi har sendt en ny e‑post` : `${email} er lagt til og har fått en e‑post`)
     await loadAdmins()
   }
 
@@ -81,7 +81,7 @@ export default function PeoplePage() {
             }}
           >
             <h2 className="text-lg font-bold">Din profil</h2>
-            <p className="text-sm text-muted">Navnet og rollen din vises for de som får se «Ansvarlige og kontakt» (velges under Oppsett i hver dugnad; vanligvis bare foreldrene).</p>
+            <p className="text-sm text-muted">Navnet og rollen din vises for de som får se «Ansvarlige og kontakt» (velges under Oppsett i hver dugnad; vanligvis bare foreldrene)</p>
             <Field label="Navn">
               <Input value={name} onChange={(e) => { setName(e.target.value); setSaved(false) }} />
             </Field>
@@ -136,7 +136,7 @@ export default function PeoplePage() {
             Se alle personer og gjør foreldre til admin →
           </Link>
         </Card>
-        <Button variant="ghost" onClick={() => void signOut()}>
+        <Button variant="ghost" className="px-0!" onClick={() => void signOut()}>
           Logg ut
         </Button>
       </Page>

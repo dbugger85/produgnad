@@ -45,7 +45,7 @@ export default function ParentPage() {
   if (data === null || !vars)
     return (
       <Page>
-        <ErrorBox>Fant ikke denne dugnaden for deg.</ErrorBox>
+        <ErrorBox>Fant ikke denne dugnaden for deg</ErrorBox>
       </Page>
     )
 
@@ -85,10 +85,10 @@ export default function ParentPage() {
           </Card>
         )}
         {campaign.locked_at && !campaign.closed_at && (
-          <Notice>Bestillingene er låst. Varene er bestilt fra leverandøren. Du kan fortsatt krysse av betalt og levert.</Notice>
+          <Notice>Bestillingene er låst. Varene er bestilt fra leverandøren. Du kan fortsatt krysse av betalt og levert</Notice>
         )}
-        {campaign.closed_at && <Notice>Dugnaden er avsluttet.</Notice>}
-        {cp.goods_sent_at && <Notice>Varene dine er sendt fra de ansvarlige ({longDate(cp.goods_sent_at)}).</Notice>}
+        {campaign.closed_at && <Notice>Dugnaden er avsluttet</Notice>}
+        {cp.goods_sent_at && <Notice>Varene dine er sendt fra de ansvarlige ({longDate(cp.goods_sent_at)})</Notice>}
 
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">Din bestillingslenke</h2>
@@ -165,9 +165,9 @@ export default function ParentPage() {
               />
             </div>
           )}
-          {owedLeft < 0 && <p className="text-sm">Du har betalt {kr(-owedLeft)} for mye. Ta kontakt med de ansvarlige.</p>}
+          {owedLeft < 0 && <p className="text-sm">Du har betalt {kr(-owedLeft)} for mye. Ta kontakt med de ansvarlige</p>}
           <p className="text-xs text-muted">
-            Betal gjerne samlet når fristen er ute. Du kan betale i flere deler; skriv {cp.payment_code} i meldingen hver gang.
+            Betal gjerne samlet når fristen er ute. Du kan betale i flere deler; skriv {cp.payment_code} i meldingen hver gang
           </p>
           {payments.length > 0 && (
             <ul className="text-sm text-muted">
@@ -209,7 +209,7 @@ export default function ParentPage() {
             ))}
           </div>
           <ErrorBox>{actionError}</ErrorBox>
-          {shown.length === 0 && <p className="text-muted">Ingen bestillinger her ennå.</p>}
+          {shown.length === 0 && <p className="text-muted">Ingen bestillinger her ennå</p>}
           {shown.map((o) => (
             <OrderRow
               key={o.id}
@@ -231,7 +231,7 @@ export default function ParentPage() {
 
         <p className="text-sm text-muted">
           Venner ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Svarer de på en e‑post fra
-          appen, går svaret til e‑postadressen din. Betalingskoden din til admin er {cp.payment_code}.
+          appen, går svaret til e‑postadressen din. Betalingskoden din til admin er {cp.payment_code}
         </p>
         {page && (
           <>
@@ -239,7 +239,7 @@ export default function ParentPage() {
             <Transparency campaign={page.campaign} products={page.products} />
           </>
         )}
-        <Button variant="ghost" onClick={() => void signOut()}>
+        <Button variant="ghost" className="px-0!" onClick={() => void signOut()}>
           Logg ut
         </Button>
       </Page>

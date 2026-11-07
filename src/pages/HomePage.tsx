@@ -32,7 +32,7 @@ export default function HomePage() {
         <Brand />
         <p className="text-ink">
           Et enkelt verktøy for dugnader i barne- og ungdomsidrett. Har du fått en bestillingslenke fra en forelder,
-          åpner du den lenken direkte.
+          åpner du den lenken direkte
         </p>
         <Link to="/logg-inn" className="block w-fit">
           <Button>Logg inn som forelder eller admin</Button>
@@ -67,11 +67,11 @@ export default function HomePage() {
       ) : (
         !profile?.is_admin && (
           <p className="text-ink">
-            Du er ikke med i noen dugnad ennå. Be en av de ansvarlige om påmeldingslenken.
+            Du er ikke med i noen dugnad ennå. Be en av de ansvarlige om påmeldingslenken
           </p>
         )
       )}
-      <Button variant="ghost" onClick={() => void signOut()}>
+      <Button variant="ghost" className="px-0!" onClick={() => void signOut()}>
         Logg ut
       </Button>
     </Page>

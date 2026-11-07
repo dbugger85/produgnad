@@ -25,9 +25,9 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
     if (error) {
       setError(
         /rate|seconds/i.test(error.message)
-          ? 'Vent litt før du ber om en ny kode.'
+          ? 'Vent litt før du ber om en ny kode'
           : /sending|smtp|email/i.test(error.message)
-            ? 'Klarte ikke å sende e‑posten akkurat nå. Prøv igjen om litt, eller kontakt de ansvarlige.'
+            ? 'Klarte ikke å sende e‑posten akkurat nå. Prøv igjen om litt, eller kontakt de ansvarlige'
             : errorText(error),
       )
       return
@@ -45,7 +45,7 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
     })
     setBusy(false)
     if (error) {
-      setError('Koden stemmer ikke, eller den er for gammel. Prøv igjen eller be om en ny.')
+      setError('Koden stemmer ikke, eller den er for gammel. Prøv igjen eller be om en ny')
       return
     }
     onDone?.()
@@ -88,7 +88,7 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
     >
       <p className="text-sm text-ink">
         Vi har sendt en e‑post til <strong>{email}</strong>. Skriv inn koden fra e‑posten her, eller trykk på lenken i
-        e‑posten.
+        e‑posten
       </p>
       <Field label="Kode fra e‑posten">
         <Input

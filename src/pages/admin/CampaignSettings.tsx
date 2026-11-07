@@ -14,7 +14,7 @@ function emptyForm(userId: string | undefined): Form {
     name: 'Kaffesalg',
     team_name: '',
     organizer_label: 'Foreldre og supportere av ',
-    purpose_text: 'Alt overskudd går til cupavgifter og reiser for laget.',
+    purpose_text: 'Alt overskudd går til cupavgifter og reiser for laget',
     target_amount: 0,
     deadline: null,
     admin_vipps_name: '',
@@ -141,7 +141,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
 
       <Card className="space-y-3">
         <h2 className="text-lg font-bold">Betaling fra foreldre</h2>
-        <p className="text-sm text-muted">Foreldrene vippser det de skylder hit, med betalingskoden sin som melding.</p>
+        <p className="text-sm text-muted">Foreldrene vippser det de skylder hit, med betalingskoden sin som melding</p>
         <Field label="Vipps-navn">
           <Input value={form.admin_vipps_name} onChange={(e) => set('admin_vipps_name', e.target.value)} />
         </Field>
@@ -167,7 +167,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
       <Card className="space-y-3">
         <h2 className="text-lg font-bold">Tekster foreldrene deler</h2>
         <p className="text-sm text-muted">
-          Du kan bruke {PLACEHOLDERS.map((p) => `{${p}}`).join(', ')}. Foreldrene kan endre teksten før de deler.
+          Du kan bruke {PLACEHOLDERS.map((p) => `{${p}}`).join(', ')}. Foreldrene kan endre teksten før de deler
         </p>
         <Field label="Kort tekst (SMS, chat)">
           <TextArea rows={4} value={form.share_template_short} onChange={(e) => set('share_template_short', e.target.value)} />

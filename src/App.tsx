@@ -73,7 +73,7 @@ export default function App() {
             <Route path="/admin/d/:id" element={<RequireAdmin><CampaignPage /></RequireAdmin>} />
             <Route path="/admin/personer" element={<RequireAdmin><PersonsPage /></RequireAdmin>} />
             <Route path="/admin/folk" element={<RequireAdmin><PeoplePage /></RequireAdmin>} />
-            <Route path="*" element={<Page><ErrorBox>Fant ikke siden.</ErrorBox></Page>} />
+            <Route path="*" element={<Page><ErrorBox>Fant ikke siden</ErrorBox></Page>} />
           </Routes>
         </Suspense>
         </ErrorBoundary>

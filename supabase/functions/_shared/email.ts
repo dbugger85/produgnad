@@ -21,10 +21,10 @@ function renderAdminInvite(row: OutboxRow & { to_email?: string }): Rendered {
 <p style="margin:0 0 12px"><img src="${APP_URL}/email-logo.png" width="180" height="48" alt="ProDugnad" style="display:block;border:0"></p>
 <div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e7e5e4">
 <h1 style="font-size:20px;margin:0 0 12px">Du er lagt til som administrator</h1>
-<p>Du kan nå sette opp dugnader, varer og foreldre, og registrere betalinger i ProDugnad.</p>
-<p>Logg inn med denne e‑postadressen. Du får en kode på e‑post, ikke noe passord.</p>
+<p>Du kan nå sette opp dugnader, varer og foreldre, og registrere betalinger i ProDugnad</p>
+<p>Logg inn med denne e‑postadressen. Du får en kode på e‑post, ikke noe passord</p>
 ${button(login, 'Logg inn')}
-<p style="font-size:13px;color:#57534e">Fyll gjerne inn navn, rolle og telefon under Innstillinger når du er logget inn.</p>
+<p style="font-size:13px;color:#57534e">Fyll gjerne inn navn, rolle og telefon under Innstillinger når du er logget inn</p>
 </div></div></body></html>`
   return { fromName: 'ProDugnad', replyTo: null, subject: 'Du er lagt til som administrator i ProDugnad', html, text: htmlToText(html) }
 }
@@ -56,7 +56,7 @@ function layout(campaign: { organizer_label: string; purpose_text: string; name:
 <p style="margin:0 0 6px;font-size:14px;font-weight:600;color:#002e5f">${esc(campaign.organizer_label)}</p>
 <div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e7e5e4">${body}</div>
 <p style="font-size:13px;color:#57534e;line-height:1.5;margin-top:16px">
-${esc(campaign.name)} er organisert av ${esc(campaign.organizer_label)}, ikke av klubben direkte.
+${esc(campaign.name)} er organisert av ${esc(campaign.organizer_label)}, ikke av klubben direkte
 ${campaign.purpose_text ? `<br>${esc(campaign.purpose_text)}` : ''}
 ${contactLine ? `<br>${contactLine}` : ''}</p>
 </div></body></html>`
@@ -102,7 +102,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
   }
   // Emails to parents: replies to the contact admin
   const wrap = (subject: string, body: string): Rendered => {
-    const line = contact?.name && campaign.admins_visibility !== 'none' ? `Kontakt: ${esc(contact.name)} (svar på denne e‑posten).` : ''
+    const line = contact?.name && campaign.admins_visibility !== 'none' ? `Kontakt: ${esc(contact.name)} (svar på denne e‑posten)` : ''
     const html = layout(campaign, line, body)
     return { ...base, subject, html, text: htmlToText(html) }
   }
@@ -119,7 +119,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
   const wrapFriend = (subject: string, body: string): Rendered => {
     if (campaign.admins_visibility === 'all' && contact?.email) return wrap(subject, body)
     const first = parentName.split(' ')[0]
-    const line = first ? `Spørsmål? Svar på denne e‑posten, så kommer den til ${esc(first)}.` : ''
+    const line = first ? `Spørsmål? Svar på denne e‑posten, så kommer den til ${esc(first)}` : ''
     const html = layout(campaign, line, body)
     return { ...base, replyTo: cp.profiles?.email || null, subject, html, text: htmlToText(html) }
   }
@@ -144,13 +144,13 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
 <tr><td style="padding-top:8px;font-weight:700">Totalt</td><td style="padding-top:8px;text-align:right;font-weight:700">${kr(amount)}</td></tr></table>
 ${vippsBlock(amount, parentName, cp.profiles?.phone ?? '', order.code)}
 ${button(statusUrl, 'Se status på bestillingen')}
-<p>${esc(parentName)} leverer varene når de kommer.</p>`,
+<p>${esc(parentName)} leverer varene når de kommer</p>`,
       )
     }
     return wrapFriend(
       `Takk! Betalingen for ${order.code} er registrert`,
       `<h1 style="font-size:20px;margin:0 0 12px">Takk, ${esc(order.buyer_first_name)}!</h1>
-<p>${esc(parentName)} har registrert at du har betalt ${kr(amount)} for bestilling ${esc(order.code)}.</p>
+<p>${esc(parentName)} har registrert at du har betalt ${kr(amount)} for bestilling ${esc(order.code)}</p>
 ${button(statusUrl, 'Se status på bestillingen')}`,
     )
   }
@@ -161,8 +161,8 @@ ${button(statusUrl, 'Se status på bestillingen')}`,
     return wrap(
       `Betaling registrert: ${kr(totals?.paid ?? 0)} av ${kr(totals?.owed ?? 0)}`,
       `<h1 style="font-size:20px;margin:0 0 12px">Takk, ${esc(parentName.split(' ')[0])}!</h1>
-<p>Vi har registrert betalingen din for ${esc(campaign.name)}. Du har nå betalt <strong>${kr(totals?.paid ?? 0)}</strong> av <strong>${kr(totals?.owed ?? 0)}</strong>.</p>
-${left > 0 ? `<p>Det gjenstår <strong>${kr(left)}</strong>.</p>${vippsBlock(left, campaign.admin_vipps_name, campaign.admin_vipps_phone, cp.payment_code)}` : left < 0 ? `<p>Du har betalt ${kr(-left)} for mye. Vi tar kontakt.</p>` : '<p>Alt er betalt. Tusen takk!</p>'}
+<p>Vi har registrert betalingen din for ${esc(campaign.name)}. Du har nå betalt <strong>${kr(totals?.paid ?? 0)}</strong> av <strong>${kr(totals?.owed ?? 0)}</strong></p>
+${left > 0 ? `<p>Det gjenstår <strong>${kr(left)}</strong></p>${vippsBlock(left, campaign.admin_vipps_name, campaign.admin_vipps_phone, cp.payment_code)}` : left < 0 ? `<p>Du har betalt ${kr(-left)} for mye. Vi tar kontakt</p>` : '<p>Alt er betalt. Tusen takk!</p>'}
 ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
     )
   }
@@ -212,13 +212,13 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
       `<h1 style="font-size:20px;margin:0 0 12px">Nye bestillinger, ${esc(parentName.split(' ')[0])}</h1>
 <table style="width:100%;font-size:15px;border-collapse:collapse">${rows}
 <tr><td style="padding-top:8px;font-weight:700;border-top:1px solid #dedad2">Nye totalt</td><td style="padding-top:8px;text-align:right;font-weight:700;border-top:1px solid #dedad2">${kr(freshSum)}</td></tr></table>
-<p>Totalt bestilt via deg: <strong>${kr(totals?.owed ?? 0)}</strong>.${
+<p>Totalt bestilt via deg: <strong>${kr(totals?.owed ?? 0)}</strong>${
         unpaid.length
-          ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => `${esc(o.code)} ${esc(o.buyer_first_name)}`).join(', ')}.`
-          : '<br>Alle venner har betalt.'
+          ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => `${esc(o.code)} ${esc(o.buyer_first_name)}`).join(', ')}`
+          : '<br>Alle venner har betalt'
       }</p>
 ${button(`${APP_URL}/forelder/${cp.id}`, 'Åpne bestillingene')}
-<p style="font-size:13px;color:#5d6472">Du får denne e‑posten bare på dager med nye bestillinger via lenken din.</p>`,
+<p style="font-size:13px;color:#5d6472">Du får denne e‑posten bare på dager med nye bestillinger via lenken din</p>`,
     )
   }
 
@@ -245,7 +245,7 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
     return wrap(
       `Varene til ${campaign.name} er på vei til deg`,
       `<h1 style="font-size:20px;margin:0 0 12px">Varene er på vei, ${esc(parentName.split(' ')[0])}!</h1>
-<p>Varene for bestillingene dine er sendt til deg. Åpne pakkelisten på mobilen og kryss av hver bestilling når den er pakket. Merk «levert» når vennen har fått varene.</p>
+<p>Varene for bestillingene dine er sendt til deg. Åpne pakkelisten på mobilen og kryss av hver bestilling når den er pakket. Merk «levert» når vennen har fått varene</p>
 ${button(`${APP_URL}/pakkeliste/${cp.id}`, 'Åpne pakkelisten')}
 <p><a href="${APP_URL}/forelder/${cp.id}" style="color:#002e5f">Til bestillingene dine</a></p>`,
     )

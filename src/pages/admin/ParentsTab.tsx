@@ -23,7 +23,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
       Pakkeliste for alle foreldre →
     </Link>
   )
-  if (rows.length === 0) return <p className="text-muted">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt.</p>
+  if (rows.length === 0) return <p className="text-muted">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt</p>
 
   return (
     <div className="space-y-2">
@@ -93,7 +93,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
   async function addPayment() {
     setError('')
     const value = Number(amount.replace(',', '.').replace(/\s/g, ''))
-    if (!value) return setError('Skriv inn et beløp.')
+    if (!value) return setError('Skriv inn et beløp')
     setBusy(true)
     const { error } = await supabase
       .from('parent_payments')
@@ -111,7 +111,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
 
   async function toggleSent() {
     const next = parent.goods_sent_at ? null : new Date().toISOString()
-    if (next && !(await ask(`Merke at varene er sendt til ${parent.profiles.name}? Forelderen får e‑post.`, { confirm: 'Merk sendt' }))) return
+    if (next && !(await ask(`Merke at varene er sendt til ${parent.profiles.name}? Forelderen får e‑post`, { confirm: 'Merk sendt' }))) return
     await supabase.from('campaign_parents').update({ goods_sent_at: next }).eq('id', parentId)
     await reload()
   }
@@ -123,7 +123,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
       </p>
       <div className="space-y-1">
         <h3 className="font-semibold">Betalinger</h3>
-        {payments.length === 0 && <p className="text-muted">Ingen registrert.</p>}
+        {payments.length === 0 && <p className="text-muted">Ingen registrert</p>}
         {payments.map((p) => (
           <div key={p.id} className="flex justify-between">
             <span>

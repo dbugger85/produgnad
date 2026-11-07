@@ -27,13 +27,16 @@ const kr = (n: number) => `${nf.format(n)} kr`
 export function buildLinkPreview({ campaign, parent, products }: PreviewInput): LinkPreview {
   const via = parent.child_first_name ? `${parent.name}, forelder til ${parent.child_first_name}` : parent.name
   const perUnit = products.find((p) => p.to_team_amount !== null && Number(p.to_team_amount) > 0)
+  // Sentences without a final full stop, joined with ". " (the owner's style: no full stop at the end)
   const description = [
-    `${campaign.organizer_label}. Bestill via ${via}.`,
+    campaign.organizer_label,
+    `Bestill via ${via}`,
     campaign.purpose_text,
-    perUnit ? `${kr(Number(perUnit.to_team_amount))} av hver ${perUnit.name.toLowerCase()} går til laget.` : '',
+    perUnit ? `${kr(Number(perUnit.to_team_amount))} av hver ${perUnit.name.toLowerCase()} går til laget` : '',
   ]
+    .map((s) => s.trim().replace(/\.+$/, ''))
     .filter(Boolean)
-    .join(' ')
+    .join('. ')
 
   // Only JPEG/PNG: some apps (WhatsApp) don't show WebP. Then a standard picture, then the default one.
   const first = products.find((p) => p.images.length > 0)?.images[0]

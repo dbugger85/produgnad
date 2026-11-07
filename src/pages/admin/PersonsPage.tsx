@@ -45,7 +45,7 @@ export default function PersonsPage() {
   }, [people, search])
 
   async function makeAdmin(p: Person) {
-    if (!(await ask(`Gjøre ${p.name || p.email} til admin? Admins ser og kan endre alle dugnader, og personen får en e‑post.`, { confirm: 'Gjør til admin' }))) return
+    if (!(await ask(`Gjøre ${p.name || p.email} til admin? Admins ser og kan endre alle dugnader, og personen får en e‑post`, { confirm: 'Gjør til admin' }))) return
     setError('')
     setMessage('')
     setBusy(p.user_id)
@@ -60,19 +60,19 @@ export default function PersonsPage() {
       }
       return setError(errorText(code || error))
     }
-    setMessage(`${p.name || p.email} er nå admin og har fått en e‑post.`)
+    setMessage(`${p.name || p.email} er nå admin og har fått en e‑post`)
     await load()
   }
 
   async function removeAdmin(p: Person) {
-    if (!(await ask(`Fjerne ${p.name || p.email} som admin? Personen beholder bestillingene sine som selger.`, { confirm: 'Fjern admin', danger: true }))) return
+    if (!(await ask(`Fjerne ${p.name || p.email} som admin? Personen beholder bestillingene sine som selger`, { confirm: 'Fjern admin', danger: true }))) return
     setError('')
     setMessage('')
     setBusy(p.user_id)
     const { error } = await supabase.rpc('set_admin', { p_email: p.email, p_is_admin: false })
     setBusy(null)
     if (error) return setError(errorText(error))
-    setMessage(`${p.name || p.email} er ikke lenger admin.`)
+    setMessage(`${p.name || p.email} er ikke lenger admin`)
     await load()
   }
 
@@ -96,7 +96,7 @@ export default function PersonsPage() {
         />
         <ErrorBox>{error}</ErrorBox>
         {message && <p className="text-sm text-green-800">{message}</p>}
-        {shown.length === 0 && <p className="text-muted">Ingen treff.</p>}
+        {shown.length === 0 && <p className="text-muted">Ingen treff</p>}
         {shown.map((p) => {
           const me = p.user_id === profile?.user_id
           return (

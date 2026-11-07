@@ -19,7 +19,7 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
   if (!profile?.is_admin)
     return (
       <Page>
-        <ErrorBox>Denne siden er bare for administratorer.</ErrorBox>
+        <ErrorBox>Denne siden er bare for administratorer</ErrorBox>
       </Page>
     )
   return <>{children}</>

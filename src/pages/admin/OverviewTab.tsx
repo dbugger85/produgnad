@@ -75,7 +75,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
       <Card className="space-y-2">
         <h2 className="text-lg font-bold">Til leverandøren</h2>
         {supplier.length === 0 ? (
-          <p className="text-sm text-muted">Ingen bestillinger ennå.</p>
+          <p className="text-sm text-muted">Ingen bestillinger ennå</p>
         ) : (
           <table className="w-full text-sm">
             <tbody>
@@ -98,7 +98,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
         <ErrorBox>{error}</ErrorBox>
         {campaign.closed_at ? (
           <>
-            <Notice>Avsluttet {longDate(campaign.closed_at)}.</Notice>
+            <Notice>Avsluttet {longDate(campaign.closed_at)}</Notice>
             <Wrapup data={data} reload={reload} />
             <Button variant="secondary" onClick={() => void update({ closed_at: null }, 'Åpne dugnaden igjen?', 'Åpne igjen')}>
               Åpne igjen
@@ -106,7 +106,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
           </>
         ) : campaign.locked_at ? (
           <>
-            <Notice>Låst {longDate(campaign.locked_at)}. Foreldre kan ikke legge til eller endre bestillinger.</Notice>
+            <Notice>Låst {longDate(campaign.locked_at)}. Foreldre kan ikke legge til eller endre bestillinger</Notice>
             <div className="flex flex-wrap gap-2">
               <Button variant="secondary" onClick={() => void update({ locked_at: null }, 'Låse opp bestillingene igjen?', 'Lås opp')}>
                 Lås opp
@@ -116,7 +116,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
                 onClick={() =>
                   void update(
                     { closed_at: new Date().toISOString() },
-                    'Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider.',
+                    'Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider',
                     'Avslutt',
                   )
                 }
@@ -127,12 +127,12 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
           </>
         ) : (
           <>
-            <p className="text-sm text-muted">Lås når varene er bestilt fra leverandøren.</p>
+            <p className="text-sm text-muted">Lås når varene er bestilt fra leverandøren</p>
             <Button
               onClick={() =>
                 void update(
                   { locked_at: new Date().toISOString() },
-                  'Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå.',
+                  'Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå',
                   'Lås',
                 )
               }
@@ -178,11 +178,11 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
     // Send right away (20 per call); anything left goes with the evening job
     for (let i = 0; i < 3; i++) await supabase.functions.invoke('send-emails').catch(() => {})
     setBusy(false)
-    setMessage(n ? `Sendt til ${n} foreldre.` : 'Alle foreldrene har allerede fått avslutningsmeldingen.')
+    setMessage(n ? `Sendt til ${n} foreldre` : 'Alle foreldrene har allerede fått avslutningsmeldingen')
   }
 
   async function anonymize() {
-    if (!(await ask('Slette vennenes personopplysninger? Fornavn blir «Venn», og e‑postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres.', { confirm: 'Slett', danger: true }))) return
+    if (!(await ask('Slette vennenes personopplysninger? Fornavn blir «Venn», og e‑postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres', { confirm: 'Slett', danger: true }))) return
     setError('')
     setBusy(true)
     const { error } = await supabase.rpc('anonymize_friends', { p_campaign_id: campaign.id })
@@ -202,7 +202,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
             <p className="text-sm text-muted">
               Foreldrene får meldingen din, hvor mye dugnaden samlet inn til laget, og hvor mye som kom via dem
             </p>
-            {sent !== null && sent > 0 && <p className="text-sm">Sendt til {sent} foreldre.</p>}
+            {sent !== null && sent > 0 && <p className="text-sm">Sendt til {sent} foreldre</p>}
             <Button onClick={() => void sendClosing()} disabled={busy || withEmail === 0}>
               {sent ? 'Send til foreldre som ikke har fått den' : `Send til ${withEmail} foreldre`}
             </Button>
@@ -214,7 +214,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
       <div className="space-y-2">
         <h3 className="font-semibold">Vennenes personopplysninger</h3>
         {campaign.anonymized_at ? (
-          <p className="text-sm">Slettet {longDate(campaign.anonymized_at)}. Beløp og betalinger er beholdt.</p>
+          <p className="text-sm">Slettet {longDate(campaign.anonymized_at)}. Beløp og betalinger er beholdt</p>
         ) : (
           <>
             <p className="text-sm text-muted">

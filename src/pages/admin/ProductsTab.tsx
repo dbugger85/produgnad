@@ -102,7 +102,7 @@ function ProductForm({
 
   async function save() {
     setError('')
-    if (Number(toTeam) > Number(price)) return setError('Beløpet til laget kan ikke være høyere enn prisen.')
+    if (Number(toTeam) > Number(price)) return setError('Beløpet til laget kan ikke være høyere enn prisen')
     setBusy(true)
     const row = {
       campaign_id: campaignId,
@@ -122,10 +122,10 @@ function ProductForm({
   }
 
   async function remove() {
-    if (!product || !(await ask(`Slette ${product.name}? Det går ikke hvis noen har bestilt varen; skjul den i stedet.`, { confirm: 'Slett', danger: true }))) return
+    if (!product || !(await ask(`Slette ${product.name}? Det går ikke hvis noen har bestilt varen; skjul den i stedet`, { confirm: 'Slett', danger: true }))) return
     const paths = (product.product_images ?? []).flatMap((i) => [i.storage_path, i.thumb_path])
     const { error } = await supabase.from('products').delete().eq('id', product.id)
-    if (error) return setError('Kan ikke slette en vare som er bestilt. Fjern haken for «Vises» i stedet.')
+    if (error) return setError('Kan ikke slette en vare som er bestilt. Fjern haken for «Vises» i stedet')
     if (paths.length) await supabase.storage.from(IMAGE_BUCKET).remove(paths)
     await onDone()
   }
@@ -180,7 +180,7 @@ function ProductForm({
       {product ? (
         <ImageManager product={product} reload={reload} />
       ) : (
-        <p className="text-sm text-muted">Lagre varen først, så kan du legge til bilder.</p>
+        <p className="text-sm text-muted">Lagre varen først, så kan du legge til bilder</p>
       )}
     </Card>
   )
@@ -252,7 +252,7 @@ function ImageManager({ product, reload }: { product: Product; reload: () => Pro
     <div className="space-y-2 border-t border-line pt-3">
       <h3 className="font-semibold">Bilder</h3>
       <p className="text-xs text-muted">
-        Første bilde er hovedbildet. Bruk egne bilder eller bilder leverandøren lar oss bruke.
+        Første bilde er hovedbildet. Bruk egne bilder eller bilder leverandøren lar oss bruke
         {images.length === 0 && defaultPictureFor(product.name) && ' Uten eget bilde brukes et standardbilde'}
       </p>
       <div className="grid grid-cols-3 gap-2">

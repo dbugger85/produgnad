@@ -14,7 +14,7 @@ export default function AllPackingPage() {
   const [ticks, setTicks] = useState<Record<string, string | null>>({})
   const [error, setError] = useState('')
   if (data === undefined) return <Loading />
-  if (data === null) return <Page><ErrorBox>Fant ikke dugnaden.</ErrorBox></Page>
+  if (data === null) return <Page><ErrorBox>Fant ikke dugnaden</ErrorBox></Page>
 
   const packedAt = (cpId: string, saved: string | null) => (cpId in ticks ? ticks[cpId] : saved)
   const rows = data.parents
@@ -40,7 +40,7 @@ export default function AllPackingPage() {
       <TopBar title="Pakkeliste" back={`/admin/d/${id}?fane=foreldre`} />
       <Page>
         {rows.length === 0 ? (
-          <p className="text-muted">Ingen bestillinger ennå.</p>
+          <p className="text-muted">Ingen bestillinger ennå</p>
         ) : (
           <>
             <PackedProgress done={done} total={rows.length} noun="poser" />

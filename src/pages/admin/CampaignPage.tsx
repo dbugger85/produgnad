@@ -22,7 +22,7 @@ export default function CampaignPage() {
   const { data, error, reload } = useAdminData(id)
 
   if (data === undefined) return <Loading />
-  if (data === null) return <Page><ErrorBox>Fant ikke dugnaden.</ErrorBox></Page>
+  if (data === null) return <Page><ErrorBox>Fant ikke dugnaden</ErrorBox></Page>
 
   return (
     <>

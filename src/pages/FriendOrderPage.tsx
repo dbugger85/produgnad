@@ -66,7 +66,7 @@ export default function FriendOrderPage() {
   if (page === null)
     return (
       <Page>
-        <ErrorBox>Fant ikke denne lenken. Sjekk at du har hele lenken.</ErrorBox>
+        <ErrorBox>Fant ikke denne lenken. Sjekk at du har hele lenken</ErrorBox>
       </Page>
     )
 
@@ -75,8 +75,8 @@ export default function FriendOrderPage() {
 
   async function submit() {
     setError('')
-    if (!firstName.trim()) return setError('Skriv inn fornavnet ditt.')
-    if (total <= 0) return setError('Velg minst én vare.')
+    if (!firstName.trim()) return setError('Skriv inn fornavnet ditt')
+    if (total <= 0) return setError('Velg minst én vare')
     setSending(true)
     const { data, error } = await publicClient.rpc('create_friend_order', {
       p_link_code: code,
@@ -131,7 +131,7 @@ export default function FriendOrderPage() {
           <>
             <p className="text-ink">
               Du bestiller via <strong>{parent.name}</strong>
-              {childText}.
+              {childText}
             </p>
             {campaign.purpose_text && <p className="text-ink">{campaign.purpose_text}</p>}
             {campaign.raised !== null && <ProgressBar raised={campaign.raised} target={campaign.target_amount ?? 0} />}
@@ -160,10 +160,10 @@ export default function FriendOrderPage() {
           {!campaign.accepting_orders ? (
             <Notice>
               {campaign.closed
-                ? 'Dugnaden er avsluttet.'
+                ? 'Dugnaden er avsluttet'
                 : campaign.locked
-                  ? 'Bestillingen er stengt fordi varene er bestilt fra leverandøren.'
-                  : 'Fristen for å bestille har gått ut.'}
+                  ? 'Bestillingen er stengt fordi varene er bestilt fra leverandøren'
+                  : 'Fristen for å bestille har gått ut'}
             </Notice>
           ) : (
             <form
@@ -174,7 +174,7 @@ export default function FriendOrderPage() {
               }}
             >
               {campaign.deadline && (
-                <p className="text-sm text-muted">Bestill innen {longDate(campaign.deadline)}.</p>
+                <p className="text-sm text-muted">Bestill innen {longDate(campaign.deadline)}</p>
               )}
               <ProductPicker
                 products={products}
@@ -228,7 +228,7 @@ export default function FriendOrderPage() {
               </Card>
               <p className="text-xs text-muted">
                 Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e‑post hvis du vil ha bekreftelse) bare
-                for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden.
+                for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden
               </p>
             </form>
           )}

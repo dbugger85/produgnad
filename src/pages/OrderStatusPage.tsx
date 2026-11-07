@@ -24,7 +24,7 @@ export default function OrderStatusPage() {
   if (order === null)
     return (
       <Page>
-        <ErrorBox>Fant ikke bestillingen. Sjekk at du har hele lenken.</ErrorBox>
+        <ErrorBox>Fant ikke bestillingen. Sjekk at du har hele lenken</ErrorBox>
       </Page>
     )
 
@@ -41,7 +41,7 @@ export default function OrderStatusPage() {
         <p className="text-lg font-semibold text-brand">Status: {STATUS_LABEL[order.status]}</p>
         <p className="text-ink">
           {order.buyer_first_name}, bestilt {longDate(order.created_at)} via {parent.name}
-          {parent.child_first_name && `, forelder til ${parent.child_first_name}`}.
+          {parent.child_first_name && `, forelder til ${parent.child_first_name}`}
         </p>
       </header>
 

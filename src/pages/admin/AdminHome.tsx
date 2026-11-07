@@ -59,7 +59,7 @@ export default function AdminHome() {
         {campaigns === null ? (
           <Loading />
         ) : campaigns.length === 0 ? (
-          <p className="text-muted">Ingen dugnader ennå.</p>
+          <p className="text-muted">Ingen dugnader ennå</p>
         ) : (
           campaigns.map((c) => (
             <Link key={c.id} to={`/admin/d/${c.id}`} className="block">
