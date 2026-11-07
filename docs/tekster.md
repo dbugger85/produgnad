@@ -73,7 +73,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | D3 | Purpose | *Alt overskudd går til …* |
 | D4 | Per product | 50 kr av hver kaffe, filtermalt 500 g på 120 kr går til laget. |
 | D5 | When finished | *The closing message, see I13* |
-| D6 | Footer on every page | ProDugnad · Vi har også laget **Substitutor**, rettferdige bytter |
+| D6 | Footer on every page | ProDugnad · Vi har også laget **Substitutor** for rettferdige bytter |
 
 ## E. Login and sign-up
 

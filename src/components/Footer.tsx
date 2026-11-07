@@ -6,7 +6,7 @@ export function Footer() {
       <a href="https://substitutor.no/?lang=no" className="font-semibold text-brand underline-offset-2 hover:underline">
         Substitutor
       </a>
-      , rettferdige bytter
+      {' '}for rettferdige bytter
     </footer>
   )
 }
