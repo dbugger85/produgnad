@@ -170,9 +170,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 ## H. Admin: start page and Innstillinger
 
-<p><a href="screenshots/h-administrasjon.jpg"><img src="screenshots/h-administrasjon.jpg" width="230" alt="Administrasjon" title="Administrasjon"></a> <a href="screenshots/h-innstillinger.jpg"><img src="screenshots/h-innstillinger.jpg" width="230" alt="Innstillinger" title="Innstillinger"></a></p>
+<p><a href="screenshots/h-administrasjon.jpg"><img src="screenshots/h-administrasjon.jpg" width="230" alt="Administrasjon" title="Administrasjon"></a> <a href="screenshots/h-innstillinger.jpg"><img src="screenshots/h-innstillinger.jpg" width="230" alt="Innstillinger" title="Innstillinger"></a> <a href="screenshots/h-personer.jpg"><img src="screenshots/h-personer.jpg" width="230" alt="Personer" title="Personer"></a></p>
 
-<sub>Administrasjon · Innstillinger</sub>
+<sub>Administrasjon · Innstillinger · Personer</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -189,6 +189,8 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | H11 | Admin row | *Kari Nordmann* · kasserer · telefon skjult · *e-post* · Fjern |
 | H12 | Field + hint | Legg til admin (e-post) · Personen får en e-post med lenke for å logge inn |
 | H13 | Button + result | Legg til og send invitasjon · *ola@…* er lagt til og har fått en e-post. / *ola@…* var allerede admin. Vi har sendt en ny e-post. |
+| H15 | Personer (/admin/personer) | Personer · Alle foreldre og admins, og hvem som er admin · 9 personer, 3 admins. Nye personer kommer hit når de melder seg på som selger, eller når du legger dem til som admin under Innstillinger · Søk på navn, e‑post eller telefon · Admin · kasserer · Deg · Selger i: *Kaffesalg* (Emma) · Ikke med i noen dugnad som selger · Gjør til admin · Fjern admin · Ingen treff. |
+| H16 | Personer, confirms | Gjøre *Ola Hansen* til admin? Admins ser og kan endre alle dugnader, og personen får en e‑post. · Fjerne *Ola Hansen* som admin? Personen beholder bestillingene sine som selger. · *Ola Hansen* er nå admin og har fått en e‑post. · *Ola Hansen* er ikke lenger admin. |
 | H14 | Admin only | Denne siden er bare for administratorer. |
 
 ## I. Admin: a campaign

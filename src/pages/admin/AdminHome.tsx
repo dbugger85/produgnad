@@ -71,6 +71,15 @@ export default function AdminHome() {
           ))
         )}
         </section>
+        <Link to="/admin/personer" className="block">
+          <Card className="flex items-center justify-between gap-2">
+            <div>
+              <div className="font-bold">Personer</div>
+              <div className="text-sm text-muted">Alle foreldre og admins, og hvem som er admin</div>
+            </div>
+            <span className="text-xl text-brand">→</span>
+          </Card>
+        </Link>
       </Page>
     </>
   )

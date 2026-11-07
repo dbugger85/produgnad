@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { useEffect, useState } from 'react'
 import { Button, Card, ErrorBox, Field, Input, Page, TopBar } from '../../components/ui'
 import { signOut, useAuth } from '../../lib/auth'
@@ -131,6 +132,9 @@ export default function PeoplePage() {
             {invited && <p className="text-sm text-green-800">{invited}</p>}
           </form>
           <ErrorBox>{error}</ErrorBox>
+          <Link to="/admin/personer" className="block text-sm font-semibold text-brand">
+            Se alle personer og gjør foreldre til admin →
+          </Link>
         </Card>
         <Button variant="ghost" onClick={() => void signOut()}>
           Logg ut

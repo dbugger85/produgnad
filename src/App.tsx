@@ -18,6 +18,7 @@ const AdminHome = lazy(() => import('./pages/admin/AdminHome'))
 const NewCampaignPage = lazy(() => import('./pages/admin/CampaignSettings'))
 const CampaignPage = lazy(() => import('./pages/admin/CampaignPage'))
 const PeoplePage = lazy(() => import('./pages/admin/PeoplePage'))
+const PersonsPage = lazy(() => import('./pages/admin/PersonsPage'))
 const PackingPage = lazy(() => import('./pages/PackingPage'))
 const AllPackingPage = lazy(() => import('./pages/admin/AllPackingPage'))
 const AssignExtraPage = lazy(() => import('./pages/parent/AssignExtraPage'))
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/admin" element={<RequireAdmin><AdminHome /></RequireAdmin>} />
             <Route path="/admin/ny" element={<RequireAdmin><NewCampaignPage /></RequireAdmin>} />
             <Route path="/admin/d/:id" element={<RequireAdmin><CampaignPage /></RequireAdmin>} />
+            <Route path="/admin/personer" element={<RequireAdmin><PersonsPage /></RequireAdmin>} />
             <Route path="/admin/folk" element={<RequireAdmin><PeoplePage /></RequireAdmin>} />
             <Route path="*" element={<Page><ErrorBox>Fant ikke siden.</ErrorBox></Page>} />
           </Routes>
