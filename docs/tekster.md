@@ -54,8 +54,8 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 |---|---|---|
 | C1 | Title + status line | Bestilling K7 · Status: betaling ikke registrert ennå / betalt / på vei / levert / avbestilt |
 | C2 | Under the title | Kari, bestilt 7. november 2026 via Ola Hansen, forelder til Emma. |
-| C3 | Progress steps | Registrert · Betalt · På vei · Levert |
 | C4 | List | 2 × *Kaffe, filtermalt 500 g* · Totalt |
+| C8 | Payment (only while unpaid), same as B | Vipps **240 kr** til **Ola Hansen** · **+47 912 34 568** · Kopier · Skriv **K7** i meldingen |
 | C5 | Link | Til bestillingssiden → |
 | C7 | Progress bar | Not shown to friends (only parents and admins: **18 400 kr** til laget av 30 000 kr) |
 | C6 | Wrong link | Fant ikke bestillingen. Sjekk at du har hele lenken. |

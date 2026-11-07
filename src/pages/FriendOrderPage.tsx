@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { CopyButton } from '../components/CopyButton'
+import { VippsSimple } from '../components/VippsSimple'
 import { ProgressBar } from '../components/ProgressBar'
 import { ProductPicker, quantitiesToLines, quantitiesTotal, type Quantities } from '../components/ProductPicker'
 import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Button, Card, ErrorBox, Field, Input, Loading, Logo, Notice, Page, Title } from '../components/ui'
 import { errorText } from '../lib/errors'
-import { kr, longDate, phone, phoneDigits } from '../lib/format'
+import { kr, longDate } from '../lib/format'
 import { newId } from '../lib/id'
 import { ordersForLink, rememberOrder, type LocalOrder } from '../lib/localOrders'
 import { supabase } from '../lib/supabase'
@@ -119,16 +119,7 @@ export default function FriendOrderPage() {
       {placed ? (
         <Card className="space-y-5 py-6 text-center">
           <h2 className="font-display text-[34px] leading-none uppercase tracking-wide">Takk for støtten, {firstName.trim()}!</h2>
-          <p className="text-xl leading-snug">
-            Vipps <strong>{kr(placed.amount)}</strong> til <strong>{placed.parent.name}</strong>
-          </p>
-          <div className="flex items-center justify-center gap-3">
-            <span className="text-2xl font-bold whitespace-nowrap tabular-nums">{phone(placed.parent.phone)}</span>
-            <CopyButton value={phoneDigits(placed.parent.phone)} label="Kopier" />
-          </div>
-          <p className="text-lg">
-            Skriv <strong>{placed.code}</strong> i meldingen
-          </p>
+          <VippsSimple amount={placed.amount} name={placed.parent.name} phoneNumber={placed.parent.phone} code={placed.code} />
           <div className="flex justify-center gap-6 pt-1 text-sm">
             <Link to={`/status/${placed.status_token}`} className="font-semibold text-brand">
               Se bestillingen

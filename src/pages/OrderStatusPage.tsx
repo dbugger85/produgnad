@@ -3,18 +3,10 @@ import { Link, useParams } from 'react-router'
 import { ProgressBar } from '../components/ProgressBar'
 import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Card, ErrorBox, Loading, Logo, Page } from '../components/ui'
-import { VippsBox } from '../components/VippsBox'
+import { VippsSimple } from '../components/VippsSimple'
 import { kr, longDate } from '../lib/format'
 import { supabase } from '../lib/supabase'
-import { STATUS_LABEL, type FriendStatus, type StatusPage } from '../lib/types'
-
-const STEPS: FriendStatus[] = ['registrert', 'betalt', 'på vei', 'levert']
-const STEP_LABEL: Record<string, string> = {
-  registrert: 'Registrert',
-  betalt: 'Betalt',
-  'på vei': 'På vei',
-  levert: 'Levert',
-}
+import { STATUS_LABEL, type StatusPage } from '../lib/types'
 
 export default function OrderStatusPage() {
   const { token = '' } = useParams()
@@ -37,7 +29,6 @@ export default function OrderStatusPage() {
     )
 
   const { campaign, parent } = order
-  const stepIndex = STEPS.indexOf(order.status)
 
   return (
     <Page>
@@ -56,17 +47,6 @@ export default function OrderStatusPage() {
 
       <ClosingMessage campaign={campaign} />
 
-      {order.status !== 'avbestilt' && (
-        <ol className="grid grid-cols-4 gap-1 text-center text-xs">
-          {STEPS.map((s, i) => (
-            <li key={s} className="space-y-1">
-              <div className={`h-2 rounded-full ${i <= stepIndex ? 'bg-brand' : 'bg-line'}`} />
-              <span className={i <= stepIndex ? 'font-semibold text-brand-dark' : 'text-muted'}>{STEP_LABEL[s]}</span>
-            </li>
-          ))}
-        </ol>
-      )}
-
       <Card className="space-y-2">
         {order.lines.map((l) => (
           <p key={l.name} className="flex justify-between">
@@ -83,7 +63,9 @@ export default function OrderStatusPage() {
       </Card>
 
       {order.status === 'registrert' && (
-        <VippsBox amount={order.amount} name={parent.name} phoneNumber={parent.phone} code={order.code} />
+        <Card className="py-6">
+          <VippsSimple amount={order.amount} name={parent.name} phoneNumber={parent.phone} code={order.code} />
+        </Card>
       )}
 
       {campaign.raised !== null && <ProgressBar raised={campaign.raised} target={campaign.target_amount ?? 0} />}
