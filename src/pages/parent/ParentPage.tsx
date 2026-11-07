@@ -101,7 +101,7 @@ export default function ParentPage() {
               Pakkeliste
             </Link>
             <button type="button" className={linkButton} onClick={() => setShowQr((v) => !v)} aria-expanded={showQr}>
-              {showQr ? 'Skjul QR' : 'QR-kode'}
+              QR
             </button>
           </div>
           {showQr && <QrCode value={link} caption={`${campaign.name} – bestill via ${cp.profiles.name}`} />}
@@ -214,9 +214,10 @@ export default function ParentPage() {
           {cp.payment_code}.
         </p>
         {page && (
-          <Card>
+          <>
+            <hr className="border-line" />
             <Transparency campaign={page.campaign} products={page.products} />
-          </Card>
+          </>
         )}
         <Button variant="ghost" onClick={() => void signOut()}>
           Logg ut
