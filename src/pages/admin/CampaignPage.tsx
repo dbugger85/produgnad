@@ -28,13 +28,13 @@ export default function CampaignPage() {
     <>
       <TopBar title={data.campaign.name} back="/admin" wide />
       <nav className="no-print sticky top-[53px] z-10 overflow-x-auto border-b border-line bg-cream">
-        <div className="mx-auto flex max-w-4xl gap-1 px-2">
+        <div className="mx-auto flex max-w-4xl gap-0.5 px-1">
           {TABS.map((t) => (
             <button
               key={t.key}
               type="button"
               onClick={() => setParams({ fane: t.key }, { replace: true })}
-              className={`whitespace-nowrap border-b-2 px-3 py-2 text-sm font-semibold ${tab === t.key ? 'border-brand text-brand' : 'border-transparent text-muted'}`}
+              className={`whitespace-nowrap border-b-2 px-2 py-2 text-sm font-semibold ${tab === t.key ? 'border-brand text-brand' : 'border-transparent text-muted'}`}
             >
               {t.label}
             </button>

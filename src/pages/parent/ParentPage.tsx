@@ -233,7 +233,7 @@ function OrderRow({
           {order.note && <div className="text-sm italic text-muted">{order.note}</div>}
         </div>
         <div className="text-right">
-          <div className="font-bold">{kr(orderAmount(order))}</div>
+          <div className="whitespace-nowrap font-bold">{kr(orderAmount(order))}</div>
           <div className="text-xs text-muted">{orderUnits(order)} stk</div>
         </div>
       </div>

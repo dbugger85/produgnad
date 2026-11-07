@@ -4,7 +4,9 @@ import type { Campaign, PublicProduct } from './types'
 
 /** "500 g kaffe (120 kr) og te (80 kr)" */
 export function productList(products: Pick<PublicProduct, 'name' | 'price'>[]): string {
-  const parts = products.map((p) => `${p.name} (${kr(p.price)})`)
+  // Lower-case the first letter mid-sentence ("selger kaffe …"), but keep abbreviations like "IPA"
+  const lower = (name: string) => (/^\p{Lu}\p{Ll}/u.test(name) ? name[0].toLowerCase() + name.slice(1) : name)
+  const parts = products.map((p) => `${lower(p.name)} (${kr(p.price)})`)
   if (parts.length <= 1) return parts.join('')
   return `${parts.slice(0, -1).join(', ')} og ${parts[parts.length - 1]}`
 }

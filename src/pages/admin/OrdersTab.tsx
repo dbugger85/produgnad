@@ -13,6 +13,7 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
   const [type, setType] = useState<'' | OrderType>('')
   const [status, setStatus] = useState<StatusFilter>('')
   const names = useMemo(() => Object.fromEntries(data.products.map((p) => [p.id, p.name])), [data.products])
+  const paymentCode = useMemo(() => Object.fromEntries(data.parents.map((p) => [p.id, p.payment_code])), [data.parents])
   const parentName = useMemo(
     () => Object.fromEntries(data.parents.map((p) => [p.id, p.profiles.name || p.profiles.email])),
     [data.parents],
@@ -67,7 +68,7 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
         <Card key={o.id} className="space-y-1 text-sm">
           <div className="flex justify-between gap-2">
             <span className="font-bold">
-              {o.code} · {o.type === 'friend' ? o.buyer_first_name : ORDER_TYPE_LABEL[o.type]}
+              {paymentCode[o.campaign_parent_id]} · {o.code} · {o.type === 'friend' ? o.buyer_first_name : ORDER_TYPE_LABEL[o.type]}
             </span>
             <span className="font-bold">{kr(orderAmount(o))}</span>
           </div>
@@ -79,13 +80,13 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
             {o.type !== 'friend' && <Badge>{ORDER_TYPE_LABEL[o.type]}</Badge>}
             {o.type === 'friend' && (
               <label className="flex items-center gap-1">
-                <input type="checkbox" checked={!!o.paid_to_parent_at} onChange={(e) => void toggle(o, 'paid', e.target.checked)} />
+                <input type="checkbox" className="h-5 w-5 accent-[var(--color-brand)]" checked={!!o.paid_to_parent_at} onChange={(e) => void toggle(o, 'paid', e.target.checked)} />
                 Betalt
               </label>
             )}
             {o.type === 'friend' && (
               <label className="flex items-center gap-1">
-                <input type="checkbox" checked={!!o.delivered_at} onChange={(e) => void toggle(o, 'delivered', e.target.checked)} />
+                <input type="checkbox" className="h-5 w-5 accent-[var(--color-brand)]" checked={!!o.delivered_at} onChange={(e) => void toggle(o, 'delivered', e.target.checked)} />
                 Levert
               </label>
             )}

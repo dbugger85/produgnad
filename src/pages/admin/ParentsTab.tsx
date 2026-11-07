@@ -27,7 +27,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
                 </div>
                 <div className="text-sm text-muted">
                   {parent.child_first_name && `${parent.child_first_name} · `}
-                  {totals?.order_count ?? 0} bestillinger
+                  {totals?.order_count ?? 0} {totals?.order_count === 1 ? 'bestilling' : 'bestillinger'}
                 </div>
               </div>
               <div className="text-right text-sm">
