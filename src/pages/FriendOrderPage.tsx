@@ -5,9 +5,8 @@ import { ProgressBar } from '../components/ProgressBar'
 import { ProductPicker, quantitiesToLines, quantitiesTotal, type Quantities } from '../components/ProductPicker'
 import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Button, Card, ErrorBox, Field, Input, Loading, Logo, Notice, Page, Title } from '../components/ui'
-import { VippsBox } from '../components/VippsBox'
 import { errorText } from '../lib/errors'
-import { kr, longDate } from '../lib/format'
+import { kr, longDate, phone, phoneDigits } from '../lib/format'
 import { newId } from '../lib/id'
 import { ordersForLink, rememberOrder, type LocalOrder } from '../lib/localOrders'
 import { supabase } from '../lib/supabase'
@@ -103,35 +102,41 @@ export default function FriendOrderPage() {
           <p className="text-sm font-semibold text-brand">{campaign.organizer_label}</p>
         </div>
         <Title>{campaign.name}</Title>
-        <p className="text-ink">
-          Du bestiller via <strong>{parent.name}</strong>
-          {childText}.
-        </p>
-        {campaign.purpose_text && <p className="text-ink">{campaign.purpose_text}</p>}
-        {campaign.raised !== null && <ProgressBar raised={campaign.raised} target={campaign.target_amount ?? 0} />}
+        {!placed && (
+          <>
+            <p className="text-ink">
+              Du bestiller via <strong>{parent.name}</strong>
+              {childText}.
+            </p>
+            {campaign.purpose_text && <p className="text-ink">{campaign.purpose_text}</p>}
+            {campaign.raised !== null && <ProgressBar raised={campaign.raised} target={campaign.target_amount ?? 0} />}
+          </>
+        )}
       </header>
 
       <ClosingMessage campaign={campaign} />
 
       {placed ? (
-        <Card className="space-y-4">
-          <h2 className="text-xl font-bold">Takk, {firstName.trim()}! Bestillingen din er {placed.code}.</h2>
-          <VippsBox amount={placed.amount} name={placed.parent.name} phoneNumber={placed.parent.phone} code={placed.code} />
-          <div className="space-y-1">
-            <p className="text-sm text-muted">Her kan du se status på bestillingen senere:</p>
-            <div className="flex flex-wrap items-center gap-2">
-              <Link to={`/status/${placed.status_token}`} className="font-semibold text-brand underline">
-                Se status
-              </Link>
-              <CopyButton value={statusUrl(placed.status_token)} label="Kopier lenke" />
-            </div>
-          </div>
-          <p className="text-sm text-muted">
-            {parent.name} leverer varene når de kommer. Spørsmål? Ta kontakt med {parent.name.split(' ')[0]}.
+        <Card className="space-y-5 py-6 text-center">
+          <h2 className="font-display text-[34px] leading-none uppercase tracking-wide">Takk for støtten, {firstName.trim()}!</h2>
+          <p className="text-xl leading-snug">
+            Vipps <strong>{kr(placed.amount)}</strong> til <strong>{placed.parent.name}</strong>
           </p>
-          <Button variant="secondary" onClick={orderMore}>
-            Bestill mer
-          </Button>
+          <div className="flex items-center justify-center gap-3">
+            <span className="text-2xl font-bold whitespace-nowrap tabular-nums">{phone(placed.parent.phone)}</span>
+            <CopyButton value={phoneDigits(placed.parent.phone)} label="Kopier" />
+          </div>
+          <p className="text-lg">
+            Skriv <strong>{placed.code}</strong> i meldingen
+          </p>
+          <div className="flex justify-center gap-6 pt-1 text-sm">
+            <Link to={`/status/${placed.status_token}`} className="font-semibold text-brand">
+              Se bestillingen
+            </Link>
+            <button type="button" onClick={orderMore} className="font-semibold text-brand">
+              Bestill mer
+            </button>
+          </div>
         </Card>
       ) : (
         <>

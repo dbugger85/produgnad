@@ -38,13 +38,11 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 | # | Where | Text |
 |---|---|---|
-| B1 | Heading | Takk, Kari! Bestillingen din er K7. |
-| B2 | Vipps box | Vipps **240 kr** til **Ola Hansen**, **+47 912 34 568**, melding **K7** |
-| B3 | Copy buttons' labels | Beløp · Nummer · Melding |
-| B4 | Under them | Trykk for å kopiere |
-| B5 | Status link | Her kan du se status på bestillingen senere: · Se status · Kopier lenke |
-| B6 | Delivery | Ola Hansen leverer varene når de kommer. Spørsmål? Ta kontakt med Ola. |
-| B7 | Button | Bestill mer |
+| B1 | Heading | Takk for støtten, Kari! |
+| B2 | Payment | Vipps **240 kr** til **Ola Hansen** |
+| B3 | Number + button (only the number can be copied) | **+47 912 34 568** · Kopier / Kopiert ✓ |
+| B4 | Message | Skriv **K7** i meldingen |
+| B5 | Small links | Se bestillingen · Bestill mer |
 
 ## C. Order status page (`/status/…`)
 
