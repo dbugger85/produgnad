@@ -12,8 +12,8 @@ export function Transparency({
   return (
     <section className="space-y-2 text-sm text-muted">
       <p>
-        Salget er organisert av <strong className="text-ink">{campaign.organizer_label}</strong>, ikke av
-        klubben.
+        Salget er organisert av <strong className="text-ink">{campaign.organizer_label}</strong>, ikke av klubben
+        direkte.
       </p>
       {campaign.admins.length > 0 && (
         <p>

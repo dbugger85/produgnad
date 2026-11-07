@@ -36,7 +36,7 @@ function layout(campaign: { organizer_label: string; purpose_text: string; name:
 <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#6b4226;text-transform:uppercase;letter-spacing:.04em">${esc(campaign.organizer_label)}</p>
 <div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e7e5e4">${body}</div>
 <p style="font-size:13px;color:#57534e;line-height:1.5;margin-top:16px">
-${esc(campaign.name)} er organisert av ${esc(campaign.organizer_label)}, ikke av klubben.
+${esc(campaign.name)} er organisert av ${esc(campaign.organizer_label)}, ikke av klubben direkte.
 ${campaign.purpose_text ? `<br>${esc(campaign.purpose_text)}` : ''}
 ${contactName ? `<br>Kontakt: ${esc(contactName)} (svar på denne e-posten).` : ''}</p>
 </div></body></html>`
