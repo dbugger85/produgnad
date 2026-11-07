@@ -87,8 +87,13 @@ a {
 .page-in {
   animation: page-in 180ms ease-out;
 }
+/* Loading placeholders: hidden for the first moment, so quick loads never flash */
+.skeleton-in {
+  animation: page-in 200ms ease-out 150ms both;
+}
 @media (prefers-reduced-motion: reduce) {
-  .page-in {
+  .page-in,
+  .skeleton-in {
     animation: none;
   }
 }

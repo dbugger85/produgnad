@@ -70,7 +70,7 @@ export default function PackingPage() {
     }
   }
 
-  if (data === undefined) return <Loading />
+  if (data === undefined) return <Loading title="Pakkeliste" />
   if (data === null) return <Page><ErrorBox>Fant ikke pakkelisten</ErrorBox></Page>
 
   // Admins packing someone else's list go back to the list of all parents

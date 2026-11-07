@@ -21,7 +21,7 @@ export default function CampaignPage() {
   const tab = params.get('fane') ?? 'oversikt'
   const { data, error, reload } = useAdminData(id)
 
-  if (data === undefined) return <Loading />
+  if (data === undefined) return <Loading title="" back="/admin" wide />
   if (data === null) return <Page><ErrorBox>Fant ikke dugnaden</ErrorBox></Page>
 
   return (

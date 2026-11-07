@@ -57,7 +57,7 @@ export default function AdminHome() {
             </Link>
           </div>
         {campaigns === null ? (
-          <Loading />
+          <Loading inline />
         ) : campaigns.length === 0 ? (
           <p className="text-muted">Ingen dugnader ennå</p>
         ) : (

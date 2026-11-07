@@ -41,7 +41,7 @@ export default function ParentPage() {
   }, [data])
 
   if (error) return <Page><ErrorBox>{error}</ErrorBox></Page>
-  if (data === undefined) return <Loading />
+  if (data === undefined) return <Loading title="" />
   if (data === null || !vars)
     return (
       <Page>

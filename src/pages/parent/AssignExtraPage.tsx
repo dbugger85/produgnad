@@ -32,7 +32,7 @@ export default function AssignExtraPage() {
     void load()
   }, [orderId])
 
-  if (order === undefined) return <Loading />
+  if (order === undefined) return <Loading title="Gi bort" back={`/forelder/${cpId}`} />
   if (order === null) return <Page><ErrorBox>Fant ikke ekstrabestillingen</ErrorBox></Page>
 
   const total = order.order_lines.reduce((s, l) => s + (qty[l.product_id] ?? 0) * Number(l.unit_price), 0)

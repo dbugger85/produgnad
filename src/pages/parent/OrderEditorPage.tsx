@@ -84,7 +84,7 @@ export default function OrderEditorPage() {
   const total = useMemo(() => (products ? quantitiesTotal(products, quantities) : 0), [products, quantities])
 
   if (error && !products) return <Page><ErrorBox>{error}</ErrorBox></Page>
-  if (!products) return <Loading />
+  if (!products) return <Loading title={orderId ? 'Endre bestilling' : 'Ny bestilling'} back={`/forelder/${cpId}`} />
 
   async function save() {
     setError('')

@@ -76,7 +76,7 @@ export default function PersonsPage() {
     await load()
   }
 
-  if (people === null) return <Loading />
+  if (people === null) return <Loading title="Personer" back="/admin" />
   const admins = people.filter((p) => p.is_admin).length
 
   return (

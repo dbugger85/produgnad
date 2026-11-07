@@ -1,4 +1,4 @@
-import { useEffect, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from 'react'
+import { type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from 'react'
 import { Link } from 'react-router'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
@@ -45,7 +45,9 @@ export function TopBar({ title, back, right, wide = false }: { title: string; ba
         ) : (
           <Logo />
         )}
-        <h1 className="flex-1 truncate font-display text-2xl leading-none uppercase tracking-wide">{title}</h1>
+        <h1 className="flex-1 truncate font-display text-2xl leading-none uppercase tracking-wide">
+          {title || <span className="inline-block h-6 w-44 max-w-full animate-pulse rounded-lg bg-line/80 align-middle" />}
+        </h1>
         {right}
       </div>
     </header>
@@ -82,13 +84,28 @@ export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
 }
 
 /** Shown only if loading takes more than half a second, so quick page changes don't flash it. */
-export function Loading({ text = 'Laster …' }: { text?: string }) {
-  const [show, setShow] = useState(false)
-  useEffect(() => {
-    const t = setTimeout(() => setShow(true), 500)
-    return () => clearTimeout(t)
-  }, [])
-  return <p className={`py-10 text-center text-muted transition-opacity duration-300 ${show ? 'opacity-100' : 'opacity-0'}`}>{text}</p>
+/**
+ * Shown while a page's data loads: the page's own top bar at once (when given) and grey
+ * placeholder blocks where the content will come, like Facebook on a slow connection.
+ * The blocks fade in after a short moment, so fast loads don't flash.
+ */
+export function Loading({ title, back, wide = false, inline = false }: { title?: string; back?: string; wide?: boolean; inline?: boolean }) {
+  const blocks = (
+    <div className="skeleton-in space-y-4" aria-busy="true" role="status">
+      <span className="sr-only">Laster</span>
+      <div className="h-6 w-2/3 animate-pulse rounded-lg bg-line/80" />
+      <div className="h-32 animate-pulse rounded-[20px] bg-white/70 ring-1 ring-line/60" />
+      <div className="h-20 animate-pulse rounded-[20px] bg-white/70 ring-1 ring-line/60" />
+      {!inline && <div className="h-20 animate-pulse rounded-[20px] bg-white/70 ring-1 ring-line/60" />}
+    </div>
+  )
+  if (inline) return blocks
+  return (
+    <>
+      {title !== undefined && <TopBar title={title} back={back} wide={wide} />}
+      <main className={`mx-auto w-full ${wide ? 'max-w-4xl' : 'max-w-xl'} px-4 py-5`}>{blocks}</main>
+    </>
+  )
 }
 
 export function ErrorBox({ children }: { children: ReactNode }) {

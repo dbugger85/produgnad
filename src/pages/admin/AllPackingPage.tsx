@@ -13,7 +13,7 @@ export default function AllPackingPage() {
   // Ticks shown at once, before the reload confirms them
   const [ticks, setTicks] = useState<Record<string, string | null>>({})
   const [error, setError] = useState('')
-  if (data === undefined) return <Loading />
+  if (data === undefined) return <Loading title="Pakkeliste" back={`/admin/d/${id}?fane=foreldre`} />
   if (data === null) return <Page><ErrorBox>Fant ikke dugnaden</ErrorBox></Page>
 
   const packedAt = (cpId: string, saved: string | null) => (cpId in ticks ? ticks[cpId] : saved)
