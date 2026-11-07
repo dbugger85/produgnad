@@ -13,6 +13,7 @@ import { supabase } from '../../lib/supabase'
 import { baseVars, fill, parentLink } from '../../lib/templates'
 import { ORDER_TYPE_LABEL, orderAmount, orderUnits, type Order } from '../../lib/types'
 import { QrCode } from '../../components/QrCode'
+import { Transparency } from '../../components/Transparency'
 
 type Filter = 'alle' | 'ubetalt' | 'ikke-levert'
 
@@ -199,6 +200,11 @@ export default function ParentPage() {
           Kunder ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Betalingskoden din til admin er{' '}
           {cp.payment_code}.
         </p>
+        {page && (
+          <Card>
+            <Transparency campaign={page.campaign} products={page.products} />
+          </Card>
+        )}
         <Button variant="ghost" onClick={() => void signOut()}>
           Logg ut
         </Button>

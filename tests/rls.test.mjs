@@ -108,7 +108,10 @@ describe('friend (no login)', () => {
     assert.equal(data.parent.phone, '91234567')
     assert.equal(data.parent.child_first_name, 'Emma')
     assert.deepEqual(data.products.map((p) => p.name), ['Kaffe', 'Te'])
-    const adminRow = data.campaign.admins.find((x) => x.name === 'Admin Test')
+    // Admins are only shown to parents and admins, never to friends
+    assert.deepEqual(data.campaign.admins, [])
+    const asMember = (await parentA.client.rpc('public_campaign_by_link', { p_link_code: linkA })).data
+    const adminRow = asMember.campaign.admins.find((x) => x.name === 'Admin Test')
     assert.ok(adminRow)
     assert.equal(adminRow.phone, null)
     // The progress bar is only for parents and admins

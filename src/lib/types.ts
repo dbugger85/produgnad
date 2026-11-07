@@ -194,7 +194,7 @@ export const ORDER_TYPE_LABEL: Record<OrderType, string> = {
 }
 
 export const STATUS_LABEL: Record<FriendStatus, string> = {
-  registrert: 'ikke betalt',
+  registrert: 'betaling ikke registrert ennå',
   betalt: 'betalt',
   'på vei': 'på vei',
   levert: 'levert',

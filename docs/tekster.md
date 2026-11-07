@@ -27,7 +27,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | A16 | Ordering closed (deadline) | Fristen for å bestille har gått ut. |
 | A17 | Ordering closed (locked) | Bestillingen er stengt fordi varene er bestilt fra leverandøren. |
 | A18 | Ordering closed (finished) | Dugnaden er avsluttet. |
-| A19 | Earlier order on this phone | Din bestilling **K7**: ikke betalt / betalt / på vei / levert · Se → |
+| A19 | Earlier order on this phone | Din bestilling **K7**: betaling ikke registrert ennå / betalt / på vei / levert · Se → |
 | A20 | Wrong link | Fant ikke denne lenken. Sjekk at du har hele lenken. |
 
 ## B. After ordering
@@ -54,7 +54,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 | # | Where | Text |
 |---|---|---|
-| C1 | Title | Bestilling K7: ikke betalt / betalt / på vei / levert / avbestilt |
+| C1 | Title + status line | Bestilling K7 · Status: betaling ikke registrert ennå / betalt / på vei / levert / avbestilt |
 | C2 | Under the title | Kari, bestilt 7. november 2026 via Ola Hansen, forelder til Emma. |
 | C3 | Progress steps | Registrert · Betalt · På vei · Levert |
 | C4 | List | 2 × *Kaffe, filtermalt 500 g* · Totalt |
@@ -71,7 +71,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | # | Where | Text |
 |---|---|---|
 | D1 | Organizer | Salget er organisert av **Foreldre og supportere av Ready G2018**, ikke av klubben direkte. |
-| D2 | Admins | Ansvarlige: Kari Nordmann (kasserer), +47 912 34 567, Martin P. (koordinator) |
+| D2 | Admins (parent page only, not shown to friends) | Ansvarlige: Kari Nordmann (kasserer), +47 912 34 567, Martin P. (koordinator) |
 | D3 | Purpose | *Alt overskudd går til …* |
 | D4 | Per product | 50 kr av hver kaffe, filtermalt 500 g på 120 kr går til laget. |
 | D5 | When finished | *The closing message, see I13* |
@@ -183,9 +183,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | H4 | Campaign card | *Kaffesalg* · Frist 14. november 2026 / Ingen frist · Åpen / Låst / Avsluttet |
 | H5 | Empty | Ingen dugnader ennå. |
 | H6 | Innstillinger, box title | Din profil |
-| H7 | Text | Navnet og rollen din vises offentlig på alle sider i dugnaden. |
+| H7 | Text | Navnet og rollen din vises for foreldrene i dugnaden, ikke for kundene. |
 | H8 | Fields | Navn · Rolle (For eksempel kasserer eller koordinator) · Telefon |
-| H9 | Tick box | Vis telefonnummeret mitt offentlig |
+| H9 | Tick box | Vis telefonnummeret mitt for foreldrene |
 | H10 | Box title | Administratorer |
 | H11 | Admin row | *Kari Nordmann* · kasserer · telefon skjult · *e-post* · Fjern |
 | H12 | Field + hint | Legg til admin (e-post) · Personen må ha logget inn én gang først, på /logg-inn |
@@ -252,7 +252,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | K4 | Parent payment registered | **Betaling registrert: 1 440 kr av 1 440 kr** · Takk, Ola! · Vi har registrert betalingen din for *Kaffesalg*. Du har nå betalt **1 440 kr** av **1 440 kr**. · Det gjenstår … / Du har betalt … for mye. Vi tar kontakt. / Alt er betalt. Tusen takk! · Se dine bestillinger |
 | K5 | Goods sent | **Varene til *Kaffesalg* er på vei til deg** · Varene er på vei, Ola! · Varene for bestillingene dine er sendt til deg. Bruk pakkelisten for å fordele dem, og kryss av «levert» etter hvert. · Åpne pakkelisten · Til bestillingene dine |
 | K6 | Daily digest (20:00) | **3 nye bestillinger i dag (720 kr)** / **1 ny bestilling i dag (240 kr)** · Nye bestillinger i dag, Ola · I dag · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per. / Alle kunder har betalt. · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din. |
-| K7 | Footer of K2–K6 | *Kaffesalg* er organisert av *Foreldre og supportere av Ready G2018*, ikke av klubben direkte. / *Alt overskudd går til …* / Kontakt: *Kari Nordmann* (svar på denne e-posten). |
+| K7 | Footer of K2–K6 | *Kaffesalg* er organisert av *Foreldre og supportere av Ready G2018*, ikke av klubben direkte. / *Alt overskudd går til …* / To parents: Kontakt: *Kari Nordmann* (svar på denne e-posten). To friends: Spørsmål? Svar på denne e-posten, så kommer den til Ola. |
 | K8 | Sender name | *Foreldre og supportere av Ready G2018* via ProDugnad |
 
 ## L. Link previews (Messenger, WhatsApp, SMS)

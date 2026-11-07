@@ -14,6 +14,7 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | Parent sign-up | Through `/bli-med/<join_code>`, a link admins share. Anyone with the link can sign up |
 | Admins | Global (`profiles.is_admin`), one team per install. First admin set by SQL; others added from the admin page after they have logged in once |
 | Admin public info | Name, role title and phone (only if opted in) stored on `profiles`, shown on all campaigns |
+| Admins on public pages | Friends don't see admin names or phone numbers; parents see them at the bottom of their page. Friend emails reply to the parent, parent emails to the contact admin (owner, 7 Nov) |
 | Progress bar | Counts all orders, including `own` and `extra` |
 | Login link | No visible "Logg inn" on the friend page |
 | Progress bar | Money to the team (profit), not sales. Only parents and admins see it; friends get no amount at all (owner, 7 Nov; deviates from the brief's transparency list) |

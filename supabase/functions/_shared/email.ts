@@ -1,5 +1,6 @@
 // Email texts (Norwegian). Every email names the organizer and the purpose,
-// and replies go to the campaign's contact admin.
+// Replies from parents go to the campaign's contact admin; replies from friends go to the parent
+// they ordered through (friends don't see the admins, owner's choice 7 Nov 2026).
 import type { SupabaseClient } from 'npm:@supabase/supabase-js@2'
 
 const APP_URL = Deno.env.get('APP_URL') ?? 'https://dugnad.substitutor.no'
@@ -30,7 +31,7 @@ const phone = (p: string) => {
 const esc = (s: string) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 
-function layout(campaign: { organizer_label: string; purpose_text: string; name: string }, contactName: string, body: string) {
+function layout(campaign: { organizer_label: string; purpose_text: string; name: string }, contactLine: string, body: string) {
   return `<!doctype html><html lang="nb"><body style="margin:0;background:#f1eee8;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#121a26">
 <div style="max-width:560px;margin:0 auto;padding:24px 16px">
 <p style="margin:0 0 12px"><img src="${APP_URL}/email-logo.png" width="180" height="48" alt="ProDugnad" style="display:block;border:0"></p>
@@ -39,7 +40,7 @@ function layout(campaign: { organizer_label: string; purpose_text: string; name:
 <p style="font-size:13px;color:#57534e;line-height:1.5;margin-top:16px">
 ${esc(campaign.name)} er organisert av ${esc(campaign.organizer_label)}, ikke av klubben direkte.
 ${campaign.purpose_text ? `<br>${esc(campaign.purpose_text)}` : ''}
-${contactName ? `<br>Kontakt: ${esc(contactName)} (svar på denne e-posten).` : ''}</p>
+${contactLine ? `<br>${contactLine}` : ''}</p>
 </div></body></html>`
 }
 
@@ -71,8 +72,10 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
     fromName: `${campaign.organizer_label.replace(/[<>"]/g, '')} via ProDugnad`,
     replyTo: contact?.email || null,
   }
+  // Emails to parents: replies to the contact admin
   const wrap = (subject: string, body: string): Rendered => {
-    const html = layout(campaign, contact?.name ?? '', body)
+    const line = contact?.name ? `Kontakt: ${esc(contact.name)} (svar på denne e-posten).` : ''
+    const html = layout(campaign, line, body)
     return { ...base, subject, html, text: htmlToText(html) }
   }
 
@@ -83,6 +86,13 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
     .single()
   if (!cp) return null
   const parentName: string = cp.profiles?.name ?? ''
+  // Emails to friends: replies go to the parent they ordered through, not to the admins
+  const wrapFriend = (subject: string, body: string): Rendered => {
+    const first = parentName.split(' ')[0]
+    const line = first ? `Spørsmål? Svar på denne e-posten, så kommer den til ${esc(first)}.` : ''
+    const html = layout(campaign, line, body)
+    return { ...base, replyTo: cp.profiles?.email || null, subject, html, text: htmlToText(html) }
+  }
 
   if (row.kind === 'friend_order' || row.kind === 'friend_paid') {
     const { data: order } = await db
@@ -97,7 +107,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
       .join('')
     const statusUrl = `${APP_URL}/status/${order.status_token}`
     if (row.kind === 'friend_order') {
-      return wrap(
+      return wrapFriend(
         `Bestilling ${order.code}: Vipps ${kr(amount)} til ${parentName}`,
         `<h1 style="font-size:20px;margin:0 0 12px">Takk for bestillingen, ${esc(order.buyer_first_name)}!</h1>
 <table style="width:100%;font-size:15px;border-collapse:collapse">${lines}
@@ -107,7 +117,7 @@ ${button(statusUrl, 'Se status på bestillingen')}
 <p>${esc(parentName)} leverer varene når de kommer.</p>`,
       )
     }
-    return wrap(
+    return wrapFriend(
       `Takk! Betalingen for ${order.code} er registrert`,
       `<h1 style="font-size:20px;margin:0 0 12px">Takk, ${esc(order.buyer_first_name)}!</h1>
 <p>${esc(parentName)} har registrert at du har betalt ${kr(amount)} for bestilling ${esc(order.code)}.</p>

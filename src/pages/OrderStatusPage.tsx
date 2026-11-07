@@ -45,9 +45,8 @@ export default function OrderStatusPage() {
           <Logo size={28} />
           <p className="text-sm font-semibold text-brand">{campaign.organizer_label}</p>
         </div>
-        <h1 className="font-display text-[32px] leading-[1.05] tracking-wide uppercase">
-          Bestilling {order.code}: {STATUS_LABEL[order.status]}
-        </h1>
+        <h1 className="font-display text-[32px] leading-[1.05] tracking-wide uppercase">Bestilling {order.code}</h1>
+        <p className="text-lg font-semibold text-brand">Status: {STATUS_LABEL[order.status]}</p>
         <p className="text-ink">
           {order.buyer_first_name}, bestilt {longDate(order.created_at)} via {parent.name}
           {parent.child_first_name && `, forelder til ${parent.child_first_name}`}.
