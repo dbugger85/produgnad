@@ -33,8 +33,8 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | 0.5 | DNS at Domeneshop for Resend (+ DMARC) | Martin, rows from Claude | |
 | 0.6 | Supabase auth: custom SMTP, site URL, redirect URLs, email template, rate limit | Martin, values from Claude | URLs done; email template needs custom SMTP first |
 | 0.7 | Secrets (Resend key for the email function) | Martin | |
-| 0.8 | Cloudflare Pages project `produgnad` (https://produgnad.pages.dev) + custom domain | Martin | project done 7 Nov; custom domain open |
-| 0.9 | DNS CNAME `dugnad` → `<project>.pages.dev` | Martin | |
+| 0.8 | Cloudflare Pages project `produgnad` (https://produgnad.pages.dev) + custom domain | Martin | done 7 Nov (dugnad.substitutor.no) |
+| 0.9 | DNS CNAME `dugnad` → `produgnad.pages.dev` | Martin | done 7 Nov |
 | 0.10 | Push database, deploy function, first admin, test on phone | Claude | database, function, first admin (martin.prokosch@gmail.com) done 7 Nov |
 
 ## Phase 1 (MVP): built 7 November 2026, not yet tested end to end
