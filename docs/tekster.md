@@ -177,7 +177,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | # | Where | Text |
 |---|---|---|
 | H1 | Title + link | Administrasjon · Innstillinger |
-| H2 | Own seller page | Mine bestillinger som selger: *Kaffesalg* → |
+| H2 | Sections | Dugnader jeg er med på (*Kaffesalg* · Mine bestillinger (Sofie) →) · Dugnader jeg administrerer |
 | H3 | Button | + Ny dugnad |
 | H4 | Campaign card | *Kaffesalg* · Frist 14. november 2026 / Ingen frist · Åpen / Låst / Avsluttet |
 | H5 | Empty | Ingen dugnader ennå. |

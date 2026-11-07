@@ -9,12 +9,12 @@ import type { Campaign } from '../../lib/types'
 export default function AdminHome() {
   const { session } = useAuth()
   const [campaigns, setCampaigns] = useState<Campaign[] | null>(null)
-  const [mine, setMine] = useState<{ id: string; campaigns: { name: string } | null }[]>([])
+  const [mine, setMine] = useState<{ id: string; child_first_name: string; campaigns: { name: string } | null }[]>([])
   useEffect(() => {
     if (!session) return
     supabase
       .from('campaign_parents')
-      .select('id, campaigns(name)')
+      .select('id, child_first_name, campaigns(name)')
       .eq('parent_user_id', session.user.id)
       .then(({ data }) => setMine((data as unknown as typeof mine) ?? []))
   }, [session])
@@ -30,14 +30,29 @@ export default function AdminHome() {
     <>
       <TopBar title="Administrasjon" right={<Link to="/admin/folk" className="text-sm font-semibold text-brand">Innstillinger</Link>} />
       <Page>
-        {mine.map((m) => (
-          <Link key={m.id} to={`/forelder/${m.id}`} className="block">
-            <Card className="font-semibold text-brand">Mine bestillinger som selger: {m.campaigns?.name} →</Card>
-          </Link>
-        ))}
-        <Link to="/admin/ny" className="block w-fit">
-          <Button>+ Ny dugnad</Button>
-        </Link>
+        {mine.length > 0 && (
+          <section className="space-y-2">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Dugnader jeg er med på</h2>
+            {mine.map((m) => (
+              <Link key={m.id} to={`/forelder/${m.id}`} className="block">
+                <Card className="flex items-center justify-between gap-2">
+                  <div>
+                    <div className="font-bold">{m.campaigns?.name}</div>
+                    <div className="text-sm text-muted">Mine bestillinger{m.child_first_name && ` (${m.child_first_name})`}</div>
+                  </div>
+                  <span className="text-xl text-brand">→</span>
+                </Card>
+              </Link>
+            ))}
+          </section>
+        )}
+        <section className="space-y-2">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Dugnader jeg administrerer</h2>
+            <Link to="/admin/ny" className="block w-fit">
+              <Button className="min-h-10 shrink-0 whitespace-nowrap px-4 text-sm">+ Ny dugnad</Button>
+            </Link>
+          </div>
         {campaigns === null ? (
           <Loading />
         ) : campaigns.length === 0 ? (
@@ -55,6 +70,7 @@ export default function AdminHome() {
             </Link>
           ))
         )}
+        </section>
       </Page>
     </>
   )
