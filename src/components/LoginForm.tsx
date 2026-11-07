@@ -23,7 +23,13 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
     })
     setBusy(false)
     if (error) {
-      setError(/rate|seconds/i.test(error.message) ? 'Vent litt før du ber om en ny kode.' : errorText(error))
+      setError(
+        /rate|seconds/i.test(error.message)
+          ? 'Vent litt før du ber om en ny kode.'
+          : /sending|smtp|email/i.test(error.message)
+            ? 'Klarte ikke å sende e-posten akkurat nå. Prøv igjen om litt, eller kontakt de ansvarlige.'
+            : errorText(error),
+      )
       return
     }
     setSent(true)
