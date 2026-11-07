@@ -195,7 +195,7 @@ export function orderUnits(order: Pick<Order, 'order_lines'>): number {
 }
 
 export const ORDER_TYPE_LABEL: Record<OrderType, string> = {
-  friend: 'Kunde',
+  friend: 'Venn',
   own: 'Egen',
   extra: 'Ekstra',
 }

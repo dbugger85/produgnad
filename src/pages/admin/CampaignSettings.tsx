@@ -203,7 +203,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         />
         <VisibilityChoice
           label="Ansvarlige og kontakt"
-          hint="Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer kunder på e-post til kontaktpersonen, ellers til forelderen"
+          hint="Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e-post til kontaktpersonen, ellers til forelderen"
           value={form.admins_visibility}
           onChange={(v) => set('admins_visibility', v)}
         />
@@ -239,7 +239,7 @@ export default function NewCampaignPage() {
 const VISIBILITY_OPTIONS: { value: Visibility; label: string }[] = [
   { value: 'none', label: 'Ikke vist' },
   { value: 'parents', label: 'Bare foreldre og admin' },
-  { value: 'all', label: 'Alle, også kunder' },
+  { value: 'all', label: 'Alle, også venner' },
 ]
 
 function VisibilityChoice({

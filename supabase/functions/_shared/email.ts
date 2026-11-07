@@ -58,6 +58,14 @@ function htmlToText(html: string) {
     .trim()
 }
 
+// Same three lines as on the pages: amount and name, the number, the message code
+function vippsBlock(amount: number, name: string, number: string, code: string) {
+  return `<div style="text-align:center;background:#f1eee8;border:1px solid #dedad2;border-radius:14px;padding:16px 12px;margin:14px 0">
+<p style="font-size:18px;margin:0 0 8px">Vipps <strong>${kr(amount)}</strong> til <strong>${esc(name)}</strong></p>
+<p style="font-size:24px;font-weight:700;margin:0 0 8px;white-space:nowrap">${esc(phone(number))}</p>
+<p style="font-size:16px;margin:0">Skriv <strong>${esc(code)}</strong> i meldingen</p></div>`
+}
+
 function button(href: string, label: string) {
   return `<p><a href="${esc(href)}" style="display:inline-block;background:#002e5f;color:#fff;text-decoration:none;font-weight:600;padding:10px 16px;border-radius:10px">${esc(label)}</a></p>`
 }
@@ -114,7 +122,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
         `<h1 style="font-size:20px;margin:0 0 12px">Takk for bestillingen, ${esc(order.buyer_first_name)}!</h1>
 <table style="width:100%;font-size:15px;border-collapse:collapse">${lines}
 <tr><td style="padding-top:8px;font-weight:700">Totalt</td><td style="padding-top:8px;text-align:right;font-weight:700">${kr(amount)}</td></tr></table>
-<p style="font-size:17px;background:#fff4ec;border-radius:12px;padding:12px">Vipps <strong>${kr(amount)}</strong> til <strong>${esc(parentName)}, ${esc(phone(cp.profiles?.phone ?? ''))}</strong>, melding <strong>${esc(order.code)}</strong></p>
+${vippsBlock(amount, parentName, cp.profiles?.phone ?? '', order.code)}
 ${button(statusUrl, 'Se status på bestillingen')}
 <p>${esc(parentName)} leverer varene når de kommer.</p>`,
       )
@@ -134,7 +142,7 @@ ${button(statusUrl, 'Se status på bestillingen')}`,
       `Betaling registrert: ${kr(totals?.paid ?? 0)} av ${kr(totals?.owed ?? 0)}`,
       `<h1 style="font-size:20px;margin:0 0 12px">Takk, ${esc(parentName.split(' ')[0])}!</h1>
 <p>Vi har registrert betalingen din for ${esc(campaign.name)}. Du har nå betalt <strong>${kr(totals?.paid ?? 0)}</strong> av <strong>${kr(totals?.owed ?? 0)}</strong>.</p>
-${left > 0 ? `<p>Det gjenstår <strong>${kr(left)}</strong>. Vipps til ${esc(campaign.admin_vipps_name)}, ${esc(phone(campaign.admin_vipps_phone))}, melding <strong>${esc(cp.payment_code)}</strong>.</p>` : left < 0 ? `<p>Du har betalt ${kr(-left)} for mye. Vi tar kontakt.</p>` : '<p>Alt er betalt. Tusen takk!</p>'}
+${left > 0 ? `<p>Det gjenstår <strong>${kr(left)}</strong>.</p>${vippsBlock(left, campaign.admin_vipps_name, campaign.admin_vipps_phone, cp.payment_code)}` : left < 0 ? `<p>Du har betalt ${kr(-left)} for mye. Vi tar kontakt.</p>` : '<p>Alt er betalt. Tusen takk!</p>'}
 ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
     )
   }
@@ -174,7 +182,7 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
 <p>Totalt bestilt via deg: <strong>${kr(totals?.owed ?? 0)}</strong>.${
         unpaid.length
           ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => `${esc(o.code)} ${esc(o.buyer_first_name)}`).join(', ')}.`
-          : '<br>Alle kunder har betalt.'
+          : '<br>Alle venner har betalt.'
       }</p>
 ${button(`${APP_URL}/forelder/${cp.id}`, 'Åpne bestillingene')}
 <p style="font-size:13px;color:#5d6472">Du får denne e-posten bare på dager med nye bestillinger via lenken din.</p>`,

@@ -39,7 +39,7 @@ export default function AssignExtraPage() {
 
   async function save() {
     setError('')
-    if (!name.trim()) return setError('Skriv inn fornavnet til kunden.')
+    if (!name.trim()) return setError('Skriv inn fornavnet til vennen.')
     setBusy(true)
     const { error } = await supabase.rpc('assign_extra', {
       p_order_id: orderId,
@@ -56,7 +56,7 @@ export default function AssignExtraPage() {
     <>
       <TopBar title={`Gi bort fra ${order.code}`} back={`/forelder/${cpId}`} />
       <Page>
-        <p className="text-muted">Velg hvor mange som skal til en kunde. De trekkes fra ekstrabestillingen, og totalen din endrer seg ikke.</p>
+        <p className="text-muted">Velg hvor mange som skal til en venn. De trekkes fra ekstrabestillingen, og totalen din endrer seg ikke.</p>
         <form
           className="space-y-4"
           onSubmit={(e) => {
@@ -83,7 +83,7 @@ export default function AssignExtraPage() {
             ))}
           </Card>
           <Card className="space-y-3">
-            <Field label="Fornavn på kunden">
+            <Field label="Fornavn på vennen">
               <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={40} required />
             </Field>
             <label className="flex items-center gap-2">
@@ -96,7 +96,7 @@ export default function AssignExtraPage() {
             </p>
             <ErrorBox>{error}</ErrorBox>
             <Button type="submit" className="w-full" disabled={busy || total <= 0}>
-              {busy ? 'Lagrer …' : 'Gi til kunden'}
+              {busy ? 'Lagrer …' : 'Gi til vennen'}
             </Button>
           </Card>
         </form>

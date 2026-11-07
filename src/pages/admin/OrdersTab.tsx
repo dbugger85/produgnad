@@ -50,7 +50,7 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
         </select>
         <select className={select} value={type} onChange={(e) => setType(e.target.value as OrderType | '')} aria-label="Type">
           <option value="">Alle typer</option>
-          <option value="friend">Kunde</option>
+          <option value="friend">Venn</option>
           <option value="own">Egen</option>
           <option value="extra">Ekstra</option>
         </select>

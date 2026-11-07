@@ -4,7 +4,7 @@ import { CopyButton } from '../../components/CopyButton'
 import { ProgressBar } from '../../components/ProgressBar'
 import { ShareBox } from '../../components/ShareBox'
 import { Badge, Button, Card, ErrorBox, Loading, Notice, Page, TopBar } from '../../components/ui'
-import { VippsBox } from '../../components/VippsBox'
+import { VippsSimple } from '../../components/VippsSimple'
 import { signOut, useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { daysUntil, kr, longDate, phone } from '../../lib/format'
@@ -126,18 +126,20 @@ export default function ParentPage() {
             <dd className="text-right text-base font-bold">{kr(owedLeft)}</dd>
             {Number(totals?.friend_unpaid ?? 0) > 0 && (
               <>
-                <dt className="text-muted">Ubetalt fra kunder</dt>
+                <dt className="text-muted">Ubetalt fra venner</dt>
                 <dd className="text-right text-muted">{kr(totals?.friend_unpaid)}</dd>
               </>
             )}
           </dl>
           {owedLeft > 0 && campaign.admin_vipps_phone && (
-            <VippsBox
-              amount={owedLeft}
-              name={campaign.admin_vipps_name}
-              phoneNumber={campaign.admin_vipps_phone}
-              code={cp.payment_code}
-            />
+            <div className="rounded-2xl bg-cream/70 py-5 ring-1 ring-line">
+              <VippsSimple
+                amount={owedLeft}
+                name={campaign.admin_vipps_name}
+                phoneNumber={campaign.admin_vipps_phone}
+                code={cp.payment_code}
+              />
+            </div>
           )}
           {owedLeft < 0 && <p className="text-sm">Du har betalt {kr(-owedLeft)} for mye. Ta kontakt med de ansvarlige.</p>}
           <p className="text-xs text-muted">
@@ -197,7 +199,7 @@ export default function ParentPage() {
         </section>
 
         <p className="text-sm text-muted">
-          Kunder ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Betalingskoden din til admin er{' '}
+          Venner ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Betalingskoden din til admin er{' '}
           {cp.payment_code}.
         </p>
         {page && (
@@ -283,7 +285,7 @@ function OrderRow({
         )}
         {order.type === 'extra' && canGive && (
           <Link to={`/forelder/${cpId}/fra-ekstra/${order.id}`} className="text-sm font-semibold text-brand">
-            Gi til kunde
+            Gi til venn
           </Link>
         )}
         {editable && (

@@ -99,7 +99,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | E14 | Sign-up title | Bli med som selger: *Kaffesalg* |
 | E15 | Sign-up, deadline | Bestillingsfrist 20. november 2026. |
 | E16 | Sign-up, before login | Først logger du inn med e-posten din. Du får en kode, ikke noe passord. |
-| E17 | Field + hint | Navnet ditt, slik det står i Vipps · Vennene dine ser dette når de betaler |
+| E17 | Field + hint | Navnet ditt · Vennene dine ser dette når de betaler |
 | E18 | Field + hint | Mobilnummer (Vipps) · Vises til de som bestiller, så de kan vippse deg |
 | E19 | Field + hint | Barnets fornavn · Vises som «forelder til …» |
 | E20 | Under the fields | Innlogget som *ola@…* |
@@ -125,8 +125,8 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | F6 | Buttons | Del · Kopier / Kopiert ✓ |
 | F7 | Shown 3 days before deadline | Påminnelse om fristen |
 | F8 | Box title | Oppgjør med de ansvarlige |
-| F9 | Rows | Totalt bestilt via deg · Betalt til admin · Gjenstår · Ubetalt fra kunder |
-| F10 | Vipps box | Vipps **1 440 kr** til **Kari Nordmann**, **+47 912 34 567**, melding **D-1** |
+| F9 | Rows | Totalt bestilt via deg · Betalt til admin · Gjenstår · Ubetalt fra venner |
+| F10 | Vipps (same as B) | Vipps **1 440 kr** til **Kari Nordmann** · **+47 912 34 567** · Kopier · Skriv **D-1** i meldingen |
 | F11 | Under it | Betal gjerne samlet når fristen er ute. Du kan betale i flere deler; skriv D-1 i meldingen hver gang. |
 | F12 | Paid too much | Du har betalt 200 kr for mye. Ta kontakt med de ansvarlige. |
 | F13 | Payments list | 7. november 2026: 1 440 kr registrert |
@@ -135,8 +135,8 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | F16 | Empty list | Ingen bestillinger her ennå. |
 | F17 | Order row | K7 · Kari / 2 × *Kaffe…* / 240 kr / 2 stk |
 | F18 | Order row tags | Egen · Ekstra · via lenken |
-| F19 | Order row actions | Betalt · Levert · Påminnelse · Gi til kunde · Endre |
-| F20 | Bottom | Kunder ser navnet ditt og nummeret +47 912 34 568 når de bestiller. Betalingskoden din til admin er D-1. |
+| F19 | Order row actions | Betalt · Levert · Påminnelse · Gi til venn · Endre |
+| F20 | Bottom | Venner ser navnet ditt og nummeret +47 912 34 568 når de bestiller. Betalingskoden din til admin er D-1. |
 | F21 | Locked | Bestillingene er låst. Varene er bestilt fra leverandøren. Du kan fortsatt krysse av betalt og levert. |
 | F22 | Finished | Dugnaden er avsluttet. |
 | F23 | Goods sent | Varene dine er sendt fra de ansvarlige (7. november 2026). |
@@ -144,25 +144,25 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 ## G. Parent: new/edit order, give extra stock, packing list
 
-<p><a href="screenshots/g-ny-bestilling.jpg"><img src="screenshots/g-ny-bestilling.jpg" width="230" alt="Ny bestilling" title="Ny bestilling"></a> <a href="screenshots/g-gi-til-kunde.jpg"><img src="screenshots/g-gi-til-kunde.jpg" width="230" alt="Gi ekstra til kunde" title="Gi ekstra til kunde"></a> <a href="screenshots/g-pakkeliste.jpg"><img src="screenshots/g-pakkeliste.jpg" width="230" alt="Pakkeliste" title="Pakkeliste"></a></p>
+<p><a href="screenshots/g-ny-bestilling.jpg"><img src="screenshots/g-ny-bestilling.jpg" width="230" alt="Ny bestilling" title="Ny bestilling"></a> <a href="screenshots/g-gi-til-venn.jpg"><img src="screenshots/g-gi-til-venn.jpg" width="230" alt="Gi ekstra til venn" title="Gi ekstra til venn"></a> <a href="screenshots/g-pakkeliste.jpg"><img src="screenshots/g-pakkeliste.jpg" width="230" alt="Pakkeliste" title="Pakkeliste"></a></p>
 
-<sub>Ny bestilling · Gi ekstra til kunde · Pakkeliste</sub>
+<sub>Ny bestilling · Gi ekstra til venn · Pakkeliste</sub>
 
 | # | Where | Text |
 |---|---|---|
 | G1 | Title | Ny bestilling / Endre K7 |
-| G2 | Type buttons + hints | Kunde: Bestilling fra venner, familie eller på døra · Egen: Til din egen husholdning · Ekstra: Lager du selger senere |
-| G3 | Field | Fornavn på kunden |
+| G2 | Type buttons + hints | Venn: Bestilling fra venner, familie eller på døra · Egen: Til din egen husholdning · Ekstra: Lager du selger senere |
+| G3 | Field | Fornavn på vennen |
 | G4 | Tick box | Allerede betalt |
 | G5 | Field + hint | Notat (valgfritt) · For eksempel adresse eller når du skal levere |
 | G6 | Buttons | Lagre · Slett bestillingen |
 | G7 | Confirm | Slette denne bestillingen? |
 | G8 | Locked | Bestillingene er låst. Bare admin kan endre nå. |
 | G9 | Give away, title | Gi bort fra K1 |
-| G10 | Give away, text | Velg hvor mange som skal til en kunde. De trekkes fra ekstrabestillingen, og totalen din endrer seg ikke. |
+| G10 | Give away, text | Velg hvor mange som skal til en venn. De trekkes fra ekstrabestillingen, og totalen din endrer seg ikke. |
 | G11 | Give away, row | 5 igjen · 120 kr |
-| G12 | Give away, button | Gi til kunden |
-| G13 | Give away, error | Skriv inn fornavnet til kunden. |
+| G12 | Give away, button | Gi til vennen |
+| G13 | Give away, error | Skriv inn fornavnet til vennen. |
 | G14 | Packing list title | Pakkeliste: Ola Hansen · Emma · +47 912 34 568 · D-1 · Skrevet ut 7. november 2026 |
 | G15 | Packing list sections | Til Ola (12 stk) · Fordeling |
 | G16 | Packing list status | betalt · ikke betalt, 240 kr |
@@ -205,7 +205,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | I5 | Status box | Status · Lås når varene er bestilt fra leverandøren. · Lås bestillingene |
 | I6 | Status, locked | Låst 7. november 2026. Foreldre kan ikke legge til eller endre bestillinger. · Lås opp · Avslutt dugnaden |
 | I7 | Status, finished | Avsluttet 7. november 2026. · Åpne igjen |
-| I8 | Confirms | Låse bestillingene? Foreldre og kunder kan ikke bestille eller endre etterpå. · Låse opp bestillingene igjen? · Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider. · Åpne dugnaden igjen? |
+| I8 | Confirms | Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå. · Låse opp bestillingene igjen? · Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider. · Åpne dugnaden igjen? |
 | I9 | Foreldre tab | Skriv ut alle pakkelister → · Ola Hansen D-1 · Emma · 4 bestillinger · 0 kr / 1 370 kr · Oppgjort / Skylder 1 370 kr / Betalt 200 kr for mye |
 | I10 | Opened parent | Betalinger · Ingen registrert. · Beløp (kr) · Dato · Registrer betaling fra Ola · Slett · Merk varer sendt / Varer sendt 7. november 2026 (angre) · Pakkeliste · Se forelderens side → |
 | I11 | Confirms | Slette denne betalingen? · Merke at varene er sendt til Ola Hansen? Forelderen får e-post. |
@@ -219,7 +219,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | I19 | Oppsett: fields | Navn på dugnaden · Laget (For eksempel Ready G2018. Brukes som {lag} i tekstene) · Hvem som organiserer (Vises på alle sider. Skriv at det er foreldre/supportere, ikke klubben) · Hva pengene går til · Mål (kr til laget) · Bestillingsfrist · Maks antall per vare i én bestilling |
 | I20 | Oppsett: payment | Foreldrene vippser det de skylder hit, med betalingskoden sin som melding. · Vipps-navn · Vipps-nummer · Kontaktperson for e-post (Svar på e-poster fra appen går til denne personen) |
 | I21 | Oppsett: texts | Du kan bruke {barn}, {lag}, {produkter}, {frist}, {lenke}, {forelder}, {beløp}, {kode}, {vipps}. Foreldrene kan endre teksten før de deler. · Kort tekst (SMS, chat) · Lang tekst (Facebook) · Påminnelse om frist (Vises for foreldrene de siste tre dagene før fristen) · Betalingspåminnelse (Per ubetalt bestilling. «Hei!» blir til «Hei Kari!») |
-| I25 | Oppsett: Hva som vises | Fremdrift (Linjen med penger til laget og målet, for eksempel «815 kr til laget av 30 000 kr») · Bidrag per vare (For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles) · Ansvarlige og kontakt (Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer kunder på e-post til kontaktpersonen, ellers til forelderen) · Ikke vist / Bare foreldre og admin / Alle, også kunder · Som admin ser du alltid alt under Oversikt |
+| I25 | Oppsett: Hva som vises | Fremdrift (Linjen med penger til laget og målet, for eksempel «815 kr til laget av 30 000 kr») · Bidrag per vare (For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles) · Ansvarlige og kontakt (Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e-post til kontaktpersonen, ellers til forelderen) · Ikke vist / Bare foreldre og admin / Alle, også venner · Som admin ser du alltid alt under Oversikt |
 | I22 | Oppsett: closing | Avslutningsmelding (Vises på alle sider når dugnaden er avsluttet: hvor mye som ble samlet inn og hva det betaler) |
 | I23 | Oppsett: button | Opprett dugnaden / Lagre / Lagret ✓ |
 | I24 | New campaign: defaults | Kaffesalg · Foreldre og supportere av … · Alt overskudd går til cupavgifter og reiser for laget. |
@@ -250,7 +250,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | K3 | Friend paid (opt-in) | **Takk! Betalingen for K7 er registrert** · Takk, Kari! · Ola Hansen har registrert at du har betalt 240 kr for bestilling K7. · Se status på bestillingen |
 | K4 | Parent payment registered | **Betaling registrert: 1 440 kr av 1 440 kr** · Takk, Ola! · Vi har registrert betalingen din for *Kaffesalg*. Du har nå betalt **1 440 kr** av **1 440 kr**. · Det gjenstår … / Du har betalt … for mye. Vi tar kontakt. / Alt er betalt. Tusen takk! · Se dine bestillinger |
 | K5 | Goods sent | **Varene til *Kaffesalg* er på vei til deg** · Varene er på vei, Ola! · Varene for bestillingene dine er sendt til deg. Bruk pakkelisten for å fordele dem, og kryss av «levert» etter hvert. · Åpne pakkelisten · Til bestillingene dine |
-| K6 | Daily digest (20:00) | **3 nye bestillinger i dag (720 kr)** / **1 ny bestilling i dag (240 kr)** · Nye bestillinger i dag, Ola · I dag · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per. / Alle kunder har betalt. · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din. |
+| K6 | Daily digest (20:00) | **3 nye bestillinger i dag (720 kr)** / **1 ny bestilling i dag (240 kr)** · Nye bestillinger i dag, Ola · I dag · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per. / Alle venner har betalt. · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din. |
 | K7 | Footer of K2–K6 | *Kaffesalg* er organisert av *Foreldre og supportere av Ready G2018*, ikke av klubben direkte. / *Alt overskudd går til …* / To parents: Kontakt: *Kari Nordmann* (svar på denne e-posten). To friends: Spørsmål? Svar på denne e-posten, så kommer den til Ola. |
 | K8 | Sender name | *Foreldre og supportere av Ready G2018* via ProDugnad |
 

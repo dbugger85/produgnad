@@ -107,7 +107,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
               onClick={() =>
                 void update(
                   { locked_at: new Date().toISOString() },
-                  'Låse bestillingene? Foreldre og kunder kan ikke bestille eller endre etterpå.',
+                  'Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå.',
                 )
               }
             >

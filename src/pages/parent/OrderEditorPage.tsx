@@ -8,7 +8,7 @@ import { supabase } from '../../lib/supabase'
 import type { Order, OrderType, Product, PublicProduct } from '../../lib/types'
 
 const TYPES: { value: OrderType; label: string; hint: string }[] = [
-  { value: 'friend', label: 'Kunde', hint: 'Bestilling fra venner, familie eller på døra' },
+  { value: 'friend', label: 'Venn', hint: 'Bestilling fra venner, familie eller på døra' },
   { value: 'own', label: 'Egen', hint: 'Til din egen husholdning' },
   { value: 'extra', label: 'Ekstra', hint: 'Lager du selger senere' },
 ]
@@ -136,7 +136,7 @@ export default function OrderEditorPage() {
             <p className="text-sm text-muted">{TYPES.find((t) => t.value === type)?.hint}</p>
             {type === 'friend' && (
               <>
-                <Field label="Fornavn på kunden">
+                <Field label="Fornavn på vennen">
                   <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={40} required />
                 </Field>
                 <label className="flex items-center gap-2">

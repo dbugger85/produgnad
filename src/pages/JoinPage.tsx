@@ -80,7 +80,7 @@ export default function JoinPage() {
               void join()
             }}
           >
-            <Field label="Navnet ditt, slik det står i Vipps" hint="Vennene dine ser dette når de betaler">
+            <Field label="Navnet ditt" hint="Vennene dine ser dette når de betaler">
               <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required minLength={2} />
             </Field>
             <Field label="Mobilnummer (Vipps)" hint="Vises til de som bestiller, så de kan vippse deg">
