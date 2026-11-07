@@ -17,7 +17,7 @@ export default function AdminHome() {
 
   return (
     <>
-      <TopBar title="Admin" back="/" right={<Link to="/admin/folk" className="text-sm font-semibold text-brand">Admins og profil</Link>} />
+      <TopBar title="Admin" back="/" right={<Link to="/admin/folk" className="text-sm font-semibold text-brand">Innstillinger</Link>} />
       <Page>
         <Link to="/admin/ny" className="block w-fit">
           <Button>+ Ny dugnad</Button>

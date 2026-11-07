@@ -47,7 +47,7 @@ export default function PeoplePage() {
 
   return (
     <>
-      <TopBar title="Admins og profil" back="/admin" />
+      <TopBar title="Innstillinger" back="/admin" />
       <Page>
         <Card>
           <form
