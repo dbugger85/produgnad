@@ -57,7 +57,7 @@ function htmlToText(html: string) {
 }
 
 function button(href: string, label: string) {
-  return `<p><a href="${esc(href)}" style="display:inline-block;background:#12603f;color:#fff;text-decoration:none;font-weight:600;padding:10px 16px;border-radius:10px">${esc(label)}</a></p>`
+  return `<p><a href="${esc(href)}" style="display:inline-block;background:#002e5f;color:#fff;text-decoration:none;font-weight:600;padding:10px 16px;border-radius:10px">${esc(label)}</a></p>`
 }
 
 export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<Rendered | null> {

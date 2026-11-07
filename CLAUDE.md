@@ -7,7 +7,7 @@ Read `docs/brief.md` (the spec) and `docs/plan.md` (approved plan, decisions log
 - Formats: amounts `1 440 kr` via `kr()` in `src/lib/format.ts`; dates `20. november 2026` via `longDate()`.
 - Every public page and email shows the organizer label ("…supportere av G2012", never the club as organizer), the admins (phone only if `show_phone_public`), the parent, and the purpose.
 - Short labels, hints and button side-texts end without a full stop.
-- Look: borrowed from Substitutor but kept light (owner, 7 Nov 2026): warm off-white page with a still colour glow, green `brand`, white cards with a thin edge (no blur), `Logo`/`Brand`/`Title` in `components/ui.tsx` (Barlow Condensed uppercase titles, Inter text, fonts in `public/fonts`). Colours are Tailwind tokens in `src/index.css` (`brand`, `cream`, `line`, `ink`, `muted`).
+- Look: borrowed from Substitutor but kept light (owner, 7 Nov 2026): warm off-white page with a still colour glow, navy `brand` from ready.no (#002e5f, owner 7 Nov 2026: to tell it apart from Substitutor), `brand-bright` #477bff for PRO in the name, gold glow, white cards with a thin edge (no blur), `Logo`/`Brand`/`Title` in `components/ui.tsx` (Barlow Condensed uppercase titles, Inter text, fonts in `public/fonts`). Colours are Tailwind tokens in `src/index.css` (`brand`, `brand-bright`, `gold`, `cream`, `line`, `ink`, `muted`); logo = shopping bag with heart (`public/logo.svg`).
 - No real personal data or Vipps screenshots in the repo. Dummy data only (`scripts/seed.mjs`).
 - Ask the owner before creating accounts, deploying or pushing.
 

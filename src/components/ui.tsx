@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-brand text-white shadow-[0_4px_14px_rgb(27_127_59/0.28)] hover:bg-brand-dark disabled:bg-line disabled:text-muted disabled:shadow-none',
+  primary: 'bg-brand text-white shadow-[0_4px_14px_rgb(0_46_95/0.28)] hover:bg-brand-dark disabled:bg-line disabled:text-muted disabled:shadow-none',
   secondary: 'bg-white text-ink ring-1 ring-line shadow-sm hover:bg-cream disabled:text-muted/70',
   ghost: 'text-brand hover:bg-brand-soft disabled:text-muted/70',
   danger: 'bg-white text-red-700 ring-1 ring-red-300 hover:bg-red-50',
@@ -111,7 +111,7 @@ export function Logo({ size = 34 }: { size?: number }) {
       alt=""
       width={size}
       height={size}
-      className="rounded-[9px] shadow-[0_4px_14px_rgb(27_127_59/0.35)]"
+      className="rounded-[9px] shadow-[0_4px_14px_rgb(0_46_95/0.32)]"
     />
   )
 }
@@ -121,7 +121,9 @@ export function Brand() {
   return (
     <Link to="/" className="flex items-center gap-2.5">
       <Logo />
-      <span className="font-display text-[28px] leading-none tracking-wide uppercase">ProDugnad</span>
+      <span className="font-display text-[28px] leading-none tracking-wide uppercase">
+        <span className="text-brand-bright">Pro</span>Dugnad
+      </span>
     </Link>
   )
 }

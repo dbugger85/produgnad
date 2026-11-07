@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Look borrowed from Substitutor: warm off-white page, soft colour glow, green accent,
+/* Look borrowed from Substitutor (warm off-white page, soft colour glow), but in ready.no's blue,
    Inter for text and Barlow Condensed for titles. Kept light: no blur effects. */
 
 @font-face {
@@ -17,12 +17,14 @@
 }
 
 @theme {
-  --color-brand: #1b7f3b;
-  --color-brand-dark: #14632d;
-  --color-brand-soft: #e2f2e6;
+  --color-brand: #002e5f; /* ready.no navy */
+  --color-brand-dark: #143e6b;
+  --color-brand-bright: #477bff; /* ready.no link blue */
+  --color-gold: #dbcf61;
+  --color-brand-soft: #e4ecf6;
   --color-cream: #f1eee8;
   --color-line: #dedad2;
-  --color-ink: #141821;
+  --color-ink: #121a26;
   --color-muted: #5d6472;
   --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Barlow Condensed", system-ui, sans-serif;
@@ -52,9 +54,9 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(55% 40% at 15% 8%, rgb(76 197 116 / 0.26), transparent 72%),
-    radial-gradient(50% 38% at 92% 20%, rgb(255 140 60 / 0.18), transparent 72%),
-    radial-gradient(55% 40% at 85% 88%, rgb(56 140 255 / 0.14), transparent 72%);
+    radial-gradient(55% 40% at 15% 8%, rgb(71 123 255 / 0.2), transparent 72%),
+    radial-gradient(50% 38% at 92% 20%, rgb(219 207 97 / 0.26), transparent 72%),
+    radial-gradient(55% 40% at 85% 88%, rgb(121 184 255 / 0.18), transparent 72%);
 }
 
 button,
