@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Badge, Button, Card, ErrorBox, Field, Input, TextArea } from '../../components/ui'
+import { BagIcon, Badge, Button, Card, ErrorBox, Field, Input, TextArea } from '../../components/ui'
 import { errorText } from '../../lib/errors'
 import { kr } from '../../lib/format'
 import { newId } from '../../lib/id'
@@ -38,7 +38,9 @@ export function ProductsTab({
             {p.product_images?.[0] ? (
               <img src={imageUrl(p.product_images[0].thumb_path)} alt="" className="h-20 w-20 rounded-xl object-cover" />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-cream text-2xl">☕</div>
+              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-brand-soft text-brand/40">
+                <BagIcon className="h-12 w-12" />
+              </div>
             )}
             <div className="flex-1">
               <div className="flex items-center gap-2 font-bold">

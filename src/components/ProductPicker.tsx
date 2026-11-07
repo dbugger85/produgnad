@@ -4,6 +4,7 @@ import { imageUrl } from '../lib/supabase'
 import type { PublicProduct } from '../lib/types'
 import { ImageViewer } from './ImageViewer'
 import { QtyStepper } from './QtyStepper'
+import { BagIcon } from './ui'
 
 export type Quantities = Record<string, number>
 
@@ -35,7 +36,9 @@ export function ProductPicker({
                 <img src={imageUrl(main.thumb)} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
               </button>
             ) : (
-              <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-cream text-3xl">☕</div>
+              <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand/40">
+                <BagIcon className="h-14 w-14" />
+              </div>
             )}
             <div className="flex min-w-0 flex-1 flex-col">
               <h3 className="font-bold leading-tight">{p.name}</h3>

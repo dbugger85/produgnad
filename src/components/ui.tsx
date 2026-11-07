@@ -122,7 +122,7 @@ export function Brand() {
     <Link to="/" className="flex items-center gap-2.5">
       <Logo />
       <span className="font-display text-[28px] leading-none tracking-wide uppercase">
-        <span className="text-brand-bright">Pro</span>Dugnad
+        <span className="text-brand/40">Pro</span>Dugnad
       </span>
     </Link>
   )
@@ -131,4 +131,17 @@ export function Brand() {
 /** Title in the condensed display font. */
 export function Title({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <h1 className={`font-display text-[32px] leading-[1.05] tracking-wide uppercase ${className}`}>{children}</h1>
+}
+
+/** The logo's shopping bag with heart, as a line icon in the current text colour. Placeholder for products without a picture. */
+export function BagIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 512 512" className={className} aria-hidden="true">
+      <g fill="none" stroke="currentColor" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M136 200 H376 L356 404 H156 Z" />
+        <path d="M200 200 V168 A56 56 0 0 1 312 168 V200" />
+      </g>
+      <path d="M256 360 L214 318 A28 28 0 0 1 256 280 A28 28 0 0 1 298 318 Z" fill="currentColor" />
+    </svg>
+  )
 }
