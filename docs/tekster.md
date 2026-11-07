@@ -303,3 +303,4 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | M17 | Crash | Noe gikk galt · Siden kunne ikke vises. Prøv å laste inn på nytt. Hjelper ikke det, ta kontakt med de ansvarlige. · Last inn på nytt |
 | M18 | After an update | Ny versjon · Appen er oppdatert. Last inn siden på nytt for å fortsette. |
 | M19 | Unknown page | Fant ikke siden. |
+| M20 | Confirm dialog (the app's own, never the browser's) | *the question* · Avbryt · *Slett / Lås / Lås opp / Avslutt / Åpne igjen / Send / Merk sendt / Gjør til admin / Fjern admin* |

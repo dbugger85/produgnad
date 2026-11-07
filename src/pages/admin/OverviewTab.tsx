@@ -8,19 +8,21 @@ import { useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { kr, longDate } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
+import { useConfirm } from '../../components/Confirm'
 
 export function OverviewTab({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
   const { campaign, progress, parents, orders, totals, products, supplier } = data
   const [error, setError] = useState('')
   const { session } = useAuth()
+  const ask = useConfirm()
   // The admin's own seller row in this campaign, if they have joined
   const myCp = parents.find((p) => p.parent_user_id === session?.user.id)?.id
   const joinLink = `${window.location.origin}/bli-med/${campaign.join_code}`
   const owed = totals.reduce((s, t) => s + Number(t.owed), 0)
   const paid = totals.reduce((s, t) => s + Number(t.paid), 0)
 
-  async function update(fields: Record<string, string | null>, question: string) {
-    if (!confirm(question)) return
+  async function update(fields: Record<string, string | null>, question: string, label: string, danger = false) {
+    if (!(await ask(question, { confirm: label, danger }))) return
     setError('')
     const { error } = await supabase.from('campaigns').update(fields).eq('id', campaign.id)
     if (error) setError(errorText(error))
@@ -93,7 +95,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
           <>
             <Notice>Avsluttet {longDate(campaign.closed_at)}.</Notice>
             <Wrapup data={data} reload={reload} />
-            <Button variant="secondary" onClick={() => void update({ closed_at: null }, 'Åpne dugnaden igjen?')}>
+            <Button variant="secondary" onClick={() => void update({ closed_at: null }, 'Åpne dugnaden igjen?', 'Åpne igjen')}>
               Åpne igjen
             </Button>
           </>
@@ -101,7 +103,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
           <>
             <Notice>Låst {longDate(campaign.locked_at)}. Foreldre kan ikke legge til eller endre bestillinger.</Notice>
             <div className="flex flex-wrap gap-2">
-              <Button variant="secondary" onClick={() => void update({ locked_at: null }, 'Låse opp bestillingene igjen?')}>
+              <Button variant="secondary" onClick={() => void update({ locked_at: null }, 'Låse opp bestillingene igjen?', 'Lås opp')}>
                 Lås opp
               </Button>
               <Button
@@ -110,6 +112,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
                   void update(
                     { closed_at: new Date().toISOString() },
                     'Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider.',
+                    'Avslutt',
                   )
                 }
               >
@@ -125,6 +128,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
                 void update(
                   { locked_at: new Date().toISOString() },
                   'Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå.',
+                  'Lås',
                 )
               }
             >
@@ -141,6 +145,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
 function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
   const { campaign, parents } = data
   const [sent, setSent] = useState<number | null>(null)
+  const ask = useConfirm()
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -157,7 +162,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
   const withEmail = parents.filter((p) => p.profiles.email).length
 
   async function sendClosing() {
-    if (!confirm(`Sende avslutningsmeldingen på e‑post til ${withEmail} foreldre?`)) return
+    if (!(await ask(`Sende avslutningsmeldingen på e‑post til ${withEmail} foreldre?`, { confirm: 'Send' }))) return
     setError('')
     setBusy(true)
     const { data: n, error } = await supabase.rpc('queue_closing_emails', { p_campaign_id: campaign.id })
@@ -172,7 +177,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
   }
 
   async function anonymize() {
-    if (!confirm('Slette vennenes personopplysninger? Fornavn blir «Venn», og e‑postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres.')) return
+    if (!(await ask('Slette vennenes personopplysninger? Fornavn blir «Venn», og e‑postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres.', { confirm: 'Slett', danger: true }))) return
     setError('')
     setBusy(true)
     const { error } = await supabase.rpc('anonymize_friends', { p_campaign_id: campaign.id })

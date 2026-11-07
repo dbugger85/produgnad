@@ -7,6 +7,7 @@ import { newId } from '../../lib/id'
 import { prepareProductImage } from '../../lib/images'
 import { IMAGE_BUCKET, imageUrl, supabase } from '../../lib/supabase'
 import type { Product, ProductImageRow } from '../../lib/types'
+import { useConfirm } from '../../components/Confirm'
 
 export function ProductsTab({
   campaignId,
@@ -95,6 +96,7 @@ function ProductForm({
   const [toTeam, setToTeam] = useState(String(product?.to_team_amount ?? ''))
   const [active, setActive] = useState(product?.active ?? true)
   const [sortOrder, setSortOrder] = useState(String(product?.sort_order ?? nextSort))
+  const ask = useConfirm()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -120,7 +122,7 @@ function ProductForm({
   }
 
   async function remove() {
-    if (!product || !confirm(`Slette ${product.name}? Går ikke hvis noen har bestilt den; skjul den i stedet.`)) return
+    if (!product || !(await ask(`Slette ${product.name}? Det går ikke hvis noen har bestilt varen; skjul den i stedet.`, { confirm: 'Slett', danger: true }))) return
     const paths = (product.product_images ?? []).flatMap((i) => [i.storage_path, i.thumb_path])
     const { error } = await supabase.from('products').delete().eq('id', product.id)
     if (error) return setError('Kan ikke slette en vare som er bestilt. Fjern haken for «Vises» i stedet.')
@@ -186,6 +188,7 @@ function ProductForm({
 
 function ImageManager({ product, reload }: { product: Product; reload: () => Promise<void> }) {
   const images = product.product_images ?? []
+  const ask = useConfirm()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -239,7 +242,7 @@ function ImageManager({ product, reload }: { product: Product; reload: () => Pro
   }
 
   async function remove(image: ProductImageRow) {
-    if (!confirm('Slette bildet?')) return
+    if (!(await ask('Slette bildet?', { confirm: 'Slett', danger: true }))) return
     await supabase.from('product_images').delete().eq('id', image.id)
     await supabase.storage.from(IMAGE_BUCKET).remove([image.storage_path, image.thumb_path])
     await reload()

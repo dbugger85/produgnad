@@ -6,6 +6,7 @@ import { errorText } from '../../lib/errors'
 import { kr } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
 import type { Order, OrderType, Product, PublicProduct } from '../../lib/types'
+import { useConfirm } from '../../components/Confirm'
 
 const TYPES: { value: OrderType; label: string; hint: string }[] = [
   { value: 'friend', label: 'Venn', hint: 'Bestilling fra venner, familie eller på døra' },
@@ -28,6 +29,7 @@ export default function OrderEditorPage() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [order, setOrder] = useState<Order | null>(null)
+  const ask = useConfirm()
 
   useEffect(() => {
     async function load() {
@@ -102,7 +104,7 @@ export default function OrderEditorPage() {
   }
 
   async function remove() {
-    if (!confirm('Slette denne bestillingen?')) return
+    if (!(await ask('Slette denne bestillingen?', { confirm: 'Slett', danger: true }))) return
     const { error } = await supabase.rpc('delete_order', { p_order_id: orderId })
     if (error) return setError(errorText(error))
     navigate(`/forelder/${cpId}`)

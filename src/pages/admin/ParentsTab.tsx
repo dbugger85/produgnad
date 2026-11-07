@@ -5,6 +5,7 @@ import type { AdminData } from '../../lib/adminData'
 import { errorText } from '../../lib/errors'
 import { kr, longDate, phone, todayOslo } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
+import { useConfirm } from '../../components/Confirm'
 
 export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
   const [open, setOpen] = useState<string | null>(null)
@@ -87,6 +88,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
   const [date, setDate] = useState(todayOslo())
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const ask = useConfirm()
 
   async function addPayment() {
     setError('')
@@ -102,14 +104,14 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
   }
 
   async function removePayment(id: string) {
-    if (!confirm('Slette denne betalingen?')) return
+    if (!(await ask('Slette denne betalingen?', { confirm: 'Slett', danger: true }))) return
     await supabase.from('parent_payments').delete().eq('id', id)
     await reload()
   }
 
   async function toggleSent() {
     const next = parent.goods_sent_at ? null : new Date().toISOString()
-    if (next && !confirm(`Merke at varene er sendt til ${parent.profiles.name}? Forelderen får e‑post.`)) return
+    if (next && !(await ask(`Merke at varene er sendt til ${parent.profiles.name}? Forelderen får e‑post.`, { confirm: 'Merk sendt' }))) return
     await supabase.from('campaign_parents').update({ goods_sent_at: next }).eq('id', parentId)
     await reload()
   }

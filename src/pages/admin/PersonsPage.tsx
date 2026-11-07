@@ -4,6 +4,7 @@ import { useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { phone } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
+import { useConfirm } from '../../components/Confirm'
 
 interface Person {
   user_id: string
@@ -23,6 +24,7 @@ export default function PersonsPage() {
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const ask = useConfirm()
 
   async function load() {
     const { data, error } = await supabase
@@ -43,7 +45,7 @@ export default function PersonsPage() {
   }, [people, search])
 
   async function makeAdmin(p: Person) {
-    if (!confirm(`Gjøre ${p.name || p.email} til admin? Admins ser og kan endre alle dugnader, og personen får en e‑post.`)) return
+    if (!(await ask(`Gjøre ${p.name || p.email} til admin? Admins ser og kan endre alle dugnader, og personen får en e‑post.`, { confirm: 'Gjør til admin' }))) return
     setError('')
     setMessage('')
     setBusy(p.user_id)
@@ -63,7 +65,7 @@ export default function PersonsPage() {
   }
 
   async function removeAdmin(p: Person) {
-    if (!confirm(`Fjerne ${p.name || p.email} som admin? Personen beholder bestillingene sine som selger.`)) return
+    if (!(await ask(`Fjerne ${p.name || p.email} som admin? Personen beholder bestillingene sine som selger.`, { confirm: 'Fjern admin', danger: true }))) return
     setError('')
     setMessage('')
     setBusy(p.user_id)

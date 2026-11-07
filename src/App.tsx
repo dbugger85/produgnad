@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { ConfirmProvider } from './components/Confirm'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { Footer } from './components/Footer'
 import { RequireAdmin, RequireLogin } from './components/Guards'
@@ -26,6 +27,7 @@ const AssignExtraPage = lazy(() => import('./pages/parent/AssignExtraPage'))
 export default function App() {
   return (
     <AuthProvider>
+      <ConfirmProvider>
       <BrowserRouter>
         <ErrorBoundary>
         <Suspense fallback={<Loading />}>
@@ -52,6 +54,7 @@ export default function App() {
         </ErrorBoundary>
         <Footer />
       </BrowserRouter>
+      </ConfirmProvider>
     </AuthProvider>
   )
 }
