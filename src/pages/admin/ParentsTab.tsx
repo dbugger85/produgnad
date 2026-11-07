@@ -12,7 +12,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
     .map((p) => ({ parent: p, totals: data.totals.find((t) => t.campaign_parent_id === p.id) }))
     .sort((a, b) => a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb'))
 
-  if (rows.length === 0) return <p className="text-stone-600">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt.</p>
+  if (rows.length === 0) return <p className="text-muted">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt.</p>
 
   return (
     <div className="space-y-2">
@@ -23,9 +23,9 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
             <button type="button" className="flex w-full items-start justify-between gap-2 text-left" onClick={() => setOpen(open === parent.id ? null : parent.id)}>
               <div>
                 <div className="font-bold">
-                  {parent.profiles.name || parent.profiles.email} <span className="font-normal text-stone-500">{parent.payment_code}</span>
+                  {parent.profiles.name || parent.profiles.email} <span className="font-normal text-muted">{parent.payment_code}</span>
                 </div>
-                <div className="text-sm text-stone-600">
+                <div className="text-sm text-muted">
                   {parent.child_first_name && `${parent.child_first_name} · `}
                   {totals?.order_count ?? 0} bestillinger
                 </div>
@@ -87,13 +87,13 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
   }
 
   return (
-    <div className="space-y-3 border-t border-stone-200 pt-3 text-sm">
+    <div className="space-y-3 border-t border-line pt-3 text-sm">
       <p>
         {phone(parent.profiles.phone)} · {parent.profiles.email}
       </p>
       <div className="space-y-1">
         <h3 className="font-semibold">Betalinger</h3>
-        {payments.length === 0 && <p className="text-stone-500">Ingen registrert.</p>}
+        {payments.length === 0 && <p className="text-muted">Ingen registrert.</p>}
         {payments.map((p) => (
           <div key={p.id} className="flex justify-between">
             <span>

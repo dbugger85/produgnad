@@ -135,7 +135,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
 
       <Card className="space-y-3">
         <h2 className="text-lg font-bold">Betaling fra foreldre</h2>
-        <p className="text-sm text-stone-600">Foreldrene vippser det de skylder hit, med betalingskoden sin som melding.</p>
+        <p className="text-sm text-muted">Foreldrene vippser det de skylder hit, med betalingskoden sin som melding.</p>
         <Field label="Vipps-navn">
           <Input value={form.admin_vipps_name} onChange={(e) => set('admin_vipps_name', e.target.value)} />
         </Field>
@@ -144,7 +144,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         </Field>
         <Field label="Kontaktperson for e-post" hint="Svar på e-poster fra appen går til denne personen">
           <select
-            className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2.5"
+            className="w-full rounded-xl border border-line bg-white px-3 py-2.5"
             value={form.contact_admin_user_id ?? ''}
             onChange={(e) => set('contact_admin_user_id', e.target.value || null)}
           >
@@ -160,7 +160,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
 
       <Card className="space-y-3">
         <h2 className="text-lg font-bold">Tekster foreldrene deler</h2>
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-muted">
           Du kan bruke {PLACEHOLDERS.map((p) => `{${p}}`).join(', ')}. Foreldrene kan endre teksten før de deler.
         </p>
         <Field label="Kort tekst (SMS, chat)">

@@ -75,7 +75,7 @@ export default function ParentPage() {
 
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">Din bestillingslenke</h2>
-          <p className="break-all rounded-lg bg-stone-100 p-2 font-mono text-sm">{link}</p>
+          <p className="break-all rounded-lg bg-cream p-2 font-mono text-sm">{link}</p>
           <div className="flex flex-wrap gap-2">
             <CopyButton value={link} label="Kopier lenke" />
             <Link to={`/k/${cp.link_code}`} className="min-h-9 rounded-lg px-3 py-1 text-sm font-semibold text-brand">
@@ -100,7 +100,7 @@ export default function ParentPage() {
           </div>
           <ShareBox text={fill(campaign, shareKind, vars)} rows={shareKind === 'short' ? 5 : 10} />
           {showReminder && (
-            <div className="space-y-2 border-t border-stone-200 pt-3">
+            <div className="space-y-2 border-t border-line pt-3">
               <h3 className="font-semibold">Påminnelse om fristen</h3>
               <ShareBox text={fill(campaign, 'reminder', vars)} rows={4} />
             </div>
@@ -118,8 +118,8 @@ export default function ParentPage() {
             <dd className="text-right text-base font-bold">{kr(owedLeft)}</dd>
             {Number(totals?.friend_unpaid ?? 0) > 0 && (
               <>
-                <dt className="text-stone-500">Ubetalt fra kunder</dt>
-                <dd className="text-right text-stone-500">{kr(totals?.friend_unpaid)}</dd>
+                <dt className="text-muted">Ubetalt fra kunder</dt>
+                <dd className="text-right text-muted">{kr(totals?.friend_unpaid)}</dd>
               </>
             )}
           </dl>
@@ -132,11 +132,11 @@ export default function ParentPage() {
             />
           )}
           {owedLeft < 0 && <p className="text-sm">Du har betalt {kr(-owedLeft)} for mye. Ta kontakt med de ansvarlige.</p>}
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-muted">
             Betal gjerne samlet når fristen er ute. Du kan betale i flere deler; skriv {cp.payment_code} i meldingen hver gang.
           </p>
           {payments.length > 0 && (
-            <ul className="text-sm text-stone-600">
+            <ul className="text-sm text-muted">
               {payments.map((p) => (
                 <li key={p.id}>
                   {longDate(p.paid_on)}: {kr(p.amount)} registrert
@@ -161,14 +161,14 @@ export default function ParentPage() {
                 key={f}
                 type="button"
                 onClick={() => setFilter(f)}
-                className={`rounded-full px-3 py-1 ${filter === f ? 'bg-stone-800 text-white' : 'bg-stone-200'}`}
+                className={`rounded-full px-3 py-1 ${filter === f ? 'bg-ink text-white' : 'bg-line'}`}
               >
                 {f === 'alle' ? 'Alle' : f === 'ubetalt' ? 'Ubetalt' : 'Ikke levert'}
               </button>
             ))}
           </div>
           <ErrorBox>{actionError}</ErrorBox>
-          {shown.length === 0 && <p className="text-stone-500">Ingen bestillinger her ennå.</p>}
+          {shown.length === 0 && <p className="text-muted">Ingen bestillinger her ennå.</p>}
           {shown.map((o) => (
             <OrderRow
               key={o.id}
@@ -187,7 +187,7 @@ export default function ParentPage() {
           ))}
         </section>
 
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-muted">
           Kunder ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Betalingskoden din til admin er{' '}
           {cp.payment_code}.
         </p>
@@ -222,21 +222,21 @@ function OrderRow({
           <div className="font-bold">
             {order.code} · {isFriend ? order.buyer_first_name : ORDER_TYPE_LABEL[order.type]}
           </div>
-          <div className="text-sm text-stone-600">
+          <div className="text-sm text-muted">
             {order.order_lines.map((l) => `${l.qty} × ${productNames[l.product_id] ?? 'vare'}`).join(', ')}
           </div>
-          {order.note && <div className="text-sm italic text-stone-500">{order.note}</div>}
+          {order.note && <div className="text-sm italic text-muted">{order.note}</div>}
         </div>
         <div className="text-right">
           <div className="font-bold">{kr(orderAmount(order))}</div>
-          <div className="text-xs text-stone-500">{orderUnits(order)} stk</div>
+          <div className="text-xs text-muted">{orderUnits(order)} stk</div>
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         {!isFriend && <Badge>{ORDER_TYPE_LABEL[order.type]}</Badge>}
         {order.created_by === 'friend' && <Badge tone="blue">via lenken</Badge>}
         {isFriend && (
-          <label className="flex min-h-9 items-center gap-2 rounded-lg bg-stone-100 px-3">
+          <label className="flex min-h-9 items-center gap-2 rounded-lg bg-cream px-3">
             <input
               type="checkbox"
               className="h-5 w-5 accent-[var(--color-brand)]"
@@ -247,7 +247,7 @@ function OrderRow({
           </label>
         )}
         {isFriend && (
-          <label className="flex min-h-9 items-center gap-2 rounded-lg bg-stone-100 px-3">
+          <label className="flex min-h-9 items-center gap-2 rounded-lg bg-cream px-3">
             <input
               type="checkbox"
               className="h-5 w-5 accent-[var(--color-brand)]"

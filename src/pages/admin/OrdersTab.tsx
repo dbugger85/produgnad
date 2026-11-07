@@ -35,7 +35,7 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
     await reload()
   }
 
-  const select = 'rounded-xl border border-stone-300 bg-white px-2 py-2 text-sm'
+  const select = 'rounded-xl border border-line bg-white px-2 py-2 text-sm'
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-3 gap-2">
@@ -60,7 +60,7 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
           <option value="levert">Levert</option>
         </select>
       </div>
-      <p className="text-sm text-stone-600">
+      <p className="text-sm text-muted">
         {shown.length} bestillinger, {kr(sum)}
       </p>
       {shown.map((o) => (
@@ -71,10 +71,10 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
             </span>
             <span className="font-bold">{kr(orderAmount(o))}</span>
           </div>
-          <div className="text-stone-600">
+          <div className="text-muted">
             via {parentName[o.campaign_parent_id]} · {shortDateTimeText(o.created_at)}
           </div>
-          <div className="text-stone-600">{o.order_lines.map((l) => `${l.qty} × ${names[l.product_id] ?? '?'}`).join(', ')}</div>
+          <div className="text-muted">{o.order_lines.map((l) => `${l.qty} × ${names[l.product_id] ?? '?'}`).join(', ')}</div>
           <div className="flex flex-wrap items-center gap-3 pt-1">
             {o.type !== 'friend' && <Badge>{ORDER_TYPE_LABEL[o.type]}</Badge>}
             {o.type === 'friend' && (

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 import { LoginForm } from '../components/LoginForm'
-import { Card, Page } from '../components/ui'
+import { Brand, Card, Page, Title } from '../components/ui'
 import { useAuth } from '../lib/auth'
 
 export function safeNext(value: string | null): string {
@@ -20,8 +20,9 @@ export default function LoginPage() {
 
   return (
     <Page>
-      <h1 className="text-2xl font-bold">Logg inn</h1>
-      <p className="text-stone-700">For foreldre og administratorer. Du får en kode på e-post, ikke noe passord.</p>
+      <Brand />
+      <Title className="pt-4">Logg inn</Title>
+      <p className="text-ink">For foreldre og administratorer. Du får en kode på e-post, ikke noe passord.</p>
       <Card>
         <LoginForm next={next} />
       </Card>

@@ -4,9 +4,9 @@ import { Link } from 'react-router'
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-brand text-white hover:bg-brand-dark disabled:bg-stone-300',
-  secondary: 'bg-white text-stone-900 ring-1 ring-stone-300 hover:bg-stone-50 disabled:text-stone-400',
-  ghost: 'text-brand hover:bg-brand-soft disabled:text-stone-400',
+  primary: 'bg-brand text-white shadow-[0_4px_14px_rgb(27_127_59/0.28)] hover:bg-brand-dark disabled:bg-line disabled:text-muted disabled:shadow-none',
+  secondary: 'bg-white text-ink ring-1 ring-line shadow-sm hover:bg-cream disabled:text-muted/70',
+  ghost: 'text-brand hover:bg-brand-soft disabled:text-muted/70',
   danger: 'bg-white text-red-700 ring-1 ring-red-300 hover:bg-red-50',
 }
 
@@ -18,14 +18,16 @@ export function Button({
   return (
     <button
       type="button"
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 font-semibold transition disabled:cursor-not-allowed ${variants[variant]} ${className}`}
+      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl px-5 py-2 font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed ${variants[variant]} ${className}`}
       {...props}
     />
   )
 }
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-2xl bg-white p-4 shadow-sm ring-1 ring-stone-200 ${className}`}>{children}</section>
+  return (
+    <section className={`rounded-[20px] bg-white/85 p-4 shadow-card ring-1 ring-line/80 ${className}`}>{children}</section>
+  )
 }
 
 export function Page({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
@@ -34,14 +36,16 @@ export function Page({ children, wide = false }: { children: ReactNode; wide?: b
 
 export function TopBar({ title, back, right }: { title: string; back?: string; right?: ReactNode }) {
   return (
-    <header className="no-print sticky top-0 z-10 border-b border-stone-200 bg-cream/95 backdrop-blur">
+    <header className="no-print sticky top-0 z-10 border-b border-line/70 bg-cream/90">
       <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-3">
-        {back && (
-          <Link to={back} className="-ml-2 rounded-lg px-2 py-1 text-xl text-brand" aria-label="Tilbake">
+        {back ? (
+          <Link to={back} className="-ml-2 flex h-11 w-11 items-center justify-center rounded-full text-2xl text-brand" aria-label="Tilbake">
             ←
           </Link>
+        ) : (
+          <Logo />
         )}
-        <h1 className="flex-1 truncate text-lg font-bold">{title}</h1>
+        <h1 className="flex-1 truncate font-display text-2xl leading-none uppercase tracking-wide">{title}</h1>
         {right}
       </div>
     </header>
@@ -59,15 +63,15 @@ export function Field({
 }) {
   return (
     <label className="block space-y-1">
-      <span className="text-sm font-semibold text-stone-700">{label}</span>
+      <span className="text-sm font-semibold text-ink">{label}</span>
       {children}
-      {hint && <span className="block text-xs text-stone-500">{hint}</span>}
+      {hint && <span className="block text-xs text-muted">{hint}</span>}
     </label>
   )
 }
 
 const inputClass =
-  'w-full rounded-xl border border-stone-300 bg-white px-3 py-2.5 text-base outline-none focus:border-brand focus:ring-2 focus:ring-brand/20'
+  'w-full rounded-xl border border-line bg-white px-3 py-2.5 text-base outline-none focus:border-brand focus:ring-2 focus:ring-brand/20'
 
 export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`${inputClass} ${props.className ?? ''}`} />
@@ -78,7 +82,7 @@ export function TextArea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
 }
 
 export function Loading({ text = 'Laster …' }: { text?: string }) {
-  return <p className="py-10 text-center text-stone-500">{text}</p>
+  return <p className="py-10 text-center text-muted">{text}</p>
 }
 
 export function ErrorBox({ children }: { children: ReactNode }) {
@@ -92,10 +96,37 @@ export function Notice({ children }: { children: ReactNode }) {
 
 export function Badge({ children, tone = 'stone' }: { children: ReactNode; tone?: 'stone' | 'green' | 'amber' | 'blue' }) {
   const tones = {
-    stone: 'bg-stone-100 text-stone-700',
+    stone: 'bg-cream text-ink',
     green: 'bg-green-100 text-green-800',
     amber: 'bg-amber-100 text-amber-900',
     blue: 'bg-sky-100 text-sky-900',
   }
   return <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${tones[tone]}`}>{children}</span>
+}
+
+export function Logo({ size = 34 }: { size?: number }) {
+  return (
+    <img
+      src="/logo.svg"
+      alt=""
+      width={size}
+      height={size}
+      className="rounded-[9px] shadow-[0_4px_14px_rgb(27_127_59/0.35)]"
+    />
+  )
+}
+
+/** Logo tile + PRODUGNAD, as in Substitutor's top bar. */
+export function Brand() {
+  return (
+    <Link to="/" className="flex items-center gap-2.5">
+      <Logo />
+      <span className="font-display text-[28px] leading-none tracking-wide uppercase">ProDugnad</span>
+    </Link>
+  )
+}
+
+/** Title in the condensed display font. */
+export function Title({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <h1 className={`font-display text-[32px] leading-[1.05] tracking-wide uppercase ${className}`}>{children}</h1>
 }

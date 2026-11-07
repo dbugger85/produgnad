@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { ProgressBar } from '../components/ProgressBar'
 import { ClosingMessage, Transparency } from '../components/Transparency'
-import { Card, ErrorBox, Loading, Page } from '../components/ui'
+import { Card, ErrorBox, Loading, Logo, Page } from '../components/ui'
 import { VippsBox } from '../components/VippsBox'
 import { kr, longDate } from '../lib/format'
 import { supabase } from '../lib/supabase'
@@ -42,11 +42,14 @@ export default function OrderStatusPage() {
   return (
     <Page>
       <header className="space-y-1">
-        <p className="text-sm font-semibold uppercase tracking-wide text-coffee">{campaign.organizer_label}</p>
-        <h1 className="text-2xl font-bold">
+        <div className="flex items-center gap-2.5">
+          <Logo size={28} />
+          <p className="text-sm font-semibold text-brand">{campaign.organizer_label}</p>
+        </div>
+        <h1 className="font-display text-[32px] leading-[1.05] tracking-wide uppercase">
           Bestilling {order.code}: {STATUS_LABEL[order.status]}
         </h1>
-        <p className="text-stone-700">
+        <p className="text-ink">
           {order.buyer_first_name}, bestilt {longDate(order.created_at)} via {parent.name}
           {parent.child_first_name && `, forelder til ${parent.child_first_name}`}.
         </p>
@@ -58,8 +61,8 @@ export default function OrderStatusPage() {
         <ol className="grid grid-cols-4 gap-1 text-center text-xs">
           {STEPS.map((s, i) => (
             <li key={s} className="space-y-1">
-              <div className={`h-2 rounded-full ${i <= stepIndex ? 'bg-brand' : 'bg-stone-200'}`} />
-              <span className={i <= stepIndex ? 'font-semibold text-brand-dark' : 'text-stone-500'}>{STEP_LABEL[s]}</span>
+              <div className={`h-2 rounded-full ${i <= stepIndex ? 'bg-brand' : 'bg-line'}`} />
+              <span className={i <= stepIndex ? 'font-semibold text-brand-dark' : 'text-muted'}>{STEP_LABEL[s]}</span>
             </li>
           ))}
         </ol>
@@ -74,7 +77,7 @@ export default function OrderStatusPage() {
             <span>{kr(l.qty * l.unit_price)}</span>
           </p>
         ))}
-        <p className="flex justify-between border-t border-stone-200 pt-2 font-bold">
+        <p className="flex justify-between border-t border-line pt-2 font-bold">
           <span>Totalt</span>
           <span>{kr(order.amount)}</span>
         </p>
@@ -88,7 +91,7 @@ export default function OrderStatusPage() {
       <Link to={`/k/${parent.link_code}`} className="block font-semibold text-brand">
         Til bestillingssiden →
       </Link>
-      <hr className="border-stone-200" />
+      <hr className="border-line" />
       <Transparency campaign={campaign} />
     </Page>
   )

@@ -5,7 +5,7 @@ export function ProgressBar({ raised, target }: { raised: number; target: number
   return (
     <div className="space-y-1">
       <div
-        className="h-3 overflow-hidden rounded-full bg-stone-200"
+        className="h-2.5 overflow-hidden rounded-full bg-line/80"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
@@ -13,7 +13,7 @@ export function ProgressBar({ raised, target }: { raised: number; target: number
       >
         <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${pct}%` }} />
       </div>
-      <p className="text-sm text-stone-700">
+      <p className="text-sm text-ink">
         <strong>{kr(raised)}</strong> samlet inn{target > 0 ? <> av {kr(target)}</> : null}
       </p>
     </div>

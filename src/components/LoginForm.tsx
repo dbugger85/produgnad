@@ -80,7 +80,7 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
         void verify()
       }}
     >
-      <p className="text-sm text-stone-700">
+      <p className="text-sm text-ink">
         Vi har sendt en e-post til <strong>{email}</strong>. Skriv inn koden fra e-posten her, eller trykk på lenken i
         e-posten.
       </p>

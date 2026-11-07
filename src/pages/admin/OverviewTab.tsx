@@ -44,22 +44,22 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
 
       <Card className="space-y-2">
         <h2 className="text-lg font-bold">Påmeldingslenke for foreldre</h2>
-        <p className="break-all rounded-lg bg-stone-100 p-2 font-mono text-sm">{joinLink}</p>
+        <p className="break-all rounded-lg bg-cream p-2 font-mono text-sm">{joinLink}</p>
         <CopyButton value={joinLink} label="Kopier lenke" />
-        <p className="text-xs text-stone-500">Del denne i foreldregruppa. Alle med lenken kan melde seg på som selger</p>
+        <p className="text-xs text-muted">Del denne i foreldregruppa. Alle med lenken kan melde seg på som selger</p>
       </Card>
 
       <Card className="space-y-2">
         <h2 className="text-lg font-bold">Til leverandøren</h2>
         {supplier.length === 0 ? (
-          <p className="text-sm text-stone-500">Ingen bestillinger ennå.</p>
+          <p className="text-sm text-muted">Ingen bestillinger ennå.</p>
         ) : (
           <table className="w-full text-sm">
             <tbody>
               {products.map((p) => {
                 const units = supplier.find((s) => s.product_id === p.id)?.units ?? 0
                 return (
-                  <tr key={p.id} className="border-b border-stone-100">
+                  <tr key={p.id} className="border-b border-line">
                     <td className="py-1">{p.name}</td>
                     <td className="py-1 text-right font-semibold tabular-nums">{units} stk</td>
                   </tr>
@@ -102,7 +102,7 @@ export function OverviewTab({ data, reload }: { data: AdminData; reload: () => P
           </>
         ) : (
           <>
-            <p className="text-sm text-stone-600">Lås når varene er bestilt fra leverandøren.</p>
+            <p className="text-sm text-muted">Lås når varene er bestilt fra leverandøren.</p>
             <Button
               onClick={() =>
                 void update(

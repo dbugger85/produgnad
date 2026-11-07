@@ -25,7 +25,7 @@ export default function AdminHome() {
         {campaigns === null ? (
           <Loading />
         ) : campaigns.length === 0 ? (
-          <p className="text-stone-600">Ingen dugnader ennå.</p>
+          <p className="text-muted">Ingen dugnader ennå.</p>
         ) : (
           campaigns.map((c) => (
             <Link key={c.id} to={`/admin/d/${c.id}`} className="block">
@@ -34,7 +34,7 @@ export default function AdminHome() {
                   <span className="font-bold">{c.name}</span>
                   {c.closed_at ? <Badge>Avsluttet</Badge> : c.locked_at ? <Badge tone="amber">Låst</Badge> : <Badge tone="green">Åpen</Badge>}
                 </div>
-                <div className="text-sm text-stone-600">{c.deadline ? `Frist ${longDate(c.deadline)}` : 'Ingen frist'}</div>
+                <div className="text-sm text-muted">{c.deadline ? `Frist ${longDate(c.deadline)}` : 'Ingen frist'}</div>
               </Card>
             </Link>
           ))

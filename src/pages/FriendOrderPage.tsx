@@ -4,7 +4,7 @@ import { CopyButton } from '../components/CopyButton'
 import { ProductPicker, quantitiesToLines, quantitiesTotal, type Quantities } from '../components/ProductPicker'
 import { ProgressBar } from '../components/ProgressBar'
 import { ClosingMessage, Transparency } from '../components/Transparency'
-import { Button, Card, ErrorBox, Field, Input, Loading, Notice, Page } from '../components/ui'
+import { Button, Card, ErrorBox, Field, Input, Loading, Logo, Notice, Page, Title } from '../components/ui'
 import { VippsBox } from '../components/VippsBox'
 import { errorText } from '../lib/errors'
 import { kr, longDate } from '../lib/format'
@@ -98,13 +98,16 @@ export default function FriendOrderPage() {
   return (
     <Page>
       <header className="space-y-2">
-        <p className="text-sm font-semibold uppercase tracking-wide text-coffee">{campaign.organizer_label}</p>
-        <h1 className="text-2xl font-bold leading-tight">{campaign.name}</h1>
-        <p className="text-stone-700">
+        <div className="flex items-center gap-2.5">
+          <Logo size={28} />
+          <p className="text-sm font-semibold text-brand">{campaign.organizer_label}</p>
+        </div>
+        <Title>{campaign.name}</Title>
+        <p className="text-ink">
           Du bestiller via <strong>{parent.name}</strong>
           {childText}.
         </p>
-        {campaign.purpose_text && <p className="text-stone-700">{campaign.purpose_text}</p>}
+        {campaign.purpose_text && <p className="text-ink">{campaign.purpose_text}</p>}
         <ProgressBar raised={campaign.raised} target={campaign.target_amount} />
       </header>
 
@@ -115,7 +118,7 @@ export default function FriendOrderPage() {
           <h2 className="text-xl font-bold">Takk, {firstName.trim()}! Bestillingen din er {placed.code}.</h2>
           <VippsBox amount={placed.amount} name={placed.parent.name} phoneNumber={placed.parent.phone} code={placed.code} />
           <div className="space-y-1">
-            <p className="text-sm text-stone-600">Her kan du se status på bestillingen senere:</p>
+            <p className="text-sm text-muted">Her kan du se status på bestillingen senere:</p>
             <div className="flex flex-wrap items-center gap-2">
               <Link to={`/status/${placed.status_token}`} className="font-semibold text-brand underline">
                 Se status
@@ -123,7 +126,7 @@ export default function FriendOrderPage() {
               <CopyButton value={statusUrl(placed.status_token)} label="Kopier lenke" />
             </div>
           </div>
-          <p className="text-sm text-stone-600">
+          <p className="text-sm text-muted">
             {parent.name} leverer varene når de kommer. Spørsmål? Ta kontakt med {parent.name.split(' ')[0]}.
           </p>
           <Button variant="secondary" onClick={orderMore}>
@@ -150,7 +153,7 @@ export default function FriendOrderPage() {
               }}
             >
               {campaign.deadline && (
-                <p className="text-sm text-stone-600">Bestill innen {longDate(campaign.deadline)}.</p>
+                <p className="text-sm text-muted">Bestill innen {longDate(campaign.deadline)}.</p>
               )}
               <ProductPicker
                 products={products}
@@ -202,7 +205,7 @@ export default function FriendOrderPage() {
                   </div>
                 </details>
               </Card>
-              <p className="text-xs text-stone-500">
+              <p className="text-xs text-muted">
                 Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e-post hvis du vil ha bekreftelse) bare
                 for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden.
               </p>
@@ -211,7 +214,7 @@ export default function FriendOrderPage() {
         </>
       )}
 
-      <hr className="border-stone-200" />
+      <hr className="border-line" />
       <Transparency campaign={campaign} products={products} />
     </Page>
   )

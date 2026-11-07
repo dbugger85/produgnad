@@ -127,13 +127,13 @@ export default function OrderEditorPage() {
                   key={t.value}
                   type="button"
                   onClick={() => setType(t.value)}
-                  className={`min-h-11 rounded-xl font-semibold ${type === t.value ? 'bg-brand text-white' : 'bg-stone-100'}`}
+                  className={`min-h-11 rounded-xl font-semibold ${type === t.value ? 'bg-brand text-white' : 'bg-cream'}`}
                 >
                   {t.label}
                 </button>
               ))}
             </div>
-            <p className="text-sm text-stone-600">{TYPES.find((t) => t.value === type)?.hint}</p>
+            <p className="text-sm text-muted">{TYPES.find((t) => t.value === type)?.hint}</p>
             {type === 'friend' && (
               <>
                 <Field label="Fornavn på kunden">

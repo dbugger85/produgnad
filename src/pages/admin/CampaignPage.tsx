@@ -27,14 +27,14 @@ export default function CampaignPage() {
   return (
     <>
       <TopBar title={data.campaign.name} back="/admin" />
-      <nav className="no-print sticky top-[53px] z-10 overflow-x-auto border-b border-stone-200 bg-cream">
+      <nav className="no-print sticky top-[53px] z-10 overflow-x-auto border-b border-line bg-cream">
         <div className="mx-auto flex max-w-4xl gap-1 px-2">
           {TABS.map((t) => (
             <button
               key={t.key}
               type="button"
               onClick={() => setParams({ fane: t.key }, { replace: true })}
-              className={`whitespace-nowrap border-b-2 px-3 py-2 text-sm font-semibold ${tab === t.key ? 'border-brand text-brand' : 'border-transparent text-stone-600'}`}
+              className={`whitespace-nowrap border-b-2 px-3 py-2 text-sm font-semibold ${tab === t.key ? 'border-brand text-brand' : 'border-transparent text-muted'}`}
             >
               {t.label}
             </button>
@@ -48,7 +48,7 @@ export default function CampaignPage() {
         {tab === 'bestillinger' && <OrdersTab data={data} reload={reload} />}
         {tab === 'produkter' && <ProductsTab campaignId={id} products={data.products} reload={reload} />}
         {tab === 'innstillinger' && <CampaignSettings key={data.campaign.id} campaign={data.campaign} onSaved={reload} />}
-        <Link to="/admin" className="block pt-4 text-sm text-stone-500">
+        <Link to="/admin" className="block pt-4 text-sm text-muted">
           ← Alle dugnader
         </Link>
       </Page>

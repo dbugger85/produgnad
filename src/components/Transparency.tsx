@@ -10,9 +10,9 @@ export function Transparency({
   products?: Pick<PublicProduct, 'name' | 'price' | 'to_team_amount'>[]
 }) {
   return (
-    <section className="space-y-2 text-sm text-stone-600">
+    <section className="space-y-2 text-sm text-muted">
       <p>
-        Salget er organisert av <strong className="text-stone-800">{campaign.organizer_label}</strong>, ikke av
+        Salget er organisert av <strong className="text-ink">{campaign.organizer_label}</strong>, ikke av
         klubben.
       </p>
       {campaign.admins.length > 0 && (

@@ -13,7 +13,7 @@ export function QtyStepper({
     <div className="flex items-center gap-1" aria-label={`Antall ${label}`}>
       <button
         type="button"
-        className="h-11 w-11 rounded-full bg-stone-100 text-2xl font-bold text-stone-700 disabled:opacity-40"
+        className="h-11 w-11 rounded-full bg-cream text-2xl font-bold text-ink disabled:opacity-40"
         onClick={() => onChange(Math.max(0, value - 1))}
         disabled={value <= 0}
         aria-label={`Færre ${label}`}

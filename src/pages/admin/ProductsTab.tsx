@@ -38,13 +38,13 @@ export function ProductsTab({
             {p.product_images?.[0] ? (
               <img src={imageUrl(p.product_images[0].thumb_path)} alt="" className="h-20 w-20 rounded-xl object-cover" />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-stone-100 text-2xl">☕</div>
+              <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-cream text-2xl">☕</div>
             )}
             <div className="flex-1">
               <div className="flex items-center gap-2 font-bold">
                 {p.name} {!p.active && <Badge>Skjult</Badge>}
               </div>
-              <div className="text-sm text-stone-600">
+              <div className="text-sm text-muted">
                 {kr(p.price)}, {kr(p.to_team_amount)} til laget
               </div>
               <button type="button" className="mt-1 text-sm font-semibold text-brand" onClick={() => setEditing(p.id)}>
@@ -173,7 +173,7 @@ function ProductForm({
       {product ? (
         <ImageManager product={product} reload={reload} />
       ) : (
-        <p className="text-sm text-stone-500">Lagre varen først, så kan du legge til bilder.</p>
+        <p className="text-sm text-muted">Lagre varen først, så kan du legge til bilder.</p>
       )}
     </Card>
   )
@@ -241,9 +241,9 @@ function ImageManager({ product, reload }: { product: Product; reload: () => Pro
   }
 
   return (
-    <div className="space-y-2 border-t border-stone-200 pt-3">
+    <div className="space-y-2 border-t border-line pt-3">
       <h3 className="font-semibold">Bilder</h3>
-      <p className="text-xs text-stone-500">Første bilde er hovedbildet. Bruk egne bilder eller bilder leverandøren lar oss bruke.</p>
+      <p className="text-xs text-muted">Første bilde er hovedbildet. Bruk egne bilder eller bilder leverandøren lar oss bruke.</p>
       <div className="grid grid-cols-3 gap-2">
         {images.map((img, i) => (
           <div key={img.id} className="space-y-1">
@@ -253,7 +253,7 @@ function ImageManager({ product, reload }: { product: Product; reload: () => Pro
                 ←
               </button>
               {i === 0 ? (
-                <span className="text-xs text-stone-500">Hoved</span>
+                <span className="text-xs text-muted">Hoved</span>
               ) : (
                 <button type="button" className="text-xs text-brand" onClick={() => void makeMain(img)}>
                   Gjør til hoved

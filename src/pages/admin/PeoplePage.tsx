@@ -58,7 +58,7 @@ export default function PeoplePage() {
             }}
           >
             <h2 className="text-lg font-bold">Din profil</h2>
-            <p className="text-sm text-stone-600">Navnet og rollen din vises offentlig på alle sider i dugnaden.</p>
+            <p className="text-sm text-muted">Navnet og rollen din vises offentlig på alle sider i dugnaden.</p>
             <Field label="Navn">
               <Input value={name} onChange={(e) => { setName(e.target.value); setSaved(false) }} />
             </Field>
@@ -82,7 +82,7 @@ export default function PeoplePage() {
             <div key={a.user_id} className="flex items-center justify-between gap-2 text-sm">
               <div>
                 <div className="font-semibold">{a.name || a.email}</div>
-                <div className="text-stone-500">
+                <div className="text-muted">
                   {[a.role_title, a.show_phone_public ? phone(a.phone) : 'telefon skjult', a.email].filter(Boolean).join(' · ')}
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function PeoplePage() {
             </div>
           ))}
           <form
-            className="space-y-2 border-t border-stone-200 pt-3"
+            className="space-y-2 border-t border-line pt-3"
             onSubmit={(e) => {
               e.preventDefault()
               void setAdmin(newEmail, true)

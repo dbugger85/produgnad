@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router'
-import { Button, Card, Loading, Page } from '../components/ui'
+import { Brand, Button, Card, Loading, Page, Title } from '../components/ui'
 import { signOut, useAuth } from '../lib/auth'
 import { supabase } from '../lib/supabase'
 
@@ -29,8 +29,8 @@ export default function HomePage() {
   if (!session) {
     return (
       <Page>
-        <h1 className="text-2xl font-bold">ProDugnad</h1>
-        <p className="text-stone-700">
+        <Brand />
+        <p className="text-ink">
           Et enkelt verktøy for dugnader i barne- og ungdomsidrett. Har du fått en bestillingslenke fra en forelder,
           åpner du den lenken direkte.
         </p>
@@ -45,7 +45,8 @@ export default function HomePage() {
 
   return (
     <Page>
-      <h1 className="text-2xl font-bold">Hei{profile?.name ? `, ${profile.name.split(' ')[0]}` : ''}!</h1>
+      <Brand />
+      <Title className="pt-2">Hei{profile?.name ? `, ${profile.name.split(' ')[0]}` : ''}!</Title>
       {profile?.is_admin && (
         <Link to="/admin" className="block">
           <Card className="font-semibold text-brand">Admin: dugnader, foreldre og betalinger →</Card>
@@ -56,7 +57,7 @@ export default function HomePage() {
           <Link key={m.id} to={`/forelder/${m.id}`} className="block">
             <Card>
               <div className="font-semibold">{m.campaigns?.name}</div>
-              <div className="text-sm text-stone-600">
+              <div className="text-sm text-muted">
                 Mine bestillinger{m.child_first_name && ` (${m.child_first_name})`} →
               </div>
             </Card>
@@ -64,7 +65,7 @@ export default function HomePage() {
         ))
       ) : (
         !profile?.is_admin && (
-          <p className="text-stone-700">
+          <p className="text-ink">
             Du er ikke med i noen dugnad ennå. Be en av de ansvarlige om påmeldingslenken.
           </p>
         )

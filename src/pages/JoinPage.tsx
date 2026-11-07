@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { LoginForm } from '../components/LoginForm'
 import { Transparency } from '../components/Transparency'
-import { Button, Card, ErrorBox, Field, Input, Loading, Page } from '../components/ui'
+import { Button, Card, ErrorBox, Field, Input, Loading, Logo, Page, Title } from '../components/ui'
 import { useAuth } from '../lib/auth'
 import { errorText } from '../lib/errors'
 import { longDate } from '../lib/format'
@@ -58,9 +58,12 @@ export default function JoinPage() {
   return (
     <Page>
       <header className="space-y-1">
-        <p className="text-sm font-semibold uppercase tracking-wide text-coffee">{campaign.organizer_label}</p>
-        <h1 className="text-2xl font-bold">Bli med som selger: {campaign.name}</h1>
-        {campaign.deadline && <p className="text-stone-700">Bestillingsfrist {longDate(campaign.deadline)}.</p>}
+        <div className="flex items-center gap-2.5">
+          <Logo size={28} />
+          <p className="text-sm font-semibold text-brand">{campaign.organizer_label}</p>
+        </div>
+        <Title>Bli med som selger: {campaign.name}</Title>
+        {campaign.deadline && <p className="text-ink">Bestillingsfrist {longDate(campaign.deadline)}.</p>}
       </header>
 
       {!session ? (
@@ -93,7 +96,7 @@ export default function JoinPage() {
             <Field label="Barnets fornavn" hint="Vises som «forelder til …»">
               <Input value={child} onChange={(e) => setChild(e.target.value)} maxLength={40} />
             </Field>
-            <p className="text-xs text-stone-500">Innlogget som {session.user.email}</p>
+            <p className="text-xs text-muted">Innlogget som {session.user.email}</p>
             <ErrorBox>{error}</ErrorBox>
             <Button type="submit" className="w-full" disabled={busy}>
               {busy ? 'Lagrer …' : 'Bli med'}
