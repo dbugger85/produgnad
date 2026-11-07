@@ -56,11 +56,11 @@ before(async () => {
   const prod = await admin.client
     .from('products')
     .insert([
-      { campaign_id: campaign.id, name: 'Kaffe', price: 120, to_team_amount: 50, sort_order: 0 },
-      { campaign_id: campaign.id, name: 'Te', price: 80, to_team_amount: 30, sort_order: 1 },
-      { campaign_id: campaign.id, name: 'Skjult', price: 10, to_team_amount: 1, active: false },
-      { campaign_id: otherCampaign.id, name: 'Annen', price: 10, to_team_amount: 1 },
-    ])
+      { campaign_id: campaign.id, name: 'Kaffe', price: 120, to_team_amount: 50, sort_order: 0, active: true },
+      { campaign_id: campaign.id, name: 'Te', price: 80, to_team_amount: 30, sort_order: 1, active: true },
+      { campaign_id: campaign.id, name: 'Skjult', price: 10, to_team_amount: 1, sort_order: 2, active: false },
+      { campaign_id: otherCampaign.id, name: 'Annen', price: 10, to_team_amount: 1, sort_order: 0, active: true },
+    ], { defaultToNull: false })
     .select()
   assert.ifError(prod.error)
   ;[coffee, tea, hidden, foreignProduct] = prod.data
