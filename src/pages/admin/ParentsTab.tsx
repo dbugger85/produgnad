@@ -109,7 +109,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
 
   async function toggleSent() {
     const next = parent.goods_sent_at ? null : new Date().toISOString()
-    if (next && !confirm(`Merke at varene er sendt til ${parent.profiles.name}? Forelderen får e-post.`)) return
+    if (next && !confirm(`Merke at varene er sendt til ${parent.profiles.name}? Forelderen får e‑post.`)) return
     await supabase.from('campaign_parents').update({ goods_sent_at: next }).eq('id', parentId)
     await reload()
   }

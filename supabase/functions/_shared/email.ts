@@ -22,7 +22,7 @@ function renderAdminInvite(row: OutboxRow & { to_email?: string }): Rendered {
 <div style="background:#fff;border-radius:16px;padding:20px;border:1px solid #e7e5e4">
 <h1 style="font-size:20px;margin:0 0 12px">Du er lagt til som administrator</h1>
 <p>Du kan nå sette opp dugnader, varer og foreldre, og registrere betalinger i ProDugnad.</p>
-<p>Logg inn med denne e-postadressen. Du får en kode på e-post, ikke noe passord.</p>
+<p>Logg inn med denne e‑postadressen. Du får en kode på e‑post, ikke noe passord.</p>
 ${button(login, 'Logg inn')}
 <p style="font-size:13px;color:#57534e">Fyll gjerne inn navn, rolle og telefon under Innstillinger når du er logget inn.</p>
 </div></div></body></html>`
@@ -102,7 +102,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
   }
   // Emails to parents: replies to the contact admin
   const wrap = (subject: string, body: string): Rendered => {
-    const line = contact?.name && campaign.admins_visibility !== 'none' ? `Kontakt: ${esc(contact.name)} (svar på denne e-posten).` : ''
+    const line = contact?.name && campaign.admins_visibility !== 'none' ? `Kontakt: ${esc(contact.name)} (svar på denne e‑posten).` : ''
     const html = layout(campaign, line, body)
     return { ...base, subject, html, text: htmlToText(html) }
   }
@@ -119,7 +119,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
   const wrapFriend = (subject: string, body: string): Rendered => {
     if (campaign.admins_visibility === 'all' && contact?.email) return wrap(subject, body)
     const first = parentName.split(' ')[0]
-    const line = first ? `Spørsmål? Svar på denne e-posten, så kommer den til ${esc(first)}.` : ''
+    const line = first ? `Spørsmål? Svar på denne e‑posten, så kommer den til ${esc(first)}.` : ''
     const html = layout(campaign, line, body)
     return { ...base, replyTo: cp.profiles?.email || null, subject, html, text: htmlToText(html) }
   }
@@ -218,7 +218,7 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
           : '<br>Alle venner har betalt.'
       }</p>
 ${button(`${APP_URL}/forelder/${cp.id}`, 'Åpne bestillingene')}
-<p style="font-size:13px;color:#5d6472">Du får denne e-posten bare på dager med nye bestillinger via lenken din.</p>`,
+<p style="font-size:13px;color:#5d6472">Du får denne e‑posten bare på dager med nye bestillinger via lenken din.</p>`,
     )
   }
 

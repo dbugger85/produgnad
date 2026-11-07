@@ -187,9 +187,9 @@ export default function FriendOrderPage() {
                   {sending ? 'Sender …' : 'Bestill'}
                 </Button>
                 <details open={wantsEmail} onToggle={(e) => setWantsEmail((e.target as HTMLDetailsElement).open)}>
-                  <summary className="cursor-pointer text-sm text-brand">Vil du ha bekreftelse på e-post?</summary>
+                  <summary className="cursor-pointer text-sm text-brand">Vil du ha bekreftelse på e‑post?</summary>
                   <div className="pt-2">
-                    <Field label="E-post (valgfritt)">
+                    <Field label="E‑post (valgfritt)">
                       <Input
                         type="email"
                         value={email}
@@ -202,7 +202,7 @@ export default function FriendOrderPage() {
                 </details>
               </Card>
               <p className="text-xs text-muted">
-                Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e-post hvis du vil ha bekreftelse) bare
+                Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e‑post hvis du vil ha bekreftelse) bare
                 for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden.
               </p>
             </form>

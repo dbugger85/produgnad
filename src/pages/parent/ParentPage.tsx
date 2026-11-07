@@ -210,8 +210,8 @@ export default function ParentPage() {
         </section>
 
         <p className="text-sm text-muted">
-          Venner ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Svarer de på en e-post fra
-          appen, går svaret til e-postadressen din. Betalingskoden din til admin er {cp.payment_code}.
+          Venner ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Svarer de på en e‑post fra
+          appen, går svaret til e‑postadressen din. Betalingskoden din til admin er {cp.payment_code}.
         </p>
         {page && (
           <>

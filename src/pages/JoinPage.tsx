@@ -68,7 +68,7 @@ export default function JoinPage() {
 
       {!session ? (
         <Card className="space-y-3">
-          <p>Først logger du inn med e-posten din. Du får en kode, ikke noe passord.</p>
+          <p>Først logger du inn med e‑posten din. Du får en kode, ikke noe passord.</p>
           <LoginForm next={`/bli-med/${code}`} />
         </Card>
       ) : (

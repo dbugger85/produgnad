@@ -22,7 +22,7 @@ export default function LoginPage() {
     <Page>
       <Brand />
       <Title className="pt-4">Logg inn</Title>
-      <p className="text-ink">For foreldre og administratorer. Du får en kode på e-post, ikke noe passord.</p>
+      <p className="text-ink">For foreldre og administratorer. Du får en kode på e‑post, ikke noe passord.</p>
       <Card>
         <LoginForm next={next} />
       </Card>

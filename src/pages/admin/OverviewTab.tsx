@@ -157,7 +157,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
   const withEmail = parents.filter((p) => p.profiles.email).length
 
   async function sendClosing() {
-    if (!confirm(`Sende avslutningsmeldingen på e-post til ${withEmail} foreldre?`)) return
+    if (!confirm(`Sende avslutningsmeldingen på e‑post til ${withEmail} foreldre?`)) return
     setError('')
     setBusy(true)
     const { data: n, error } = await supabase.rpc('queue_closing_emails', { p_campaign_id: campaign.id })
@@ -172,7 +172,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
   }
 
   async function anonymize() {
-    if (!confirm('Slette vennenes personopplysninger? Fornavn blir «Venn», og e-postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres.')) return
+    if (!confirm('Slette vennenes personopplysninger? Fornavn blir «Venn», og e‑postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres.')) return
     setError('')
     setBusy(true)
     const { error } = await supabase.rpc('anonymize_friends', { p_campaign_id: campaign.id })
@@ -184,7 +184,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
   return (
     <div className="space-y-4 border-t border-line pt-3">
       <div className="space-y-2">
-        <h3 className="font-semibold">Avslutningsmelding på e-post</h3>
+        <h3 className="font-semibold">Avslutningsmelding på e‑post</h3>
         {!campaign.closing_message.trim() ? (
           <p className="text-sm text-muted">Skriv en avslutningsmelding under Oppsett først</p>
         ) : (
@@ -208,7 +208,7 @@ function Wrapup({ data, reload }: { data: AdminData; reload: () => Promise<void>
         ) : (
           <>
             <p className="text-sm text-muted">
-              Slett fornavn, e-postadresser og notater fra vennene når varene er levert og alt er betalt, slik personvernteksten lover
+              Slett fornavn, e‑postadresser og notater fra vennene når varene er levert og alt er betalt, slik personvernteksten lover
             </p>
             <Button variant="danger" onClick={() => void anonymize()} disabled={busy}>
               Slett vennenes personopplysninger

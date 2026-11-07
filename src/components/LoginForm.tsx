@@ -27,7 +27,7 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
         /rate|seconds/i.test(error.message)
           ? 'Vent litt før du ber om en ny kode.'
           : /sending|smtp|email/i.test(error.message)
-            ? 'Klarte ikke å sende e-posten akkurat nå. Prøv igjen om litt, eller kontakt de ansvarlige.'
+            ? 'Klarte ikke å sende e‑posten akkurat nå. Prøv igjen om litt, eller kontakt de ansvarlige.'
             : errorText(error),
       )
       return
@@ -60,7 +60,7 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
           void send()
         }}
       >
-        <Field label="E-post">
+        <Field label="E‑post">
           <Input
             type="email"
             inputMode="email"
@@ -87,10 +87,10 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
       }}
     >
       <p className="text-sm text-ink">
-        Vi har sendt en e-post til <strong>{email}</strong>. Skriv inn koden fra e-posten her, eller trykk på lenken i
-        e-posten.
+        Vi har sendt en e‑post til <strong>{email}</strong>. Skriv inn koden fra e‑posten her, eller trykk på lenken i
+        e‑posten.
       </p>
-      <Field label="Kode fra e-posten">
+      <Field label="Kode fra e‑posten">
         <Input
           inputMode="numeric"
           autoComplete="one-time-code"
@@ -107,7 +107,7 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
         {busy ? 'Sjekker …' : 'Logg inn'}
       </Button>
       <button type="button" className="text-sm text-brand underline" onClick={() => setSent(false)}>
-        Feil e-post, eller ingen e-post? Prøv igjen
+        Feil e‑post, eller ingen e‑post? Prøv igjen
       </button>
     </form>
   )

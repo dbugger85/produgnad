@@ -148,7 +148,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         <Field label="Vipps-nummer">
           <Input inputMode="tel" value={form.admin_vipps_phone} onChange={(e) => set('admin_vipps_phone', e.target.value)} />
         </Field>
-        <Field label="Kontaktperson for e-post" hint="Svar på e-poster fra appen går til denne personen">
+        <Field label="Kontaktperson for e‑post" hint="Svar på e‑poster fra appen går til denne personen">
           <select
             className="w-full rounded-xl border border-line bg-white px-3 py-2.5"
             value={form.contact_admin_user_id ?? ''}
@@ -203,7 +203,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         />
         <VisibilityChoice
           label="Ansvarlige og kontakt"
-          hint="Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e-post til kontaktpersonen, ellers til forelderen"
+          hint="Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e‑post til kontaktpersonen, ellers til forelderen"
           value={form.admins_visibility}
           onChange={(v) => set('admins_visibility', v)}
         />

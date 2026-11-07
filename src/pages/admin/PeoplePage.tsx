@@ -55,7 +55,7 @@ export default function PeoplePage() {
       return setError(errorText(code || error))
     }
     setNewEmail('')
-    setInvited(data?.already ? `${email} var allerede admin. Vi har sendt en ny e-post.` : `${email} er lagt til og har fått en e-post.`)
+    setInvited(data?.already ? `${email} var allerede admin. Vi har sendt en ny e‑post.` : `${email} er lagt til og har fått en e‑post.`)
     await loadAdmins()
   }
 
@@ -122,7 +122,7 @@ export default function PeoplePage() {
               void invite()
             }}
           >
-            <Field label="Legg til admin (e-post)" hint="Personen får en e-post med lenke for å logge inn">
+            <Field label="Legg til admin (e‑post)" hint="Personen får en e‑post med lenke for å logge inn">
               <Input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
             </Field>
             <Button type="submit" variant="secondary" disabled={!newEmail.includes('@')}>
