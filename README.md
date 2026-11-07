@@ -48,7 +48,7 @@ GitHub Actions runs all of them on every push.
 | `/logg-inn` | Parents, admins | Login with a code from email (or the link in the email) |
 | `/forelder/<id>` | Parents | Money to the team via them, their link with share texts, link preview and QR, amount owed with Vipps, orders |
 | `/forelder/<id>/ny`, `/ordre/<id>`, `/fra-ekstra/<id>` | Parents | New or edit order (Venn / Egen / Ekstra), give extra stock to a friend |
-| `/pakkeliste/<id>` | Parents, admins | Printable packing list |
+| `/pakkeliste/<id>` | Parents, admins | Packing list per friend, ticked on the phone |
 | `/admin` | Admins | Campaigns I sell in, campaigns I administer, Personer |
 | `/admin/d/<id>` | Admins | One campaign: Oversikt (progress, sign-up link, supplier totals, lock, close, closing email, delete friends' data), Foreldre (payments, goods sent, packing lists), Bestillinger, Varer (with pictures), Oppsett (texts, what friends see) |
 | `/admin/personer` | Admins | Everyone in the app; make or remove admins |

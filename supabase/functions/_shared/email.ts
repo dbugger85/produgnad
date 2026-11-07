@@ -245,7 +245,7 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
     return wrap(
       `Varene til ${campaign.name} er på vei til deg`,
       `<h1 style="font-size:20px;margin:0 0 12px">Varene er på vei, ${esc(parentName.split(' ')[0])}!</h1>
-<p>Varene for bestillingene dine er sendt til deg. Bruk pakkelisten for å fordele dem, og kryss av «levert» etter hvert.</p>
+<p>Varene for bestillingene dine er sendt til deg. Åpne pakkelisten på mobilen og kryss av hver bestilling når den er pakket. Merk «levert» når vennen har fått varene.</p>
 ${button(`${APP_URL}/pakkeliste/${cp.id}`, 'Åpne pakkelisten')}
 <p><a href="${APP_URL}/forelder/${cp.id}" style="color:#002e5f">Til bestillingene dine</a></p>`,
     )

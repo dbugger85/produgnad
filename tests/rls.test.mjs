@@ -188,6 +188,7 @@ describe('friend (no login)', () => {
     expectError(await anon().rpc('save_order', { p_campaign_parent_id: cpA, p_type: 'own', p_lines: [{ product_id: coffee.id, qty: 1 }] }))
     expectError(await anon().rpc('set_admin', { p_email: 'x@example.com', p_is_admin: true }))
     expectError(await anon().rpc('claim_outbox', { p_limit: 5 }))
+    expectError(await anon().rpc('set_order_packed', { p_order_id: '00000000-0000-0000-0000-000000000000', p_packed: true }))
   })
 })
 
@@ -229,6 +230,7 @@ describe('parent', () => {
     expectError(await parentA.client.from('parent_payments').insert({ campaign_parent_id: cpA, amount: 1000 }))
     expectError(await parentA.client.from('campaign_parents').update({ payment_code: 'D-1' }).eq('id', cpA))
     expectNoRows(await parentA.client.from('campaign_parents').update({ goods_sent_at: new Date().toISOString() }).eq('id', cpA).select())
+    expectNoRows(await parentA.client.from('campaign_parents').update({ packed_at: new Date().toISOString() }).eq('id', cpA).select())
     expectNoRows(await parentA.client.from('email_outbox').select('*'))
   })
 
@@ -237,6 +239,7 @@ describe('parent', () => {
     const bOrder = (await service.from('orders').select('id').eq('campaign_parent_id', cpB).limit(1).single()).data
     expectError(await parentA.client.rpc('set_order_paid', { p_order_id: bOrder.id, p_paid: true }), 'NOT_ALLOWED')
     expectError(await parentA.client.rpc('delete_order', { p_order_id: bOrder.id }), 'NOT_ALLOWED')
+    expectError(await parentA.client.rpc('set_order_packed', { p_order_id: bOrder.id, p_packed: true }), 'NOT_ALLOWED')
     // Editing B's order while claiming to be A's row is also refused.
     expectError(await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_order_id: bOrder.id, p_type: 'own', p_lines: [{ product_id: coffee.id, qty: 1 }] }))
   })
@@ -260,6 +263,17 @@ describe('parent', () => {
     assert.ifError((await parentA.client.rpc('delete_order', { p_order_id: id })).error)
     const gone = (await service.from('orders').select('deleted_at').eq('id', id).single()).data
     assert.ok(gone.deleted_at)
+  })
+
+  test('ticks and unticks own orders as packed; packing is not delivery', async () => {
+    const id = (await service.from('orders').select('id').eq('campaign_parent_id', cpA).limit(1).single()).data.id
+    assert.ifError((await parentA.client.rpc('set_order_packed', { p_order_id: id, p_packed: true })).error)
+    let o = (await parentA.client.from('orders').select('packed_at, delivered_at').eq('id', id).single()).data
+    assert.ok(o.packed_at)
+    assert.equal(o.delivered_at, null)
+    assert.ifError((await parentA.client.rpc('set_order_packed', { p_order_id: id, p_packed: false })).error)
+    o = (await parentA.client.from('orders').select('packed_at').eq('id', id).single()).data
+    assert.equal(o.packed_at, null)
   })
 
   test('friend order status follows paid -> delivered', async () => {
@@ -293,6 +307,13 @@ describe('admin', () => {
     assert.equal(cps.length, 2)
     const orders = (await admin.client.from('orders').select('campaign_parent_id').eq('campaign_id', campaign.id)).data
     assert.ok(orders.some((o) => o.campaign_parent_id === cpA) && orders.some((o) => o.campaign_parent_id === cpB))
+  })
+
+  test("ticks a parent's bag as packed", async () => {
+    const r = await admin.client.from('campaign_parents').update({ packed_at: new Date().toISOString() }).eq('id', cpB).select('packed_at')
+    assert.ifError(r.error)
+    assert.ok(r.data[0].packed_at)
+    assert.ifError((await admin.client.from('campaign_parents').update({ packed_at: null }).eq('id', cpB)).error)
   })
 
   test('records a parent payment; totals add up; parent gets an email', async () => {

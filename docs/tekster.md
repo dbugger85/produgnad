@@ -166,9 +166,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | G11 | Give away, row | 5 igjen · 120 kr |
 | G12 | Give away, button | Gi til vennen |
 | G13 | Give away, error | Skriv inn fornavnet til vennen. |
-| G14 | Packing list title | Pakkeliste: Ola Hansen · Emma · +47 912 34 568 · D-1 · Skrevet ut 7. november 2026 |
-| G15 | Packing list sections | Til Ola (12 stk) · Fordeling |
-| G16 | Packing list status | betalt · ikke betalt, 240 kr |
+| G14 | Packing list (per venn, tick on the phone) | Pakkeliste · *Kaffesalg* · Ola Hansen · Emma (admins also see +47 912 34 568 · D-1) |
+| G15 | Packing list sections | I posen fra de ansvarlige (12 stk) · 1 av 4 bestillinger pakket / Alt er pakket (4 bestillinger) · Trykk på en bestilling når den er pakket. Trykk igjen for å angre · Ingen varer ennå · Ingen bestillinger. |
+| G16 | Packing list row | Kari · K1 · 2 × Kaffe · 2 stk · betalt / ikke betalt, 240 kr |
 
 ## H. Admin: start page and Innstillinger
 
@@ -197,9 +197,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 ## I. Admin: a campaign
 
-<p><a href="screenshots/i-oversikt.jpg"><img src="screenshots/i-oversikt.jpg" width="230" alt="Oversikt" title="Oversikt"></a> <a href="screenshots/i-foreldre.jpg"><img src="screenshots/i-foreldre.jpg" width="230" alt="Foreldre (åpnet)" title="Foreldre (åpnet)"></a> <a href="screenshots/i-bestillinger.jpg"><img src="screenshots/i-bestillinger.jpg" width="230" alt="Bestillinger" title="Bestillinger"></a> <a href="screenshots/i-varer.jpg"><img src="screenshots/i-varer.jpg" width="230" alt="Varer" title="Varer"></a> <a href="screenshots/i-vare-endre.jpg"><img src="screenshots/i-vare-endre.jpg" width="230" alt="Endre vare med bilder" title="Endre vare med bilder"></a> <a href="screenshots/i-oppsett.jpg"><img src="screenshots/i-oppsett.jpg" width="230" alt="Oppsett" title="Oppsett"></a> <a href="screenshots/i-oppsett-hva-som-vises.jpg"><img src="screenshots/i-oppsett-hva-som-vises.jpg" width="230" alt="Hva som vises" title="Hva som vises"></a> <a href="screenshots/i-avslutning.jpg"><img src="screenshots/i-avslutning.jpg" width="230" alt="Etter avslutning" title="Etter avslutning"></a> <a href="screenshots/i-alle-pakkelister.jpg"><img src="screenshots/i-alle-pakkelister.jpg" width="230" alt="Alle pakkelister" title="Alle pakkelister"></a></p>
+<p><a href="screenshots/i-oversikt.jpg"><img src="screenshots/i-oversikt.jpg" width="230" alt="Oversikt" title="Oversikt"></a> <a href="screenshots/i-foreldre.jpg"><img src="screenshots/i-foreldre.jpg" width="230" alt="Foreldre (åpnet)" title="Foreldre (åpnet)"></a> <a href="screenshots/i-bestillinger.jpg"><img src="screenshots/i-bestillinger.jpg" width="230" alt="Bestillinger" title="Bestillinger"></a> <a href="screenshots/i-varer.jpg"><img src="screenshots/i-varer.jpg" width="230" alt="Varer" title="Varer"></a> <a href="screenshots/i-vare-endre.jpg"><img src="screenshots/i-vare-endre.jpg" width="230" alt="Endre vare med bilder" title="Endre vare med bilder"></a> <a href="screenshots/i-oppsett.jpg"><img src="screenshots/i-oppsett.jpg" width="230" alt="Oppsett" title="Oppsett"></a> <a href="screenshots/i-oppsett-hva-som-vises.jpg"><img src="screenshots/i-oppsett-hva-som-vises.jpg" width="230" alt="Hva som vises" title="Hva som vises"></a> <a href="screenshots/i-avslutning.jpg"><img src="screenshots/i-avslutning.jpg" width="230" alt="Etter avslutning" title="Etter avslutning"></a> <a href="screenshots/i-alle-pakkelister.jpg"><img src="screenshots/i-alle-pakkelister.jpg" width="230" alt="Pakkeliste per forelder" title="Pakkeliste per forelder"></a></p>
 
-<sub>Oversikt · Foreldre (åpnet) · Bestillinger · Varer · Endre vare med bilder · Oppsett · Hva som vises · Etter avslutning · Alle pakkelister</sub>
+<sub>Oversikt · Foreldre (åpnet) · Bestillinger · Varer · Endre vare med bilder · Oppsett · Hva som vises · Etter avslutning · Pakkeliste per forelder</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -214,7 +214,8 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | I26 | After closing | Avslutningsmelding på e-post · Foreldrene får meldingen din, hvor mye dugnaden samlet inn til laget, og hvor mye som kom via dem · Send til 2 foreldre / Send til foreldre som ikke har fått den · Sendt til 2 foreldre. · Skriv en avslutningsmelding under Oppsett først · Vennenes personopplysninger · Slett fornavn, e-postadresser og notater fra vennene når varene er levert og alt er betalt, slik personvernteksten lover · Slett vennenes personopplysninger · Slettet 7. november 2026. Beløp og betalinger er beholdt. |
 | I27 | Confirms after closing | Sende avslutningsmeldingen på e-post til 2 foreldre? · Slette vennenes personopplysninger? Fornavn blir «Venn», og e-postadresser og notater slettes. Beløp og betalinger beholdes. Dette kan ikke angres. |
 | I8 | Confirms | Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå. · Låse opp bestillingene igjen? · Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider. · Åpne dugnaden igjen? |
-| I9 | Foreldre tab | Skriv ut alle pakkelister → · Navn / Mest til laget · Emma · 6 bestillinger · **765 kr** til laget · Ola Hansen D-1 · Emma · 4 bestillinger · 0 kr / 1 370 kr · Oppgjort / Skylder 1 370 kr / Betalt 200 kr for mye |
+| I9 | Foreldre tab | Pakkeliste for alle foreldre → · Navn / Mest til laget · Emma · 6 bestillinger · **765 kr** til laget · Ola Hansen D-1 · Emma · 4 bestillinger · 0 kr / 1 370 kr · Oppgjort / Skylder 1 370 kr / Betalt 200 kr for mye |
+| I28 | Packing list for admins (per forelder) | Pakkeliste · 1 av 2 poser pakket / Alt er pakket (2 poser) · Igjen å pakke (12 stk) · Én pose per forelder. Trykk når posen er pakket. Se fordelingen per venn under hver forelder · Lise Berg · Jonas · 5 × Kaffe · 5 stk · Sendt · Fordeling per venn (1) → · Ingen bestillinger ennå. |
 | I10 | Opened parent | Betalinger · Ingen registrert. · Beløp (kr) · Dato · Registrer betaling fra Ola · Slett · Merk varer sendt / Varer sendt 7. november 2026 (angre) · Pakkeliste · Se forelderens side → |
 | I11 | Confirms | Slette denne betalingen? · Merke at varene er sendt til Ola Hansen? Forelderen får e-post. |
 | I12 | Empty | Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt. |
@@ -257,7 +258,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | K2 | Friend ordered (opt-in) | **Bestilling K7: Vipps 240 kr til Ola Hansen** · Takk for bestillingen, Kari! · Totalt · Vipps **240 kr** til **Ola Hansen, +47 912 34 568**, melding **K7** · Se status på bestillingen · Ola Hansen leverer varene når de kommer. |
 | K3 | Friend paid (opt-in) | **Takk! Betalingen for K7 er registrert** · Takk, Kari! · Ola Hansen har registrert at du har betalt 240 kr for bestilling K7. · Se status på bestillingen |
 | K4 | Parent payment registered | **Betaling registrert: 1 440 kr av 1 440 kr** · Takk, Ola! · Vi har registrert betalingen din for *Kaffesalg*. Du har nå betalt **1 440 kr** av **1 440 kr**. · Det gjenstår … / Du har betalt … for mye. Vi tar kontakt. / Alt er betalt. Tusen takk! · Se dine bestillinger |
-| K5 | Goods sent | **Varene til *Kaffesalg* er på vei til deg** · Varene er på vei, Ola! · Varene for bestillingene dine er sendt til deg. Bruk pakkelisten for å fordele dem, og kryss av «levert» etter hvert. · Åpne pakkelisten · Til bestillingene dine |
+| K5 | Goods sent | **Varene til *Kaffesalg* er på vei til deg** · Varene er på vei, Ola! · Varene for bestillingene dine er sendt til deg. Åpne pakkelisten på mobilen og kryss av hver bestilling når den er pakket. Merk «levert» når vennen har fått varene. · Åpne pakkelisten · Til bestillingene dine |
 | K6 | Daily digest (20:00) | **3 nye bestillinger siden sist (720 kr)** / **1 ny bestilling siden sist (240 kr)** · Nye bestillinger, Ola · Nye totalt · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per. / Alle venner har betalt. · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din. |
 | K9 | Closing message (button on Oversikt) | **Kaffesalg: takk for innsatsen!** · Takk for innsatsen, Ola! · *the closing message* · Til laget totalt · 1 015 kr · Via deg: 765 kr · Se dine bestillinger |
 | K10 | Admin invitation (Innstillinger → Legg til) | **Du er lagt til som administrator i ProDugnad** · Du er lagt til som administrator · Du kan nå sette opp dugnader, varer og foreldre, og registrere betalinger i ProDugnad. · Logg inn med denne e-postadressen. Du får en kode på e-post, ikke noe passord. · Logg inn · Fyll gjerne inn navn, rolle og telefon under Innstillinger når du er logget inn. |

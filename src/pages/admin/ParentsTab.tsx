@@ -18,9 +18,9 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
         : a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb'),
     )
 
-  const printAll = (
+  const packingLink = (
     <Link to={`/admin/d/${data.campaign.id}/pakkelister`} className="block w-fit font-semibold text-brand">
-      Skriv ut alle pakkelister →
+      Pakkeliste for alle foreldre →
     </Link>
   )
   if (rows.length === 0) return <p className="text-muted">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt.</p>
@@ -28,7 +28,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        {printAll}
+        {packingLink}
         <div className="flex gap-1 text-sm" role="radiogroup" aria-label="Sorter">
           {(['name', 'team'] as const).map((k) => (
             <button

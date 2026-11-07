@@ -19,7 +19,7 @@ Read `docs/brief.md` (original spec), `docs/plan.md` (decisions, log, ideas, sec
 ## Security model
 - Friends (anon) never touch tables; only `public_campaign_by_link`, `public_campaign_by_join`, `order_status_by_token`, `create_friend_order`. A pgTAP guard (`supabase/tests/rls_enabled.test.sql`) fails if anon can execute any other function, if a table has RLS off, or if anon has table rights.
 - New SQL functions: `alter default privileges for role postgres` revokes PUBLIC execute (migration 8), but still add explicit `revoke … from public, anon, authenticated` and `grant` what's needed.
-- Parents read their own rows through RLS; all parent writes go through functions (`join_campaign`, `save_order`, `set_order_paid`, `set_order_delivered`, `delete_order`, `assign_extra`) that check ownership and the lock. Orders given away from extra stock move units back/forth (`move_extra_units`).
+- Parents read their own rows through RLS; all parent writes go through functions (`join_campaign`, `save_order`, `set_order_paid`, `set_order_delivered`, `set_order_packed`, `delete_order`, `assign_extra`) that check ownership and the lock. Orders given away from extra stock move units back/forth (`move_extra_units`).
 - Admins (`profiles.is_admin`) read and write everything; one team per install. `invite-admin` Edge Function adds admins (checks the caller's JWT itself).
 - Friend order limits per link per hour: 20 orders, 10 with email; 200 friend orders/hour in total; one confirmation per email address per day. Names are stripped of control characters by a trigger.
 - Errors from SQL are short codes (`CAMPAIGN_LOCKED` …) translated in `src/lib/errors.ts`.
@@ -32,7 +32,7 @@ Live: `npx supabase db push --remote --yes`, `npx supabase functions deploy <nam
 Screenshots of every page for `docs/tekster.md`: Playwright from `~/Work/substitutor/node_modules/playwright-core` with `/usr/bin/chromium`, logging in with seed users by putting their session in localStorage (`sb-127-auth-token`).
 
 ## Where things are
-- `supabase/migrations/`: schema → functions/views → RPCs → RLS/grants/storage, then digest, extra stock, visibility settings, per-parent totals, closing/anonymize, review fixes
+- `supabase/migrations/`: schema → functions/views → RPCs → RLS/grants/storage, then digest, extra stock, visibility settings, per-parent totals, closing/anonymize, review fixes, packing ticks
 - `supabase/functions/`: `send-emails`, `daily-digest` (20:00 Oslo + 07:00 morning round, `.github/workflows/daily.yml`, also keep-alive), `invite-admin`; `_shared/email.ts` (all email texts), `_shared/outbox.ts` (sending)
 - `functions/` (Cloudflare Pages Functions) + `functions-lib/preview.ts`: link previews for `/k/<code>` and `/bli-med/<code>`, only for preview apps (`isPreviewBot`); texts built by `src/lib/linkPreview.ts`, shared with the preview card on the parent page
 - `src/pages/FriendOrderPage.tsx` (the page most people see), `OrderStatusPage.tsx`, `PackingPage.tsx`, `src/pages/parent/`, `src/pages/admin/` (`AdminHome`, `CampaignPage` with tabs Oversikt/Foreldre/Bestillinger/Varer/Oppsett, `PeoplePage` = Innstillinger, `PersonsPage` = Personer)

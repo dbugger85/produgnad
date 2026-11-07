@@ -1,112 +1,141 @@
-import { kr, longDate, phone } from '../lib/format'
+import type { ReactNode } from 'react'
+import { kr } from '../lib/format'
 import { ORDER_TYPE_LABEL, orderAmount, orderUnits, type Order } from '../lib/types'
 
-export interface PackingParent {
-  name: string
-  phone: string
-  child_first_name: string
-  payment_code: string
+type ProductRef = { id: string; name: string; sort_order: number }
+
+/** Units per product over some orders, in product order, only products with units. */
+export function unitsByProduct(orders: Order[], products: ProductRef[]) {
+  const units = new Map<string, number>()
+  for (const o of orders) for (const l of o.order_lines) units.set(l.product_id, (units.get(l.product_id) ?? 0) + l.qty)
+  return [...products]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .filter((p) => (units.get(p.id) ?? 0) > 0)
+    .map((p) => ({ id: p.id, name: p.name, units: units.get(p.id) ?? 0 }))
 }
 
-/**
- * One parent's packing list: what the admins put in the parent's bag, and what goes to whom.
- * Made for paper too (one parent per printed page).
- */
-export function PackingList({
-  campaignName,
-  organizer,
-  parent,
+/** "4 × Kaffe, 8 × Sokker" */
+export function unitsText(rows: { name: string; units: number }[]) {
+  return rows.map((r) => `${r.units} × ${r.name}`).join(', ')
+}
+
+/** Product totals as big numbers, for counting goods */
+export function UnitsTable({ rows }: { rows: { id: string; name: string; units: number }[] }) {
+  return (
+    <ul className="divide-y divide-line/70">
+      {rows.map((r) => (
+        <li key={r.id} className="flex items-baseline justify-between gap-3 py-1.5">
+          <span>{r.name}</span>
+          <span className="text-lg font-bold tabular-nums">{r.units} stk</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/** "3 av 7 pakket" with a thin bar */
+export function PackedProgress({ done, total, noun }: { done: number; total: number; noun: string }) {
+  const all = total > 0 && done === total
+  return (
+    <div className="space-y-1.5">
+      <p className={`font-semibold ${all ? 'text-green-800' : ''}`}>
+        {all ? `Alt er pakket (${total} ${noun})` : `${done} av ${total} ${noun} pakket`}
+      </p>
+      <div className="h-2 overflow-hidden rounded-full bg-line/70">
+        <div
+          className={`h-full rounded-full transition-[width] duration-300 ${all ? 'bg-green-700' : 'bg-brand'}`}
+          style={{ width: `${total ? (done / total) * 100 : 0}%` }}
+        />
+      </div>
+    </div>
+  )
+}
+
+/** One tappable row with a big tick circle. The whole row toggles. */
+export function CheckRow({
+  checked,
+  onToggle,
+  disabled = false,
+  children,
+  aside,
+}: {
+  checked: boolean
+  onToggle: () => void
+  disabled?: boolean
+  children: ReactNode
+  aside?: ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      disabled={disabled}
+      onClick={onToggle}
+      className={`flex w-full items-start gap-3 rounded-2xl p-3 text-left ring-1 transition-colors ${
+        checked ? 'bg-cream/70 ring-line/60' : 'bg-white ring-line'
+      }`}
+    >
+      <span
+        aria-hidden
+        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base font-bold transition-colors ${
+          checked ? 'bg-brand text-white' : 'ring-2 ring-ink/30'
+        }`}
+      >
+        {checked ? '✓' : ''}
+      </span>
+      <span className={`min-w-0 flex-1 ${checked ? 'text-muted' : ''}`}>{children}</span>
+      {aside && <span className={`shrink-0 text-right text-sm ${checked ? 'text-muted' : ''}`}>{aside}</span>}
+    </button>
+  )
+}
+
+/** One parent's list, one row per order (per friend). Tick when that order is packed. */
+export function OrderPackingList({
   orders,
   products,
+  packed,
+  onToggle,
 }: {
-  campaignName: string
-  organizer: string
-  parent: PackingParent
   orders: Order[]
-  products: { id: string; name: string; sort_order: number }[]
+  products: ProductRef[]
+  packed: (o: Order) => boolean
+  onToggle: (o: Order) => void
 }) {
-  const sorted = [...products].sort((a, b) => a.sort_order - b.sort_order)
-  const name = (id: string) => products.find((p) => p.id === id)?.name ?? 'vare'
-  const units = Object.fromEntries(sorted.map((p) => [p.id, 0]))
-  for (const o of orders) for (const l of o.order_lines) units[l.product_id] = (units[l.product_id] ?? 0) + l.qty
-  const total = Object.values(units).reduce((a, b) => a + b, 0)
-
-  const friends = orders
-    .filter((o) => o.type === 'friend')
-    .sort((a, b) => a.buyer_first_name.localeCompare(b.buyer_first_name, 'nb'))
-  const others = orders.filter((o) => o.type !== 'friend')
-
-  const lines = (o: Order) => o.order_lines.map((l) => `${l.qty} × ${name(l.product_id)}`).join(', ')
-
+  const sorted = [
+    ...orders.filter((o) => o.type === 'friend').sort((a, b) => a.buyer_first_name.localeCompare(b.buyer_first_name, 'nb')),
+    ...orders.filter((o) => o.type !== 'friend'),
+  ]
+  if (sorted.length === 0) return <p className="text-muted">Ingen bestillinger.</p>
   return (
-    <article className="packing space-y-4 rounded-[20px] bg-white p-5 ring-1 ring-line print:rounded-none print:p-0 print:ring-0">
-      <header className="flex items-start justify-between gap-3 border-b border-line pb-3">
-        <div>
-          <p className="text-xs text-muted">
-            {organizer} · {campaignName}
-          </p>
-          <h2 className="font-display text-3xl leading-tight uppercase tracking-wide">Pakkeliste: {parent.name}</h2>
-          <p className="text-sm text-muted">
-            {parent.child_first_name && `${parent.child_first_name} · `}
-            {phone(parent.phone)} · {parent.payment_code}
-          </p>
-        </div>
-        <p className="text-right text-xs text-muted">Skrevet ut {longDate(new Date())}</p>
-      </header>
-
-      <section>
-        <h3 className="mb-1 font-semibold">Til {parent.name.split(' ')[0]} ({total} stk)</h3>
-        <table className="w-full text-sm">
-          <tbody>
-            {sorted
-              .filter((p) => units[p.id] > 0)
-              .map((p) => (
-                <tr key={p.id} className="border-b border-line/70">
-                  <td className="py-1.5">
-                    <span className="mr-2 inline-block h-4 w-4 translate-y-0.5 rounded border border-ink/40" />
-                    {p.name}
-                  </td>
-                  <td className="py-1.5 text-right text-base font-bold tabular-nums">{units[p.id]} stk</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <h3 className="mb-1 font-semibold">Fordeling</h3>
-        {orders.length === 0 && <p className="text-sm text-muted">Ingen bestillinger.</p>}
-        <table className="w-full text-sm">
-          <tbody>
-            {[...friends, ...others].map((o) => (
-              <tr key={o.id} className="border-b border-line/70 align-top">
-                <td className="w-7 py-1.5">
-                  <span
-                    className={`inline-block h-4 w-4 translate-y-0.5 rounded border border-ink/40 text-center text-[11px] leading-[14px] ${o.delivered_at ? 'bg-brand text-white' : ''}`}
-                  >
-                    {o.delivered_at ? '✓' : ''}
+    <div className="space-y-2">
+      {sorted.map((o) => {
+        const done = packed(o)
+        return (
+          <CheckRow
+            key={o.id}
+            checked={done}
+            onToggle={() => onToggle(o)}
+            aside={
+              <>
+                <span className="block font-semibold">{orderUnits(o)} stk</span>
+                {o.type === 'friend' && (
+                  <span className={`block text-xs ${o.paid_to_parent_at || done ? '' : 'font-semibold text-amber-800'}`}>
+                    {o.paid_to_parent_at ? 'betalt' : `ikke betalt, ${kr(orderAmount(o))}`}
                   </span>
-                </td>
-                <td className="py-1.5">
-                  <span className="font-semibold">
-                    {o.code} · {o.type === 'friend' ? o.buyer_first_name : ORDER_TYPE_LABEL[o.type]}
-                  </span>
-                  <span className="block text-muted">{lines(o)}</span>
-                  {o.note && <span className="block italic text-muted">{o.note}</span>}
-                </td>
-                <td className="py-1.5 text-right whitespace-nowrap">
-                  <span className="block">{orderUnits(o)} stk</span>
-                  {o.type === 'friend' && (
-                    <span className={`block text-xs ${o.paid_to_parent_at ? 'text-green-700' : 'font-semibold text-amber-800'}`}>
-                      {o.paid_to_parent_at ? 'betalt' : `ikke betalt, ${kr(orderAmount(o))}`}
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-    </article>
+                )}
+              </>
+            }
+          >
+            <span className={`block font-semibold ${done ? 'line-through decoration-ink/30' : ''}`}>
+              {o.type === 'friend' ? o.buyer_first_name : ORDER_TYPE_LABEL[o.type]}{' '}
+              <span className="font-normal text-muted">· {o.code}</span>
+            </span>
+            <span className="block text-sm">{unitsText(unitsByProduct([o], products))}</span>
+            {o.note && <span className="block text-sm italic text-muted">{o.note}</span>}
+          </CheckRow>
+        )
+      })}
+    </div>
   )
 }

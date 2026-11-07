@@ -138,6 +138,7 @@ export interface CampaignParent {
   link_code: string
   payment_code: string
   goods_sent_at: string | null
+  packed_at: string | null
   profiles?: Pick<Profile, 'name' | 'phone' | 'email'>
 }
 
@@ -162,6 +163,7 @@ export interface Order {
   wants_email: boolean
   paid_to_parent_at: string | null
   delivered_at: string | null
+  packed_at: string | null
   created_by: 'friend' | 'parent'
   created_at: string
   deleted_at: string | null
