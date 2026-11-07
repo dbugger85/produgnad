@@ -119,7 +119,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 |---|---|---|
 | F0 | Top (follows Fremdrift) | **765 kr** til laget via deg · av 1 850 kr solgt · *progress bar* · For hele dugnaden |
 | F1 | Box title | Din bestillingslenke |
-| F2 | Buttons | Kopier lenke · Åpne siden · Pakkeliste · QR-kode / Skjul QR-kode |
+| F2 | Buttons (one row) | Kopier · Åpne · Pakkeliste · QR-kode / Skjul QR |
 | F3 | QR print heading | *Kaffesalg* – bestill via *Ola Hansen* · Skriv ut |
 | F4 | Box title | Del med venner og familie |
 | F5 | Choice | Kort (SMS) · Lang (Facebook) |

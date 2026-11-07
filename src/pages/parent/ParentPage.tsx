@@ -17,6 +17,10 @@ import { Transparency } from '../../components/Transparency'
 
 type Filter = 'alle' | 'ubetalt' | 'ikke-levert'
 
+// Same look as the copy button, so the four buttons under the link line up
+const linkButton =
+  'flex min-h-10 w-full items-center justify-center whitespace-nowrap rounded-xl bg-brand-soft px-1 text-sm font-semibold text-brand-dark'
+
 export default function ParentPage() {
   const { cpId = '' } = useParams()
   const { data, error, reload } = useParentData(cpId)
@@ -88,16 +92,16 @@ export default function ParentPage() {
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">Din bestillingslenke</h2>
           <p className="break-all rounded-lg bg-cream p-2 font-mono text-sm">{link}</p>
-          <div className="flex flex-wrap gap-2">
-            <CopyButton value={link} label="Kopier lenke" />
-            <Link to={`/k/${cp.link_code}`} className="min-h-9 rounded-lg px-3 py-1 text-sm font-semibold text-brand">
-              Åpne siden
+          <div className="grid grid-cols-4 gap-1.5">
+            <CopyButton value={link} label="Kopier" className="w-full" />
+            <Link to={`/k/${cp.link_code}`} className={linkButton}>
+              Åpne
             </Link>
-            <Link to={`/pakkeliste/${cp.id}`} className="min-h-9 rounded-lg px-3 py-1 text-sm font-semibold text-brand">
+            <Link to={`/pakkeliste/${cp.id}`} className={linkButton}>
               Pakkeliste
             </Link>
-            <button type="button" className="min-h-9 rounded-lg px-3 py-1 text-sm font-semibold text-brand" onClick={() => setShowQr((v) => !v)}>
-              {showQr ? 'Skjul QR-kode' : 'QR-kode'}
+            <button type="button" className={linkButton} onClick={() => setShowQr((v) => !v)} aria-expanded={showQr}>
+              {showQr ? 'Skjul QR' : 'QR-kode'}
             </button>
           </div>
           {showQr && <QrCode value={link} caption={`${campaign.name} – bestill via ${cp.profiles.name}`} />}
