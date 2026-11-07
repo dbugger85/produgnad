@@ -29,10 +29,10 @@ The spec is [brief.md](brief.md). This file records the approved plan and every 
 | 0.1 | GitHub repo | Claude | done |
 | 0.2 | Code skeleton, migrations, seed, tests, CI | Claude | done |
 | 0.3 | Supabase project `nnqpdzqzwzhogcbzriyn` (created in London, eu-west-2; owner chose to keep it: UK has EU adequacy) | Martin | done |
-| 0.4 | Resend account + domain `substitutor.no` | Martin | |
-| 0.5 | DNS at Domeneshop for Resend (+ DMARC) | Martin, rows from Claude | |
-| 0.6 | Supabase auth: custom SMTP, site URL, redirect URLs, email template, rate limit | Martin, values from Claude | URLs done; email template needs custom SMTP first |
-| 0.7 | Secrets (Resend key for the email function) | Martin | |
+| 0.4 | Resend account + domain `substitutor.no` (Ireland, verified) | Martin | done 7 Nov |
+| 0.5 | DNS at Domeneshop for Resend: TXT `resend._domainkey`, CNAME `rsend`, CNAME `send`, TXT `_dmarc` | Martin, rows from Claude | done 7 Nov |
+| 0.6 | Supabase auth: custom SMTP, site URL, redirect URLs, email template, rate limit | Martin, values from Claude | done 7 Nov: SMTP via Resend, site URL dugnad.substitutor.no, Norwegian template with logo and code (OTP length is 8) |
+| 0.7 | Secrets (Resend key for the email function) | Martin | set by owner 7 Nov, not yet confirmed by a real friend email |
 | 0.8 | Cloudflare Pages project `produgnad` (https://produgnad.pages.dev) + custom domain | Martin | done 7 Nov (dugnad.substitutor.no) |
 | 0.9 | DNS CNAME `dugnad` → `produgnad.pages.dev` | Martin | done 7 Nov |
 | 0.10 | Push database, deploy function, first admin, test on phone | Claude | database, function, first admin (martin.prokosch@gmail.com) done 7 Nov |
@@ -56,3 +56,8 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 
 - Phase 2: daily parent digest + keep-alive cron (GitHub Actions), packing list per parent (print), assign extra stock to named buyers
 - Phase 3: screenshot matching (Tesseract.js), closing message by email, ledger CSV, data deletion, link previews
+
+## Log
+
+- 7 Nov 2026: look borrowed from Substitutor but light; then switched to ready.no navy (#002e5f) to tell it apart. Logo: shopping bag with heart. Name shown as PRODUGNAD with PRO in faded navy. Phone numbers +47 912 34 567, amounts with kr. "ikke av klubben direkte". Admin page = "Administrasjon"; settings = "Innstillinger"; campaign settings tab = "Oppsett". Admins skip the front page.
+- Next: owner's end-to-end test on a phone, then keep-alive cron (Supabase pauses after 7 idle days), link preview, packing list, extra stock, then phase 3.
