@@ -1,6 +1,6 @@
 # ProDugnad: all texts
 
-Every text in the app, the emails and the link previews, as of 7 November 2026, with screenshots from the test data (tap a picture to see it full size). Numbered so changes can be referred to ("#23 → …"). Words in *italics* are filled in by the app; the examples use Ola Hansen, Emma, Kari Nordmann and Ready G2018.
+Every text in the app, the emails and the link previews, as of 22 November 2026, with screenshots from the test data (tap a picture to see it full size). Numbered so changes can be referred to ("#23 → …"). Words in *italics* are filled in by the app; the examples use Ola Hansen, Emma, Kari Nordmann and Ready G2018.
 
 ## A. Friend order page (`/k/…`), the page most people see
 
@@ -15,7 +15,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | A3 | Under the title | Du bestiller via **Ola Hansen**, forelder til Emma |
 | A4 | Under that | *Alt overskudd går til cupavgifter og reiser for laget i 2027* |
 | A6 | Above the products | Bestill innen 20. november 2026 |
-| A7 | Product card | *Kaffe, filtermalt 500 g* / *Mellomristet, fra lokal brenner* / *120 kr* |
+| A7 | Product card | *Kaffe, filtermalt 500 g* / *Mellomristet, fra lokal brenner* (the description can have **fet**, *kursiv* and bullet points) / *120 kr* |
 | A8 | Total box | Totalt |
 | A9 | Name field | Fornavnet ditt |
 | A10 | Button | Bestill |
@@ -197,9 +197,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 ## I. Admin: a campaign
 
-<p><a href="screenshots/i-oversikt.jpg"><img src="screenshots/i-oversikt.jpg" width="230" alt="Oversikt" title="Oversikt"></a> <a href="screenshots/i-foreldre.jpg"><img src="screenshots/i-foreldre.jpg" width="230" alt="Foreldre (åpnet)" title="Foreldre (åpnet)"></a> <a href="screenshots/i-bestillinger.jpg"><img src="screenshots/i-bestillinger.jpg" width="230" alt="Bestillinger" title="Bestillinger"></a> <a href="screenshots/i-varer.jpg"><img src="screenshots/i-varer.jpg" width="230" alt="Varer" title="Varer"></a> <a href="screenshots/i-vare-endre.jpg"><img src="screenshots/i-vare-endre.jpg" width="230" alt="Endre vare med bilder" title="Endre vare med bilder"></a> <a href="screenshots/i-oppsett.jpg"><img src="screenshots/i-oppsett.jpg" width="230" alt="Oppsett" title="Oppsett"></a> <a href="screenshots/i-oppsett-hva-som-vises.jpg"><img src="screenshots/i-oppsett-hva-som-vises.jpg" width="230" alt="Hva som vises" title="Hva som vises"></a> <a href="screenshots/i-avslutning.jpg"><img src="screenshots/i-avslutning.jpg" width="230" alt="Etter avslutning" title="Etter avslutning"></a> <a href="screenshots/i-alle-pakkelister.jpg"><img src="screenshots/i-alle-pakkelister.jpg" width="230" alt="Pakkeliste per forelder" title="Pakkeliste per forelder"></a></p>
+<p><a href="screenshots/i-oversikt.jpg"><img src="screenshots/i-oversikt.jpg" width="230" alt="Oversikt" title="Oversikt"></a> <a href="screenshots/i-foreldre.jpg"><img src="screenshots/i-foreldre.jpg" width="230" alt="Foreldre (åpnet)" title="Foreldre (åpnet)"></a> <a href="screenshots/i-bestillinger.jpg"><img src="screenshots/i-bestillinger.jpg" width="230" alt="Bestillinger" title="Bestillinger"></a> <a href="screenshots/i-varer.jpg"><img src="screenshots/i-varer.jpg" width="230" alt="Varer" title="Varer"></a> <a href="screenshots/i-vare-endre.jpg"><img src="screenshots/i-vare-endre.jpg" width="230" alt="Endre vare med bilder" title="Endre vare med bilder"></a> <a href="screenshots/i-oppsett.jpg"><img src="screenshots/i-oppsett.jpg" width="230" alt="Oppsett" title="Oppsett"></a> <a href="screenshots/i-slett-dugnad-knapp.jpg"><img src="screenshots/i-slett-dugnad-knapp.jpg" width="230" alt="Slett dugnaden (Oppsett, nederst)" title="Slett dugnaden (Oppsett, nederst)"></a> <a href="screenshots/i-slett-dugnad.jpg"><img src="screenshots/i-slett-dugnad.jpg" width="230" alt="Slette dugnaden? (skriv navnet)" title="Slette dugnaden? (skriv navnet)"></a> <a href="screenshots/i-fjern-forelder.jpg"><img src="screenshots/i-fjern-forelder.jpg" width="230" alt="Fjerne forelder? (skriv navnet)" title="Fjerne forelder? (skriv navnet)"></a> <a href="screenshots/i-oppsett-hva-som-vises.jpg"><img src="screenshots/i-oppsett-hva-som-vises.jpg" width="230" alt="Hva som vises" title="Hva som vises"></a> <a href="screenshots/i-avslutning.jpg"><img src="screenshots/i-avslutning.jpg" width="230" alt="Etter avslutning" title="Etter avslutning"></a> <a href="screenshots/i-alle-pakkelister.jpg"><img src="screenshots/i-alle-pakkelister.jpg" width="230" alt="Pakkeliste per forelder" title="Pakkeliste per forelder"></a></p>
 
-<sub>Oversikt · Foreldre (åpnet) · Bestillinger · Varer · Endre vare med bilder · Oppsett · Hva som vises · Etter avslutning · Pakkeliste per forelder</sub>
+<sub>Oversikt · Foreldre (åpnet) · Bestillinger · Varer · Endre vare med bilder · Oppsett · Slett dugnaden (Oppsett, nederst) · Slette dugnaden? (skriv navnet) · Fjerne forelder? (skriv navnet) · Hva som vises · Etter avslutning · Pakkeliste per forelder</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -216,12 +216,13 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | I8 | Confirms | Låse bestillingene? Foreldre og venner kan ikke bestille eller endre etterpå · Låse opp bestillingene igjen? · Avslutte dugnaden? Avslutningsmeldingen vises da på alle sider · Åpne dugnaden igjen? |
 | I9 | Foreldre tab | Pakkeliste for alle foreldre → · Navn / Mest til laget · Emma · 6 bestillinger · **765 kr** til laget · Ola Hansen D-1 · Emma · 4 bestillinger · 0 kr / 1 370 kr · Oppgjort / Skylder 1 370 kr / Betalt 200 kr for mye |
 | I28 | Packing list for admins (per forelder) | Pakkeliste · 1 av 2 poser pakket / Alt er pakket (2 poser) · Igjen å pakke (12 stk) · Én pose per forelder. Trykk når posen er pakket. Se fordelingen per venn under hver forelder · Lise Berg · Jonas · 5 × Kaffe · 5 stk · Sendt · Fordeling per venn (1) → · Ingen bestillinger ennå |
-| I10 | Opened parent | Betalinger · Ingen registrert · Beløp (kr) · Dato · Registrer betaling fra Ola · Slett · Merk varer sendt / Varer sendt 7. november 2026 (angre) · Pakkeliste · Se forelderens side → |
+| I10 | Opened parent | Betalinger · Ingen registrert · Beløp (kr) · Dato · Registrer betaling fra Ola · Slett · Merk varer sendt / Varer sendt 7. november 2026 (angre) · Pakkeliste · Se forelderens side → · Fjern fra dugnaden |
 | I11 | Confirms | Slette denne betalingen? · Merke at varene er sendt til Ola Hansen? Forelderen får e-post |
+| I30 | Remove a parent (confirm) | Fjerne *Ola Hansen* fra dugnaden? · Dette slettes for godt: *4 bestillinger (565 kr til laget)* og *1 betaling (200 kr)* / Forelderen har ingen bestillinger eller betalinger. Bestillingslenken slutter å virke. Brukeren beholdes, så forelderen kan melde seg på igjen · Skriv «*Ola Hansen*» for å bekrefte (only when there are orders or payments) · Avbryt · Fjern |
 | I12 | Empty | Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt |
 | I13 | Bestillinger tab | Alle foreldre · Alle typer · Alle / Ubetalt / Betalt / Levert · 5 bestillinger, 1 970 kr · D-1 · K7 · Kari · via Ola Hansen · 7. nov., 10:17 |
-| I14 | Varer tab | 120 kr, 50 kr til laget · Skjult · Endre · + Ny vare |
-| I15 | Product form | Navn · Kort beskrivelse · Pris (kr) · Til laget per stk (kr) · Rekkefølge · Vises · Lagre · Avbryt · Slett |
+| I14 | Varer tab | 120 kr, 50 kr til laget · Skjult · Endre · Kopier / Kopierer … · + Ny vare · A copy is called *Kaffe, filtermalt 500 g* (kopi), starts hidden and opens for editing |
+| I15 | Product form | Navn · Kort beskrivelse (with the buttons Fet · Kursiv · • Punktliste; what you see is what friends see) · Pris (kr) · Til laget per stk (kr) · Rekkefølge · Vises · then the pictures (I16) · Lagre · Avbryt · Slett at the bottom |
 | I16 | Pictures | Bilder · Første bilde er hovedbildet. Bruk egne bilder eller bilder leverandøren lar oss bruke · Hoved · Gjør til hoved · Slett · + Legg til bilde · Laster opp … · Lagre varen først, så kan du legge til bilder |
 | I17 | Product errors | Beløpet til laget kan ikke være høyere enn prisen · Slette *Kaffe*? Går ikke hvis noen har bestilt den; skjul den i stedet · Kan ikke slette en vare som er bestilt. Fjern haken for «Vises» i stedet · Slette bildet? |
 | I18 | Oppsett: sections | Om dugnaden · Betaling fra foreldre · Tekster foreldrene deler · Avslutning |
@@ -231,6 +232,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | I25 | Oppsett: Hva som vises | Fremdrift (Linjen med penger til laget og målet, for eksempel «815 kr til laget av 30 000 kr») · Bidrag per vare (For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles) · Ansvarlige og kontakt (Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e-post til kontaktpersonen, ellers til forelderen) · Ikke vist / Foreldre og admin / Alle, også venner · Som admin ser du alltid alt under Oversikt |
 | I22 | Oppsett: closing | Avslutningsmelding (Vises på alle sider når dugnaden er avsluttet: hvor mye som ble samlet inn og hva det betaler) |
 | I23 | Oppsett: button | Opprett dugnaden / Lagre / Lagret ✓ |
+| I29 | Oppsett: delete (bottom, existing campaigns only) | Slett dugnaden · Sletter dugnaden med varer, bilder, bestillinger og betalinger for godt. Vil du bare stoppe bestillingene, bruk «Avslutt dugnaden» under Oversikt · Slett dugnaden / Sletter … · Confirm: Slette *Kaffesalg høsten 2026*? · Varer, bilder, foreldrenes lenker, bestillinger og betalinger slettes for godt. Vennenes lenker slutter å virke. Foreldrenes brukere beholdes. Dette kan ikke angres · Skriv «*Kaffesalg høsten 2026*» for å bekrefte · Avbryt · Slett |
 | I24 | New campaign: defaults | Kaffesalg · Foreldre og supportere av … · Alt overskudd går til cupavgifter og reiser for laget |
 
 ## J. Default share texts (new campaigns; admins can change them under Oppsett)
@@ -305,4 +307,5 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | M17 | Crash | Noe gikk galt · Siden kunne ikke vises. Prøv å laste inn på nytt. Hjelper ikke det, ta kontakt med de ansvarlige · Last inn på nytt |
 | M18 | After an update | Ny versjon · Appen er oppdatert. Last inn siden på nytt for å fortsette |
 | M19 | Unknown page | Fant ikke siden |
-| M20 | Confirm dialog (the app's own, never the browser's) | *the question* · Avbryt · *Slett / Lås / Lås opp / Avslutt / Åpne igjen / Send / Merk sendt / Gjør til admin / Fjern admin* |
+| M20 | Confirm dialog (the app's own, never the browser's) | *the question* · Avbryt · *Slett / Lås / Lås opp / Avslutt / Åpne igjen / Send / Merk sendt / Gjør til admin / Fjern admin / Fjern* · For things that can't be undone: Skriv «*navn*» for å bekrefte (the red button stays grey until the name is typed; capitals don't matter) |
+| M21 | Delete dugnad, wrong name | Navnet stemmer ikke med dugnadens navn |
