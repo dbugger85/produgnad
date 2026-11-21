@@ -8,6 +8,8 @@ interface Options {
   /** Red button, for things that delete */
   danger?: boolean
   title?: string
+  /** The person must type this (any case) before the confirm button works, for things that can't be undone */
+  typeToConfirm?: string
 }
 
 type Ask = (message: string, options?: Options) => Promise<boolean>
@@ -26,9 +28,14 @@ interface Open extends Options {
 export function ConfirmProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState<Open | null>(null)
   const confirmRef = useRef<HTMLButtonElement>(null)
+  const typedRef = useRef<HTMLInputElement>(null)
+  const [typed, setTyped] = useState('')
 
   const ask = useCallback<Ask>(
-    (message, options = {}) => new Promise<boolean>((resolve) => setOpen({ message, resolve, ...options })),
+    (message, options = {}) => new Promise<boolean>((resolve) => {
+        setTyped('')
+        setOpen({ message, resolve, ...options })
+      }),
     [],
   )
 
@@ -42,13 +49,15 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!open) return
-    confirmRef.current?.focus()
+    ;(open.typeToConfirm ? typedRef.current : confirmRef.current)?.focus()
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close(false)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, close])
+
+  const matches = !open?.typeToConfirm || typed.trim().toLowerCase() === open.typeToConfirm.trim().toLowerCase()
 
   return (
     <ConfirmContext.Provider value={ask}>
@@ -74,6 +83,23 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
             <p id="confirm-message" className="text-ink">
               {open.message}
             </p>
+            {open.typeToConfirm && (
+              <label className="block space-y-1.5">
+                <span className="text-sm font-semibold text-ink">Skriv «{open.typeToConfirm}» for å bekrefte</span>
+                <input
+                  ref={typedRef}
+                  value={typed}
+                  onChange={(e) => setTyped(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && matches) close(true)
+                  }}
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
+                  className="w-full rounded-xl border border-line bg-white px-3 py-2.5"
+                />
+              </label>
+            )}
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
@@ -86,7 +112,8 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                 ref={confirmRef}
                 type="button"
                 onClick={() => close(true)}
-                className={`min-h-12 rounded-2xl px-4 font-semibold text-white ${open.danger ? 'bg-red-700' : 'bg-brand'}`}
+                disabled={!matches}
+                className={`min-h-12 rounded-2xl px-4 font-semibold text-white disabled:opacity-40 ${open.danger ? 'bg-red-700' : 'bg-brand'}`}
               >
                 {open.confirm ?? 'OK'}
               </button>

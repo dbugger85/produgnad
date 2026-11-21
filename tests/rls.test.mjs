@@ -189,6 +189,7 @@ describe('friend (no login)', () => {
     expectError(await anon().rpc('set_admin', { p_email: 'x@example.com', p_is_admin: true }))
     expectError(await anon().rpc('claim_outbox', { p_limit: 5 }))
     expectError(await anon().rpc('set_order_packed', { p_order_id: '00000000-0000-0000-0000-000000000000', p_packed: true }))
+    expectError(await anon().rpc('delete_campaign', { p_campaign_id: campaign.id, p_name: campaign.name }))
   })
 })
 
@@ -596,5 +597,33 @@ describe('review fixes (7 Nov)', () => {
     expectError(fnAnon)
     expectError(await anon().rpc('release_outbox', { p_id: crypto.randomUUID() }))
     expectError(await anon().rpc('visible_to_viewer', { p_visibility: 'all', p_insider: false }))
+  })
+})
+
+describe('deleting a campaign', () => {
+  test('admins only, with the right name; everything in it goes, other campaigns and logins stay', async () => {
+    const c = (await admin.client.from('campaigns').insert({ name: `Slett meg ${run}`, organizer_label: 'X' }).select().single()).data
+    const p = (await admin.client.from('products').insert({ campaign_id: c.id, name: 'Kaffe', price: 100, to_team_amount: 40, active: true }).select().single()).data
+    assert.ifError((await admin.client.from('product_images').insert({ product_id: p.id, storage_path: `x/${run}.jpg`, thumb_path: `x/${run}.webp` })).error)
+    const parent = await makeUser('parent-del')
+    const cp = (await parent.client.rpc('join_campaign', { p_join_code: c.join_code, p_name: 'Del Test', p_phone: '94444444', p_child_first_name: 'Ida' })).data
+    const link = (await service.from('campaign_parents').select('link_code').eq('id', cp).single()).data.link_code
+    assert.ifError((await anon().rpc('create_friend_order', { p_link_code: link, p_first_name: 'Kari', p_lines: [{ product_id: p.id, qty: 2 }], p_email: `del-${run}@example.com`, p_wants_email: true })).error)
+    assert.ifError((await admin.client.from('parent_payments').insert({ campaign_parent_id: cp, amount: 200 })).error)
+
+    expectError(await parent.client.rpc('delete_campaign', { p_campaign_id: c.id, p_name: c.name }), 'NOT_ALLOWED')
+    expectError(await admin.client.rpc('delete_campaign', { p_campaign_id: c.id, p_name: 'feil navn' }), 'NAME_MISMATCH')
+
+    const res = await admin.client.rpc('delete_campaign', { p_campaign_id: c.id, p_name: `  ${c.name.toUpperCase()} ` })
+    assert.ifError(res.error)
+    assert.deepEqual([...res.data].sort(), [`x/${run}.jpg`, `x/${run}.webp`])
+
+    for (const [table, col, val] of [['campaigns', 'id', c.id], ['products', 'campaign_id', c.id], ['campaign_parents', 'campaign_id', c.id],
+      ['orders', 'campaign_id', c.id], ['email_outbox', 'campaign_id', c.id], ['product_images', 'product_id', p.id], ['parent_payments', 'campaign_parent_id', cp]]) {
+      assert.equal((await service.from(table).select('id').eq(col, val)).data.length, 0, table)
+    }
+    assert.equal((await service.from('profiles').select('user_id').eq('user_id', parent.id)).data.length, 1)
+    assert.equal((await service.from('campaigns').select('id').eq('id', campaign.id)).data.length, 1)
+    expectError(await admin.client.rpc('delete_campaign', { p_campaign_id: c.id, p_name: c.name }), 'UNKNOWN_CAMPAIGN')
   })
 })

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BagIcon, Badge, Button, Card, ErrorBox, Field, Input, TextArea } from '../../components/ui'
+import { BagIcon, Badge, Button, Card, ErrorBox, Field, Input } from '../../components/ui'
 import { defaultPictureFor, defaultPictureUrl } from '../../lib/defaultPictures'
 import { errorText } from '../../lib/errors'
 import { kr } from '../../lib/format'
@@ -8,6 +8,7 @@ import { prepareProductImage } from '../../lib/images'
 import { IMAGE_BUCKET, imageUrl, supabase } from '../../lib/supabase'
 import type { Product, ProductImageRow } from '../../lib/types'
 import { useConfirm } from '../../components/Confirm'
+import { RichTextEditor } from '../../components/RichText'
 
 export function ProductsTab({
   campaignId,
@@ -19,9 +20,61 @@ export function ProductsTab({
   reload: () => Promise<void>
 }) {
   const [editing, setEditing] = useState<string | 'new' | null>(products.length === 0 ? 'new' : null)
+  const [copying, setCopying] = useState<string | null>(null)
+  const [error, setError] = useState('')
+
+  // A copy starts hidden, so friends don't see it before it's been changed, and opens for editing
+  async function duplicate(p: Product) {
+    setError('')
+    setCopying(p.id)
+    try {
+      const { data: copy, error } = await supabase
+        .from('products')
+        .insert({
+          campaign_id: campaignId,
+          name: `${p.name} (kopi)`,
+          description: p.description,
+          price: p.price,
+          to_team_amount: p.to_team_amount,
+          active: false,
+          sort_order: Math.max(0, ...products.map((x) => x.sort_order)) + 1,
+        })
+        .select('id')
+        .single()
+      if (error) throw error
+      // Own copies of the pictures, so deleting one product's picture never breaks the other
+      for (const img of p.product_images ?? []) {
+        const base = `${campaignId}/${copy.id}/${newId()}`
+        const paths: string[] = []
+        for (const [from, suffix] of [[img.storage_path, ''], [img.thumb_path, '-thumb']] as const) {
+          const blob = await (await fetch(imageUrl(from))).blob()
+          const to = `${base}${suffix}.${from.split('.').pop()}`
+          const up = await supabase.storage.from(IMAGE_BUCKET).upload(to, blob, { contentType: blob.type, upsert: false })
+          if (up.error) throw up.error
+          paths.push(to)
+        }
+        const ins = await supabase.from('product_images').insert({
+          product_id: copy.id,
+          storage_path: paths[0],
+          thumb_path: paths[1],
+          width: img.width,
+          height: img.height,
+          sort_order: img.sort_order,
+        })
+        if (ins.error) throw ins.error
+      }
+      await reload()
+      setEditing(copy.id)
+    } catch (e) {
+      setError(errorText(e))
+      await reload()
+    }
+    setCopying(null)
+  }
 
   return (
     <div className="space-y-3">
+      <ErrorBox>{error}</ErrorBox>
       {products.map((p) =>
         editing === p.id ? (
           <ProductForm
@@ -53,9 +106,19 @@ export function ProductsTab({
               <div className="text-sm text-muted">
                 {kr(p.price)}, {kr(p.to_team_amount)} til laget
               </div>
-              <button type="button" className="mt-1 text-sm font-semibold text-brand" onClick={() => setEditing(p.id)}>
-                Endre
-              </button>
+              <div className="mt-1 flex gap-4">
+                <button type="button" className="text-sm font-semibold text-brand" onClick={() => setEditing(p.id)}>
+                  Endre
+                </button>
+                <button
+                  type="button"
+                  className="text-sm font-semibold text-brand disabled:text-muted"
+                  onClick={() => void duplicate(p)}
+                  disabled={copying !== null}
+                >
+                  {copying === p.id ? 'Kopierer …' : 'Kopier'}
+                </button>
+              </div>
             </div>
           </Card>
         ),
@@ -142,9 +205,7 @@ function ProductForm({
         <Field label="Navn">
           <Input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Kaffe, 500 g" />
         </Field>
-        <Field label="Kort beskrivelse">
-          <TextArea rows={2} value={description} onChange={(e) => setDescription(e.target.value)} />
-        </Field>
+        <RichTextEditor label="Kort beskrivelse" value={description} onChange={setDescription} />
         <div className="grid grid-cols-2 gap-3">
           <Field label="Pris (kr)">
             <Input inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} required />

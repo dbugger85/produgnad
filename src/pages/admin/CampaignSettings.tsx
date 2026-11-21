@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { useConfirm } from '../../components/Confirm'
 import { Button, Card, ErrorBox, Field, Input, Page, TextArea, TopBar } from '../../components/ui'
 import { useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { DEFAULT_TEMPLATES, PLACEHOLDERS } from '../../lib/share'
-import { supabase } from '../../lib/supabase'
+import { forgetAll } from '../../lib/pageCache'
+import { IMAGE_BUCKET, supabase } from '../../lib/supabase'
 import type { Campaign, Profile, Visibility } from '../../lib/types'
 
 type Form = Omit<Campaign, 'id' | 'join_code' | 'locked_at' | 'closed_at' | 'anonymized_at'>
@@ -221,7 +223,49 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
       <Button type="submit" className="w-full" disabled={busy}>
         {busy ? 'Lagrer …' : saved ? 'Lagret ✓' : campaign ? 'Lagre' : 'Opprett dugnaden'}
       </Button>
+
+      {campaign && <DeleteCampaign campaign={campaign} />}
     </form>
+  )
+}
+
+/** Deletes the whole campaign after the admin has typed its name. */
+function DeleteCampaign({ campaign }: { campaign: Campaign }) {
+  const ask = useConfirm()
+  const navigate = useNavigate()
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  async function remove() {
+    const ok = await ask(
+      'Varer, bilder, foreldrenes lenker, bestillinger og betalinger slettes for godt. Vennenes lenker slutter å virke. Foreldrenes brukere beholdes. Dette kan ikke angres',
+      { title: `Slette ${campaign.name}?`, confirm: 'Slett', danger: true, typeToConfirm: campaign.name },
+    )
+    if (!ok) return
+    setError('')
+    setBusy(true)
+    const { data: paths, error } = await supabase.rpc('delete_campaign', { p_campaign_id: campaign.id, p_name: campaign.name })
+    if (error) {
+      setBusy(false)
+      return setError(errorText(error))
+    }
+    // The campaign is gone; pictures left in storage would only cost space, so don't stop on errors
+    if (Array.isArray(paths) && paths.length) await supabase.storage.from(IMAGE_BUCKET).remove(paths as string[]).catch(() => {})
+    forgetAll()
+    navigate('/admin', { replace: true })
+  }
+
+  return (
+    <Card className="space-y-3">
+      <h2 className="text-lg font-bold">Slett dugnaden</h2>
+      <p className="text-sm text-muted">
+        Sletter dugnaden med varer, bilder, bestillinger og betalinger for godt. Vil du bare stoppe bestillingene, bruk «Avslutt dugnaden» under Oversikt
+      </p>
+      <ErrorBox>{error}</ErrorBox>
+      <Button type="button" variant="danger" onClick={() => void remove()} disabled={busy}>
+        {busy ? 'Sletter …' : 'Slett dugnaden'}
+      </Button>
+    </Card>
   )
 }
 
@@ -238,7 +282,7 @@ export default function NewCampaignPage() {
 
 const VISIBILITY_OPTIONS: { value: Visibility; label: string }[] = [
   { value: 'none', label: 'Ikke vist' },
-  { value: 'parents', label: 'Bare foreldre og admin' },
+  { value: 'parents', label: 'Foreldre og admin' },
   { value: 'all', label: 'Alle, også venner' },
 ]
 

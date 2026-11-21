@@ -32,7 +32,7 @@ Live: `npx supabase db push --remote --yes`, `npx supabase functions deploy <nam
 Screenshots of every page for `docs/tekster.md`: Playwright from `~/Work/substitutor/node_modules/playwright-core` with `/usr/bin/chromium`, logging in with seed users by putting their session in localStorage (`sb-127-auth-token`).
 
 ## Where things are
-- `supabase/migrations/`: schema → functions/views → RPCs → RLS/grants/storage, then digest, extra stock, visibility settings, per-parent totals, closing/anonymize, review fixes, packing ticks
+- `supabase/migrations/`: schema → functions/views → RPCs → RLS/grants/storage, then digest, extra stock, visibility settings, per-parent totals, closing/anonymize, review fixes, packing ticks, delete campaign
 - `supabase/functions/`: `send-emails`, `daily-digest` (20:00 Oslo + 07:00 morning round, `.github/workflows/daily.yml`, also keep-alive), `invite-admin`; `_shared/email.ts` (all email texts), `_shared/outbox.ts` (sending)
 - `functions/` (Cloudflare Pages Functions) + `functions-lib/preview.ts`: link previews for `/k/<code>` and `/bli-med/<code>`, only for preview apps (`isPreviewBot`); texts built by `src/lib/linkPreview.ts`, shared with the preview card on the parent page
 - `src/pages/FriendOrderPage.tsx` (the page most people see), `OrderStatusPage.tsx`, `PackingPage.tsx`, `src/pages/parent/`, `src/pages/admin/` (`AdminHome`, `CampaignPage` with tabs Oversikt/Foreldre/Bestillinger/Varer/Oppsett, `PeoplePage` = Innstillinger, `PersonsPage` = Personer)

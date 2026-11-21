@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { RichText } from './RichText'
 import { kr } from '../lib/format'
 import { imageUrl } from '../lib/supabase'
 import type { PublicProduct } from '../lib/types'
@@ -49,7 +50,7 @@ export function ProductPicker({
             )}
             <div className="flex min-w-0 flex-1 flex-col">
               <h3 className="font-bold leading-tight">{p.name}</h3>
-              {p.description && <p className="text-sm text-muted">{p.description}</p>}
+              {p.description && <RichText text={p.description} className="text-sm text-muted" />}
               <div className="mt-auto flex items-end justify-between gap-2 pt-2">
                 <span className="font-bold">{kr(p.price)}</span>
                 <QtyStepper
