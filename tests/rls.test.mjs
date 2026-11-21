@@ -627,3 +627,30 @@ describe('deleting a campaign', () => {
     expectError(await admin.client.rpc('delete_campaign', { p_campaign_id: c.id, p_name: c.name }), 'UNKNOWN_CAMPAIGN')
   })
 })
+
+describe('removing a parent', () => {
+  test('admins only; orders, payments and emails go, the login and other parents stay', async () => {
+    const parent = await makeUser('parent-rm')
+    const cp = (await parent.client.rpc('join_campaign', { p_join_code: campaign.join_code, p_name: 'Rm Test', p_phone: '95555555', p_child_first_name: 'Ola' })).data
+    const link = (await service.from('campaign_parents').select('link_code').eq('id', cp).single()).data.link_code
+    assert.ifError((await anon().rpc('create_friend_order', { p_link_code: link, p_first_name: 'Per', p_lines: [{ product_id: coffee.id, qty: 1 }], p_email: `rm-${run}@example.com`, p_wants_email: true })).error)
+    assert.ifError((await admin.client.from('parent_payments').insert({ campaign_parent_id: cp, amount: 120 })).error)
+    const othersBefore = (await service.from('orders').select('id').eq('campaign_id', campaign.id).neq('campaign_parent_id', cp)).data.length
+
+    // Parents can't remove themselves or others (RLS: nothing deleted)
+    await parent.client.from('campaign_parents').delete().eq('id', cp)
+    await parentA.client.from('campaign_parents').delete().eq('id', cp)
+    assert.equal((await service.from('campaign_parents').select('id').eq('id', cp)).data.length, 1)
+
+    assert.ifError((await admin.client.from('campaign_parents').delete().eq('id', cp)).error)
+    for (const [table, col] of [['campaign_parents', 'id'], ['orders', 'campaign_parent_id'], ['parent_payments', 'campaign_parent_id'], ['email_outbox', 'campaign_parent_id']]) {
+      assert.equal((await service.from(table).select('id').eq(col, cp)).data.length, 0, table)
+    }
+    assert.equal((await service.from('profiles').select('user_id').eq('user_id', parent.id)).data.length, 1)
+    assert.equal((await service.from('orders').select('id').eq('campaign_id', campaign.id).neq('campaign_parent_id', cp)).data.length, othersBefore)
+    expectError(await anon().rpc('create_friend_order', { p_link_code: link, p_first_name: 'Per', p_lines: [{ product_id: coffee.id, qty: 1 }] }), 'UNKNOWN_LINK')
+    // Can join again
+    assert.ifError((await parent.client.rpc('join_campaign', { p_join_code: campaign.join_code, p_name: 'Rm Test', p_phone: '95555555', p_child_first_name: 'Ola' })).error)
+  })
+})
+

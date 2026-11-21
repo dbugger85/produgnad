@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { BagIcon, Badge, Button, Card, ErrorBox, Field, Input } from '../../components/ui'
 import { defaultPictureFor, defaultPictureUrl } from '../../lib/defaultPictures'
 import { errorText } from '../../lib/errors'
@@ -160,6 +160,7 @@ function ProductForm({
   const [active, setActive] = useState(product?.active ?? true)
   const [sortOrder, setSortOrder] = useState(String(product?.sort_order ?? nextSort))
   const ask = useConfirm()
+  const formId = useId()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -196,6 +197,7 @@ function ProductForm({
   return (
     <Card className="space-y-3 ring-2 ring-brand">
       <form
+        id={formId}
         className="space-y-3"
         onSubmit={(e) => {
           e.preventDefault()
@@ -223,26 +225,27 @@ function ProductForm({
             Vises
           </label>
         </div>
-        <ErrorBox>{error}</ErrorBox>
-        <div className="flex flex-wrap gap-2">
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Lagrer …' : 'Lagre'}
-          </Button>
-          <Button variant="secondary" onClick={() => void onDone()}>
-            Avbryt
-          </Button>
-          {product && (
-            <Button variant="danger" className="ml-auto" onClick={() => void remove()}>
-              Slett
-            </Button>
-          )}
-        </div>
       </form>
       {product ? (
         <ImageManager product={product} reload={reload} />
       ) : (
         <p className="text-sm text-muted">Lagre varen først, så kan du legge til bilder</p>
       )}
+      {/* Below the pictures: the buttons belong to the form above through form={formId} */}
+      <ErrorBox>{error}</ErrorBox>
+      <div className="flex flex-wrap gap-2 border-t border-line pt-3">
+        <Button type="submit" form={formId} disabled={busy}>
+          {busy ? 'Lagrer …' : 'Lagre'}
+        </Button>
+        <Button type="button" variant="secondary" onClick={() => void onDone()}>
+          Avbryt
+        </Button>
+        {product && (
+          <Button type="button" variant="danger" className="ml-auto" onClick={() => void remove()}>
+            Slett
+          </Button>
+        )}
+      </div>
     </Card>
   )
 }

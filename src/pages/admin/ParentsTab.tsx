@@ -116,6 +116,33 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
     await reload()
   }
 
+  async function removeParent() {
+    const name = parent.profiles.name || parent.profiles.email
+    const orders = totals?.order_count ?? 0
+    const paid = Number(totals?.paid ?? 0)
+    const lost = [
+      orders ? `${orders} ${orders === 1 ? 'bestilling' : 'bestillinger'} (${kr(totals?.to_team)} til laget)` : '',
+      payments.length ? `${payments.length} ${payments.length === 1 ? 'betaling' : 'betalinger'} (${kr(paid)})` : '',
+    ].filter(Boolean)
+    const message = [
+      lost.length ? `Dette slettes for godt: ${lost.join(' og ')}` : 'Forelderen har ingen bestillinger eller betalinger',
+      'Bestillingslenken slutter å virke. Brukeren beholdes, så forelderen kan melde seg på igjen',
+    ].join('. ')
+    const ok = await ask(message, {
+      title: `Fjerne ${name} fra dugnaden?`,
+      confirm: 'Fjern',
+      danger: true,
+      typeToConfirm: lost.length ? name : undefined,
+    })
+    if (!ok) return
+    setError('')
+    setBusy(true)
+    const { error } = await supabase.from('campaign_parents').delete().eq('id', parentId)
+    setBusy(false)
+    if (error) return setError(errorText(error))
+    await reload()
+  }
+
   return (
     <div className="space-y-3 border-t border-line pt-3 text-sm">
       <p>
@@ -163,6 +190,11 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
         <Link to={`/forelder/${parent.id}`} className="inline-flex min-h-11 items-center px-2 font-semibold text-brand">
           Se forelderens side →
         </Link>
+      </div>
+      <div className="border-t border-line pt-3">
+        <Button variant="danger" onClick={() => void removeParent()} disabled={busy}>
+          Fjern fra dugnaden
+        </Button>
       </div>
     </div>
   )
