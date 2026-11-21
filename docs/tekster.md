@@ -72,9 +72,9 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 | D1 | Organizer | Salget er organisert av **Foreldre og supportere av Ready G2018**, ikke av klubben direkte |
 | D2 | Admins (parent page only, not shown to friends) | Ansvarlige: Kari Nordmann (kasserer), +47 912 34 567, Martin P. (koordinator) |
 | D3 | Purpose | *Alt overskudd går til …* |
-| D4 | Per product | 50 kr av hver kaffe, filtermalt 500 g på 120 kr går til laget |
+| D4 | Per product | 50 kr av hver Kaffe, filtermalt 500 g på 120 kr går til laget |
 | D5 | When finished | *The closing message, see I13* |
-| D6 | Footer on every page | ProDugnad · Vi har også laget **Substitutor** for rettferdige bytter |
+| D6 | Footer on every page | ProDugnad er helt gratis. Hele overskuddet går til laget · Vi har også laget **Substitutor** for rettferdige bytter |
 
 ## E. Login and sign-up
 
@@ -273,7 +273,7 @@ Every text in the app, the emails and the link previews, as of 7 November 2026, 
 
 | # | Link | Title / text |
 |---|---|---|
-| L1 | Order link | **Kaffesalg – bestill via Ola Hansen** · Foreldre og supportere av Ready G2018. Bestill via Ola Hansen, forelder til Emma. *Alt overskudd …* 50 kr av hver kaffe, filtermalt 500 g går til laget |
+| L1 | Order link | **Kaffesalg – bestill via Ola Hansen** · Foreldre og supportere av Ready G2018. Bestill via Ola Hansen, forelder til Emma. *Alt overskudd …* 50 kr av hver Kaffe, filtermalt 500 g går til laget |
 | L2 | Sign-up link | **Bli med som selger: Kaffesalg** · Foreldre og supportere av Ready G2018. Meld deg på, så får du din egen bestillingslenke å dele. *Alt overskudd …* |
 | L3 | Everything else | **ProDugnad** · Bestill og støtt laget. Enkelt, uten innlogging, og du betaler med Vipps |
 | L4 | Default picture | PRODUGNAD · Bestill og støtt laget. Enkelt, uten innlogging, og du betaler med Vipps |

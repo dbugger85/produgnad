@@ -33,7 +33,7 @@ export function Transparency({
         .filter((p) => p.to_team_amount !== null && Number(p.to_team_amount) > 0)
         .map((p) => (
           <p key={p.name}>
-            {kr(p.to_team_amount)} av hver {p.name.toLowerCase()} på {kr(p.price)} går til laget
+            {kr(p.to_team_amount)} av hver {p.name} på {kr(p.price)} går til laget
           </p>
         ))}
     </section>

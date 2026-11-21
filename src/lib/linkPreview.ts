@@ -32,7 +32,7 @@ export function buildLinkPreview({ campaign, parent, products }: PreviewInput): 
     campaign.organizer_label,
     `Bestill via ${via}`,
     campaign.purpose_text,
-    perUnit ? `${kr(Number(perUnit.to_team_amount))} av hver ${perUnit.name.toLowerCase()} går til laget` : '',
+    perUnit ? `${kr(Number(perUnit.to_team_amount))} av hver ${perUnit.name} går til laget` : '',
   ]
     .map((s) => s.trim().replace(/\.+$/, ''))
     .filter(Boolean)
