@@ -75,6 +75,7 @@ Also built early (phase 2 items that were cheap): lock/unlock and close, supplie
 - 22 Nov 2026: `docs/tekster.md` brought up to date (I14, I15, I29, I30, M20, M21, new screenshots); README test count 45
 - 22 Nov 2026: emails: amounts never wrap («250 kr» split over two lines in the digest on a phone): non-breaking space in `kr()` in `_shared/email.ts`, and the amount cells don't wrap and have a small gap on the left
 - 22 Nov 2026: installable app with a proper icon (the home-screen shortcut was a small logo on a white circle because there was no manifest): manifest, glass-style icons like the owner's other apps, Apple tags. Chrome's installability check passes on `/` and `/k/…`
+- 22 Nov 2026: Foreldre tab has a **Barn** view, now the default (the owner: «we don't really know all the parents»): one card per child, grouped by first name with case and spaces ignored (a capitalised spelling wins), the family's orders, to-team and paid/owed, the parents listed under it, each tappable for the usual details. Two different children with the same first name would share a card
 - **Next:** the owner's real test run on a phone with the live campaign (join, order as a friend, tick paid, register payment, lock, close). Owner: set Supabase Auth → Rate Limits → emails per hour to 10.
 
 ## Ideas (not built; may never be built)

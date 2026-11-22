@@ -7,16 +7,63 @@ import { kr, longDate, phone, todayOslo } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
 import { useConfirm } from '../../components/Confirm'
 
+type Totals = AdminData['totals'][number]
+type Row = { parent: AdminData['parents'][number]; totals: Totals | undefined }
+
+const num = (v: unknown) => Number(v ?? 0)
+const ordersText = (n: number) => `${n} ${n === 1 ? 'bestilling' : 'bestillinger'}`
+const parentName = (p: Row['parent']) => p.profiles.name || p.profiles.email
+
+/** Paid / owed and whether it's settled, for one parent or a whole family */
+function Owing({ paid, owed }: { paid: number; owed: number }) {
+  const diff = owed - paid
+  return (
+    <div className="shrink-0 space-y-1 text-right text-sm whitespace-nowrap">
+      <div>
+        {kr(paid)} / {kr(owed)}
+      </div>
+      {diff === 0 && owed > 0 ? (
+        <Badge tone="green">Oppgjort</Badge>
+      ) : diff > 0 ? (
+        <Badge tone="amber">Skylder {kr(diff)}</Badge>
+      ) : diff < 0 ? (
+        <Badge tone="blue">Betalt {kr(-diff)} for mye</Badge>
+      ) : null}
+    </div>
+  )
+}
+
+/** Children by first name (case and spaces ignored); parents who gave no name go last */
+function byChild(rows: Row[]) {
+  const groups = new Map<string, { name: string; rows: Row[] }>()
+  for (const r of rows) {
+    const name = r.parent.child_first_name.trim()
+    const key = name.toLocaleLowerCase('nb')
+    const g = groups.get(key)
+    // Show a capitalised spelling if any parent typed one ("Emma" over "emma")
+    if (!g) groups.set(key, { name, rows: [r] })
+    else {
+      g.rows.push(r)
+      if (name[0] && name[0] === name[0].toLocaleUpperCase('nb')) g.name = name
+    }
+  }
+  for (const g of groups.values()) g.name = g.name.charAt(0).toLocaleUpperCase('nb') + g.name.slice(1)
+  return [...groups.values()].sort((a, b) =>
+    !a.name ? 1 : !b.name ? -1 : a.name.localeCompare(b.name, 'nb'),
+  )
+}
+
 export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
   const [open, setOpen] = useState<string | null>(null)
-  const [sortBy, setSortBy] = useState<'name' | 'team'>('name')
-  const rows = data.parents
+  const [sortBy, setSortBy] = useState<'child' | 'name' | 'team'>('child')
+  const rows: Row[] = data.parents
     .map((p) => ({ parent: p, totals: data.totals.find((t) => t.campaign_parent_id === p.id) }))
     .sort((a, b) =>
       sortBy === 'team'
-        ? Number(b.totals?.to_team ?? 0) - Number(a.totals?.to_team ?? 0)
-        : a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb'),
+        ? num(b.totals?.to_team) - num(a.totals?.to_team)
+        : parentName(a.parent).localeCompare(parentName(b.parent), 'nb'),
     )
+  const toggle = (id: string) => setOpen(open === id ? null : id)
 
   const packingLink = (
     <Link to={`/admin/d/${data.campaign.id}/pakkelister`} className="block w-fit font-semibold text-brand">
@@ -29,8 +76,8 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
     <div className="space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         {packingLink}
-        <div className="flex gap-1 text-sm" role="radiogroup" aria-label="Sorter">
-          {(['name', 'team'] as const).map((k) => (
+        <div className="flex gap-1 text-sm" role="radiogroup" aria-label="Vis">
+          {(['child', 'name', 'team'] as const).map((k) => (
             <button
               key={k}
               type="button"
@@ -39,43 +86,65 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
               onClick={() => setSortBy(k)}
               className={`rounded-full px-3 py-1 ${sortBy === k ? 'bg-ink text-white' : 'bg-line'}`}
             >
-              {k === 'name' ? 'Navn' : 'Mest til laget'}
+              {k === 'child' ? 'Barn' : k === 'name' ? 'Navn' : 'Mest til laget'}
             </button>
           ))}
         </div>
       </div>
-      {rows.map(({ parent, totals }) => {
-        const diff = Number(totals?.diff ?? 0)
-        return (
-          <Card key={parent.id} className="space-y-2">
-            <button type="button" className="flex w-full items-start justify-between gap-2 text-left" onClick={() => setOpen(open === parent.id ? null : parent.id)}>
-              <div>
-                <div className="font-bold">
-                  {parent.profiles.name || parent.profiles.email} <span className="font-normal text-muted">{parent.payment_code}</span>
+
+      {sortBy === 'child'
+        ? byChild(rows).map((g) => {
+            const sum = (f: keyof Totals) => g.rows.reduce((n, r) => n + num(r.totals?.[f]), 0)
+            const orders = sum('order_count')
+            return (
+              <Card key={g.name || '-'} className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="text-lg font-bold">{g.name || 'Barn ikke oppgitt'}</div>
+                    <div className="text-sm text-muted">
+                      {ordersText(orders)} · <strong className="text-ink">{kr(sum('to_team'))}</strong> til laget
+                    </div>
+                  </div>
+                  {g.rows.length > 1 && <Owing paid={sum('paid')} owed={sum('owed')} />}
                 </div>
-                <div className="text-sm text-muted">
-                  {parent.child_first_name && `${parent.child_first_name} · `}
-                  {totals?.order_count ?? 0} {totals?.order_count === 1 ? 'bestilling' : 'bestillinger'} ·{' '}
-                  <strong className="text-ink">{kr(totals?.to_team)}</strong> til laget
-                </div>
-              </div>
-              <div className="shrink-0 space-y-1 text-right text-sm whitespace-nowrap">
+                {g.rows.map(({ parent, totals }) => (
+                  <div key={parent.id} className="border-t border-line pt-2">
+                    <button type="button" className="flex w-full items-start justify-between gap-2 text-left" onClick={() => toggle(parent.id)}>
+                      <div>
+                        <div className="font-semibold">
+                          {parentName(parent)} <span className="font-normal text-muted">{parent.payment_code}</span>
+                        </div>
+                        {g.rows.length > 1 && (
+                          <div className="text-sm text-muted">
+                            {ordersText(num(totals?.order_count))} · {kr(totals?.to_team)} til laget
+                          </div>
+                        )}
+                      </div>
+                      <Owing paid={num(totals?.paid)} owed={num(totals?.owed)} />
+                    </button>
+                    {open === parent.id && <ParentDetail data={data} parentId={parent.id} reload={reload} />}
+                  </div>
+                ))}
+              </Card>
+            )
+          })
+        : rows.map(({ parent, totals }) => (
+            <Card key={parent.id} className="space-y-2">
+              <button type="button" className="flex w-full items-start justify-between gap-2 text-left" onClick={() => toggle(parent.id)}>
                 <div>
-                  {kr(totals?.paid)} / {kr(totals?.owed)}
+                  <div className="font-bold">
+                    {parentName(parent)} <span className="font-normal text-muted">{parent.payment_code}</span>
+                  </div>
+                  <div className="text-sm text-muted">
+                    {parent.child_first_name && `${parent.child_first_name} · `}
+                    {ordersText(num(totals?.order_count))} · <strong className="text-ink">{kr(totals?.to_team)}</strong> til laget
+                  </div>
                 </div>
-                {diff === 0 && Number(totals?.owed ?? 0) > 0 ? (
-                  <Badge tone="green">Oppgjort</Badge>
-                ) : diff > 0 ? (
-                  <Badge tone="amber">Skylder {kr(diff)}</Badge>
-                ) : diff < 0 ? (
-                  <Badge tone="blue">Betalt {kr(-diff)} for mye</Badge>
-                ) : null}
-              </div>
-            </button>
-            {open === parent.id && <ParentDetail data={data} parentId={parent.id} reload={reload} />}
-          </Card>
-        )
-      })}
+                <Owing paid={num(totals?.paid)} owed={num(totals?.owed)} />
+              </button>
+              {open === parent.id && <ParentDetail data={data} parentId={parent.id} reload={reload} />}
+            </Card>
+          ))}
     </div>
   )
 }
