@@ -28,6 +28,36 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Shown only if the app can't start (an old browser, or one with JavaScript off), so the
+         page never stays blank. Plain HTML and old-style JavaScript on purpose: it must work where
+         the app doesn't -->
+    <div id="cant-start" hidden style="max-width:28rem;margin:0 auto;padding:3rem 1.25rem;font:16px/1.5 system-ui,sans-serif;color:#121a26;background:#f1eee8">
+      <h1 style="font-size:1.4rem;margin:0 0 .75rem">Siden kunne ikke åpnes</h1>
+      <p style="margin:0 0 .75rem">Nettleseren din er trolig for gammel. Oppdater Samsung Internet eller Chrome (Play Butikk eller Galaxy Store) og trykk på lenken igjen</p>
+      <p style="margin:0 0 1.25rem">Åpnet du lenken inne i en annen app, velg «Åpne i nettleser» eller kopier lenken til Chrome</p>
+      <button type="button" onclick="location.reload()" style="min-height:3rem;padding:0 1.25rem;border:0;border-radius:1rem;background:#002e5f;color:#fff;font:600 16px system-ui,sans-serif">Last inn på nytt</button>
+      <p id="cant-start-browser" style="margin:1.5rem 0 0;font-size:12px;color:#5d6472"></p>
+    </div>
+    <noscript><p style="max-width:28rem;margin:0 auto;padding:3rem 1.25rem;font:16px/1.5 system-ui,sans-serif;color:#121a26;background:#f1eee8">ProDugnad trenger JavaScript. Slå det på i nettleseren og last inn siden på nytt</p></noscript>
+    <script>
+      (function () {
+        var shown = false
+        function show() {
+          var root = document.getElementById('root')
+          var box = document.getElementById('cant-start')
+          if (shown || !box || (root && root.hasChildNodes())) return
+          shown = true
+          var ua = navigator.userAgent
+          var m = ua.match(/(SamsungBrowser|Chrome|Firefox|Version)\/[\d.]+/g)
+          document.getElementById('cant-start-browser').textContent = 'Nettleser: ' + (m ? m.join(' ') : ua)
+          box.hidden = false
+        }
+        window.addEventListener('error', show)
+        window.addEventListener('load', function () { setTimeout(show, 3000) })
+        window.__cantStart = show
+      })()
+    </script>
+    <script nomodule>window.__cantStart()</script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

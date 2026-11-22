@@ -310,3 +310,5 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | M19 | Unknown page | Fant ikke siden |
 | M20 | Confirm dialog (the app's own, never the browser's) | *the question* · Avbryt · *Slett / Lås / Lås opp / Avslutt / Åpne igjen / Send / Merk sendt / Gjør til admin / Fjern admin / Fjern* · For things that can't be undone: Skriv «*navn*» for å bekrefte (the red button stays grey until the name is typed; capitals don't matter) |
 | M21 | Delete dugnad, wrong name | Navnet stemmer ikke med dugnadens navn |
+| M22 | The app can't start (too old a browser, an error before the first page; plain HTML in `index.html`) | Siden kunne ikke åpnes · Nettleseren din er trolig for gammel. Oppdater Samsung Internet eller Chrome (Play Butikk eller Galaxy Store) og trykk på lenken igjen · Åpnet du lenken inne i en annen app, velg «Åpne i nettleser» eller kopier lenken til Chrome · Last inn på nytt · Nettleser: *name and version* |
+| M23 | JavaScript turned off | ProDugnad trenger JavaScript. Slå det på i nettleseren og last inn siden på nytt |

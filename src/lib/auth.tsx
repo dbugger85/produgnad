@@ -33,11 +33,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data }) => {
-      setSession(data.session)
-      await loadProfile(data.session?.user.id)
-      setLoading(false)
-    })
+    // Never stay on the loading page: if the login check fails, carry on as logged out
+    supabase.auth
+      .getSession()
+      .then(async ({ data }) => {
+        setSession(data.session)
+        await loadProfile(data.session?.user.id)
+      })
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false))
     const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
       setSession(next)
       // Do not await inside the callback (supabase-js recommendation).

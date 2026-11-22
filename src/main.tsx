@@ -15,3 +15,5 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+// The app started: the "can't start" message in index.html is no longer needed
+document.getElementById('cant-start')?.remove()
