@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "ProDugnad",
+  "short_name": "ProDugnad",
+  "description": "Dugnad for laget: venner bestiller via lenken din og betaler med Vipps",
+  "lang": "nb",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f1eee8",
+  "theme_color": "#f1eee8",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
