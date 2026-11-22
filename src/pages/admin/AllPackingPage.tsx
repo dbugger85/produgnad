@@ -6,6 +6,12 @@ import { adminChildName, useAdminData } from '../../lib/adminData'
 import { errorText } from '../../lib/errors'
 import { supabase } from '../../lib/supabase'
 
+/** The child's name as admins see it, with a capital first letter ("emma" → "Emma") */
+const childName = (p: Parameters<typeof adminChildName>[0]) => {
+  const n = adminChildName(p)
+  return n.charAt(0).toLocaleUpperCase('nb') + n.slice(1)
+}
+
 /** /admin/d/:id/pakkelister: one row per parent; tick when that parent's bag is packed. */
 export default function AllPackingPage() {
   const { id = '' } = useParams()
@@ -13,6 +19,7 @@ export default function AllPackingPage() {
   // Ticks shown at once, before the reload confirms them
   const [ticks, setTicks] = useState<Record<string, string | null>>({})
   const [error, setError] = useState('')
+  const [view, setView] = useState<'child' | 'name'>('child')
   if (data === undefined) return <Loading title="Pakkeliste" back={`/admin/d/${id}?fane=foreldre`} />
   if (data === null) return <Page><ErrorBox>Fant ikke dugnaden</ErrorBox></Page>
 
@@ -20,7 +27,14 @@ export default function AllPackingPage() {
   const rows = data.parents
     .map((p) => ({ parent: p, orders: data.orders.filter((o) => o.campaign_parent_id === p.id) }))
     .filter((r) => r.orders.length > 0)
-    .sort((a, b) => a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb'))
+    .sort((a, b) => {
+      if (view === 'name') return a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb')
+      // By child; parents who gave no child's name last, siblings' bags next to each other
+      const ca = childName(a.parent)
+      const cb = childName(b.parent)
+      if (!ca !== !cb) return ca ? -1 : 1
+      return ca.localeCompare(cb, 'nb') || a.parent.profiles.name.localeCompare(b.parent.profiles.name, 'nb')
+    })
   const isPacked = (r: (typeof rows)[number]) => !!packedAt(r.parent.id, r.parent.packed_at)
   const done = rows.filter(isPacked).length
   const left = unitsByProduct(rows.filter((r) => !isPacked(r)).flatMap((r) => r.orders), data.products)
@@ -50,6 +64,20 @@ export default function AllPackingPage() {
                 <UnitsTable rows={left} />
               </Card>
             )}
+            <div className="flex gap-1 text-sm" role="radiogroup" aria-label="Vis">
+              {(['child', 'name'] as const).map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  role="radio"
+                  aria-checked={view === k}
+                  onClick={() => setView(k)}
+                  className={`rounded-full px-3 py-1 ${view === k ? 'bg-ink text-white' : 'bg-line'}`}
+                >
+                  {k === 'child' ? 'Barn' : 'Foreldre'}
+                </button>
+              ))}
+            </div>
             <p className="text-sm text-muted">
               Én pose per forelder. Trykk når posen er pakket. Se fordelingen per venn under hver forelder
             </p>
@@ -67,8 +95,17 @@ export default function AllPackingPage() {
                       aside={<span className="font-semibold">{units.reduce((a, u) => a + u.units, 0)} stk</span>}
                     >
                       <span className={`block font-semibold ${checked ? 'line-through decoration-ink/30' : ''}`}>
-                        {p.profiles.name}
-                        {adminChildName(p) && <span className="font-normal text-muted"> · {adminChildName(p)}</span>}
+                        {view === 'child' && childName(p) ? (
+                          <>
+                            {childName(p)}
+                            <span className="font-normal text-muted"> · {p.profiles.name}</span>
+                          </>
+                        ) : (
+                          <>
+                            {p.profiles.name}
+                            {childName(p) && <span className="font-normal text-muted"> · {childName(p)}</span>}
+                          </>
+                        )}
                       </span>
                       <span className="block text-sm">{unitsText(units)}</span>
                       {p.goods_sent_at && <span className="block text-xs text-green-800">Sendt</span>}
