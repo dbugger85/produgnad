@@ -39,7 +39,8 @@ interface OutboxRow {
 }
 
 const nf = new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 2 })
-const kr = (n: number | string) => `${nf.format(Number(n))} kr`
+// Non-breaking space so "250 kr" never splits over two lines
+const kr = (n: number | string) => `${nf.format(Number(n))}\u00a0kr`
 // Same rules as phone() in src/lib/format.ts: "+47 912 34 567"
 const phone = (p: string) => {
   const raw = (p ?? '').replace(/[^\d+]/g, '')
@@ -133,7 +134,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
     if (!order || order.deleted_at) return null
     const amount = order.order_lines.reduce((s: number, l: { qty: number; unit_price: number }) => s + l.qty * Number(l.unit_price), 0)
     const lines = order.order_lines
-      .map((l: { qty: number; unit_price: number; products: { name: string } }) => `<tr><td>${l.qty} × ${esc(l.products.name)}</td><td style="text-align:right">${kr(l.qty * Number(l.unit_price))}</td></tr>`)
+      .map((l: { qty: number; unit_price: number; products: { name: string } }) => `<tr><td>${l.qty} × ${esc(l.products.name)}</td><td style="text-align:right;white-space:nowrap;padding-left:12px">${kr(l.qty * Number(l.unit_price))}</td></tr>`)
       .join('')
     const statusUrl = `${APP_URL}/status/${order.status_token}`
     if (row.kind === 'friend_order') {
@@ -141,7 +142,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
         `Bestilling ${order.code}: Vipps ${kr(amount)} til ${parentName}`,
         `<h1 style="font-size:20px;margin:0 0 12px">Takk for bestillingen, ${esc(order.buyer_first_name)}!</h1>
 <table style="width:100%;font-size:15px;border-collapse:collapse">${lines}
-<tr><td style="padding-top:8px;font-weight:700">Totalt</td><td style="padding-top:8px;text-align:right;font-weight:700">${kr(amount)}</td></tr></table>
+<tr><td style="padding-top:8px;font-weight:700">Totalt</td><td style="padding-top:8px;text-align:right;white-space:nowrap;padding-left:12px;font-weight:700">${kr(amount)}</td></tr></table>
 ${vippsBlock(amount, parentName, cp.profiles?.phone ?? '', order.code)}
 ${button(statusUrl, 'Se status på bestillingen')}
 <p>${esc(parentName)} leverer varene når de kommer</p>`,
@@ -204,14 +205,14 @@ ${button(`${APP_URL}/forelder/${cp.id}`, 'Se dine bestillinger')}`,
         (o) =>
           `<tr><td style="padding:4px 0"><strong>${esc(o.code)}</strong> ${esc(o.buyer_first_name)}<br><span style="color:#5d6472;font-size:13px">${o.order_lines
             .map((l) => `${l.qty} × ${esc(l.products.name)}`)
-            .join(', ')}</span></td><td style="text-align:right;vertical-align:top;padding:4px 0">${kr(amount(o))}</td></tr>`,
+            .join(', ')}</span></td><td style="text-align:right;white-space:nowrap;vertical-align:top;padding:4px 0 4px 12px">${kr(amount(o))}</td></tr>`,
       )
       .join('')
     return wrap(
       `${fresh.length === 1 ? '1 ny bestilling' : `${fresh.length} nye bestillinger`} siden sist (${kr(freshSum)})`,
       `<h1 style="font-size:20px;margin:0 0 12px">Nye bestillinger, ${esc(parentName.split(' ')[0])}</h1>
 <table style="width:100%;font-size:15px;border-collapse:collapse">${rows}
-<tr><td style="padding-top:8px;font-weight:700;border-top:1px solid #dedad2">Nye totalt</td><td style="padding-top:8px;text-align:right;font-weight:700;border-top:1px solid #dedad2">${kr(freshSum)}</td></tr></table>
+<tr><td style="padding-top:8px;font-weight:700;border-top:1px solid #dedad2">Nye totalt</td><td style="padding-top:8px;text-align:right;white-space:nowrap;padding-left:12px;font-weight:700;border-top:1px solid #dedad2">${kr(freshSum)}</td></tr></table>
 <p>Totalt bestilt via deg: <strong>${kr(totals?.owed ?? 0)}</strong>${
         unpaid.length
           ? `<br>Ikke betalt ennå: <strong>${kr(unpaidSum)}</strong> fra ${unpaid.map((o) => `${esc(o.code)} ${esc(o.buyer_first_name)}`).join(', ')}`
