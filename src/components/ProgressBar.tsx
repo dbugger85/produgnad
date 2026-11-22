@@ -22,8 +22,13 @@ export function ProgressBar({ raised, target }: { raised: number; target: number
       >
         <div className="h-full rounded-full bg-brand transition-all" style={{ width: `${pct}%` }} />
       </div>
-      <p className="text-sm text-ink">
-        <strong>{kr(raised)}</strong> til laget av {kr(target)}
+      <p className="flex flex-wrap justify-between gap-x-3 text-sm text-ink">
+        <span>
+          <strong>{kr(raised)}</strong> til laget
+        </span>
+        <span>
+          Mål: <strong>{kr(target)}</strong>
+        </span>
       </p>
     </div>
   )

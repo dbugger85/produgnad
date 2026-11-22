@@ -80,8 +80,10 @@ export default function ParentPage() {
               <strong className="text-2xl">{kr(totals?.to_team)}</strong> til laget via deg
               <span className="block text-sm text-muted">av {kr(totals?.owed)} solgt</span>
             </p>
-            <ProgressBar raised={page.campaign.raised} target={page.campaign.target_amount ?? 0} />
-            <p className="-mt-1 text-xs text-muted">For hele dugnaden</p>
+            <div className="space-y-1.5 border-t border-line pt-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted">Hele dugnaden</p>
+              <ProgressBar raised={page.campaign.raised} target={page.campaign.target_amount ?? 0} />
+            </div>
           </Card>
         )}
         {campaign.locked_at && !campaign.closed_at && (

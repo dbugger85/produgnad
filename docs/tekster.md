@@ -58,7 +58,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | C4 | List | 2 × *Kaffe, filtermalt 500 g* · Totalt |
 | C8 | Payment (only while unpaid), same as B | Vipps **240 kr** til **Ola Hansen** · **+47 912 34 568** · Kopier · Skriv **K7** i meldingen |
 | C5 | Link | Til bestillingssiden → |
-| C7 | Progress bar | Not shown to friends (only parents and admins: **18 400 kr** til laget av 30 000 kr) |
+| C7 | Progress bar | Not shown to friends (only parents and admins: *bar* · **18 400 kr** til laget · Mål: **30 000 kr**) |
 | C6 | Wrong link | Fant ikke bestillingen. Sjekk at du har hele lenken |
 
 ## D. Shown at the bottom of public pages (transparency)
@@ -118,7 +118,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 
 | # | Where | Text |
 |---|---|---|
-| F0 | Top (follows Fremdrift) | **765 kr** til laget via deg · av 1 850 kr solgt · *progress bar* · For hele dugnaden |
+| F0 | Top (follows Fremdrift) | **765 kr** til laget via deg · av 1 850 kr solgt · Hele dugnaden · *progress bar* · **2 280 kr** til laget · Mål: **12 000 kr** |
 | F1 | Box title | Din bestillingslenke |
 | F2 | Buttons (one row) | Kopier · Åpne · QR |
 | F3 | QR print heading | *Kaffesalg* – bestill via *Ola Hansen* · Skriv ut |
@@ -231,7 +231,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | I19 | Oppsett: fields | Navn på dugnaden · Laget (For eksempel Ready G2018. Brukes som {lag} i tekstene) · Hvem som organiserer (Vises på alle sider. Skriv at det er foreldre/supportere, ikke klubben) · Hva pengene går til · Mål (kr til laget) · Bestillingsfrist · Maks antall per vare i én bestilling |
 | I20 | Oppsett: payment | Foreldrene vippser det de skylder hit, med betalingskoden sin som melding · Vipps-navn · Vipps-nummer · Kontaktperson for e-post (Svar på e-poster fra appen går til denne personen) |
 | I21 | Oppsett: texts | Du kan bruke {barn}, {lag}, {produkter}, {frist}, {lenke}, {forelder}, {beløp}, {kode}, {vipps}. Foreldrene kan endre teksten før de deler · Kort tekst (SMS, chat) · Lang tekst (Facebook) · Påminnelse om frist (Vises for foreldrene de siste tre dagene før fristen) · Betalingspåminnelse (Per ubetalt bestilling. «Hei!» blir til «Hei Kari!») |
-| I25 | Oppsett: Hva som vises | Fremdrift (Linjen med penger til laget og målet, for eksempel «815 kr til laget av 30 000 kr») · Bidrag per vare (For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles) · Ansvarlige og kontakt (Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e-post til kontaktpersonen, ellers til forelderen) · Ikke vist / Foreldre og admin / Alle, også venner · Som admin ser du alltid alt under Oversikt |
+| I25 | Oppsett: Hva som vises | Fremdrift (Linjen med penger til laget og målet, for eksempel «815 kr til laget · Mål: 30 000 kr») · Bidrag per vare (For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles) · Ansvarlige og kontakt (Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e-post til kontaktpersonen, ellers til forelderen) · Ikke vist / Foreldre og admin / Alle, også venner · Som admin ser du alltid alt under Oversikt |
 | I22 | Oppsett: closing | Avslutningsmelding (Vises på alle sider når dugnaden er avsluttet: hvor mye som ble samlet inn og hva det betaler) |
 | I23 | Oppsett: button | Opprett dugnaden / Lagre / Lagret ✓ |
 | I29 | Oppsett: delete (bottom, existing campaigns only) | Slett dugnaden · Sletter dugnaden med varer, bilder, bestillinger og betalinger for godt. Vil du bare stoppe bestillingene, bruk «Avslutt dugnaden» under Oversikt · Slett dugnaden / Sletter … · Confirm: Slette *Kaffesalg høsten 2026*? · Varer, bilder, foreldrenes lenker, bestillinger og betalinger slettes for godt. Vennenes lenker slutter å virke. Foreldrenes brukere beholdes. Dette kan ikke angres · Skriv «*Kaffesalg høsten 2026*» for å bekrefte · Avbryt · Slett |

@@ -193,7 +193,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         <h2 className="text-lg font-bold">Hva som vises</h2>
         <VisibilityChoice
           label="Fremdrift"
-          hint="Linjen med penger til laget og målet, for eksempel «815 kr til laget av 30 000 kr»"
+          hint="Linjen med penger til laget og målet, for eksempel «815 kr til laget · Mål: 30 000 kr»"
           value={form.progress_visibility}
           onChange={(v) => set('progress_visibility', v)}
         />
