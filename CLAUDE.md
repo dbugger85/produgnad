@@ -31,6 +31,7 @@ Read `docs/brief.md` (original spec), `docs/plan.md` (decisions, log, ideas, sec
 ## Commands
 `npm run db:start` (Docker), `npm run db:reset`, `npm run seed`, `npm run dev`, `npm test`, `npm run test:db`, `npx supabase test db`, `npm run build`.
 Live: `npx supabase db push --remote --yes`, `npx supabase functions deploy <name> --no-verify-jwt --use-api --yes` (send-emails, daily-digest, invite-admin), SQL `npx supabase db query --remote [--read-only|--yes] "…"`; the frontend deploys on `git push` (Cloudflare Pages). Link previews locally: `npx wrangler pages dev dist`.
+Backup: `scripts/backup.sh` (live database + pictures → `~/Backups/produgnad/`, nightly at 23:30 by the systemd user timer `produgnad-backup.timer` on the owner's laptop); restore steps in `docs/backup.md`.
 Screenshots of every page for `docs/tekster.md`: Playwright from `~/Work/substitutor/node_modules/playwright-core` with `/usr/bin/chromium`, logging in with seed users by putting their session in localStorage (`sb-127-auth-token`).
 
 ## Where things are

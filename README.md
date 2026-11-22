@@ -28,6 +28,10 @@ Login emails don't leave your computer locally: open the mail viewer at http://1
 
 To test on a phone on the same wifi, use the laptop's IP address instead of `localhost` (the dev server listens on the network), and put that IP in `VITE_SUPABASE_URL` too.
 
+## Backup
+
+The live database and product pictures are copied to the owner's laptop every night: [docs/backup.md](docs/backup.md) (what runs, and how to restore).
+
 ## Tests
 
 ```bash
