@@ -4,8 +4,9 @@ import { supabase } from '../lib/supabase'
 import { Button, ErrorBox, Field, Input } from './ui'
 
 /**
- * Email login without password. The email has both a link and a 6-digit code;
- * the code works even when the link opens in another browser (e.g. inside Messenger).
+ * Email login without password. The email has only a code (8 digits live, 6 locally), no link:
+ * email security filters open links to check them, which used the code up. The code also works
+ * when the page is open in another app's browser (e.g. inside Messenger).
  */
 export function LoginForm({ next, onDone }: { next: string; onDone?: () => void }) {
   const [email, setEmail] = useState(() => new URLSearchParams(window.location.search).get('e') ?? '')
@@ -87,8 +88,7 @@ export function LoginForm({ next, onDone }: { next: string; onDone?: () => void 
       }}
     >
       <p className="text-sm text-ink">
-        Vi har sendt en e‑post til <strong>{email}</strong>. Skriv inn koden fra e‑posten her, eller trykk på lenken i
-        e‑posten
+        Vi har sendt en e‑post til <strong>{email}</strong>. Skriv inn koden fra e‑posten her
       </p>
       <Field label="Kode fra e‑posten">
         <Input

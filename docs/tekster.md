@@ -90,7 +90,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | E4 | Login text | For foreldre og administratorer. Du får en kode på e-post, ikke noe passord |
 | E5 | Field | E-post |
 | E6 | Button | Send meg en innloggingskode |
-| E7 | After sending | Vi har sendt en e-post til *ola@…*. Skriv inn koden fra e-posten her, eller trykk på lenken i e-posten |
+| E7 | After sending | Vi har sendt en e-post til *ola@…*. Skriv inn koden fra e-posten her |
 | E8 | Code field | Kode fra e-posten |
 | E9 | Button | Logg inn |
 | E10 | Link | Feil e-post, eller ingen e-post? Prøv igjen |
@@ -258,7 +258,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 
 | # | Email | Subject / text |
 |---|---|---|
-| K1 | Login (Supabase template) | **Innloggingskode for dugnaden** · Logg inn på dugnaden · Skriv inn denne koden på siden du har åpen: · Eller trykk her for å logge inn: · Logg inn · Koden virker i én time. Har du ikke bedt om denne e-posten, kan du se bort fra den |
+| K1 | Login (Supabase template) | **Innloggingskode for dugnaden** · Logg inn på dugnaden · Skriv inn denne koden på siden du har åpen: · *the code, no link (email security filters open links and that used the code up)* · Koden virker i én time. Har du ikke bedt om denne e-posten, kan du se bort fra den |
 | K2 | Friend ordered (opt-in) | **Bestilling K7: Vipps 240 kr til Ola Hansen** · Takk for bestillingen, Kari! · Totalt · Vipps **240 kr** til **Ola Hansen, +47 912 34 568**, melding **K7** · Se status på bestillingen · Ola Hansen leverer varene når de kommer |
 | K3 | Friend paid (opt-in) | **Takk! Betalingen for K7 er registrert** · Takk, Kari! · Ola Hansen har registrert at du har betalt 240 kr for bestilling K7 · Se status på bestillingen |
 | K4 | Parent payment registered | **Betaling registrert: 1 440 kr av 1 440 kr** · Takk, Ola! · Vi har registrert betalingen din for *Kaffesalg*. Du har nå betalt **1 440 kr** av **1 440 kr** · Det gjenstår … / Du har betalt … for mye. Vi tar kontakt / Alt er betalt. Tusen takk! · Se dine bestillinger |
