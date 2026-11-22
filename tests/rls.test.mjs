@@ -90,7 +90,7 @@ describe('friend (no login)', () => {
   test('cannot read any table or view directly', async () => {
     const a = anon()
     for (const table of ['profiles', 'campaigns', 'products', 'product_images', 'campaign_parents', 'orders',
-      'order_lines', 'parent_payments', 'email_outbox', 'v_order_amounts', 'v_parent_totals', 'v_campaign_progress']) {
+      'order_lines', 'parent_payments', 'email_outbox', 'child_labels', 'v_order_amounts', 'v_parent_totals', 'v_campaign_progress']) {
       expectNoRows(await a.from(table).select('*').limit(1))
     }
   })
@@ -651,6 +651,22 @@ describe('removing a parent', () => {
     expectError(await anon().rpc('create_friend_order', { p_link_code: link, p_first_name: 'Per', p_lines: [{ product_id: coffee.id, qty: 1 }] }), 'UNKNOWN_LINK')
     // Can join again
     assert.ifError((await parent.client.rpc('join_campaign', { p_join_code: campaign.join_code, p_name: 'Rm Test', p_phone: '95555555', p_child_first_name: 'Ola' })).error)
+  })
+})
+
+describe("admins' child labels", () => {
+  test('admins only; parents never see or change them, and the parent keeps their own child name', async () => {
+    expectError(await anon().from('child_labels').insert({ campaign_parent_id: cpA, label: 'X' }))
+    expectError(await parentA.client.from('child_labels').insert({ campaign_parent_id: cpA, label: 'Emma H.' }))
+    assert.ifError((await admin.client.from('child_labels').upsert({ campaign_parent_id: cpA, label: 'Emma H.' })).error)
+    expectNoRows(await parentA.client.from('child_labels').select('*'))
+    expectNoRows(await anon().from('child_labels').select('*'))
+    const mine = (await parentA.client.from('campaign_parents').select('child_first_name').eq('id', cpA).single()).data
+    assert.equal(mine.child_first_name, 'Emma')
+    const viaAdmin = (await admin.client.from('campaign_parents').select('id, child_labels(label)').eq('id', cpA).single()).data
+    assert.equal(viaAdmin.child_labels.label, 'Emma H.')
+    expectError(await admin.client.from('child_labels').upsert({ campaign_parent_id: cpA, label: '   ' }))
+    assert.ifError((await admin.client.from('child_labels').delete().eq('campaign_parent_id', cpA)).error)
   })
 })
 

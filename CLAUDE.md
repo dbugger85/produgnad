@@ -25,6 +25,7 @@ Read `docs/brief.md` (original spec), `docs/plan.md` (decisions, log, ideas, sec
 - Friend order limits per link per hour: 20 orders, 10 with email; 200 friend orders/hour in total; one confirmation per email address per day. Names are stripped of control characters by a trigger.
 - Errors from SQL are short codes (`CAMPAIGN_LOCKED` …) translated in `src/lib/errors.ts`.
 - Emails: SQL inserts rows in `email_outbox` (unique `dedupe_key`); `_shared/outbox.ts` drains it via `claim_outbox` (max 90/day; parents' emails first, friend confirmations max 40/day; Resend quota errors go back to the queue via `release_outbox`). Without `RESEND_API_KEY` it only logs (dry run). Login emails are sent by Supabase directly (owner sets its rate limit).
+- `child_labels`: admins' own name for a child ("Emil H."), admin-only by RLS; `adminChildName()` / `saveChildLabel()` in `src/lib/adminData.ts`. Parent and friend pages, links and emails always use `child_first_name`
 - New table? Enable RLS, revoke from anon, add policies, and add cases to `tests/rls.test.mjs`.
 
 ## Commands
@@ -33,7 +34,7 @@ Live: `npx supabase db push --remote --yes`, `npx supabase functions deploy <nam
 Screenshots of every page for `docs/tekster.md`: Playwright from `~/Work/substitutor/node_modules/playwright-core` with `/usr/bin/chromium`, logging in with seed users by putting their session in localStorage (`sb-127-auth-token`).
 
 ## Where things are
-- `supabase/migrations/`: schema → functions/views → RPCs → RLS/grants/storage, then digest, extra stock, visibility settings, per-parent totals, closing/anonymize, review fixes, packing ticks, delete campaign, remove parent
+- `supabase/migrations/`: schema → functions/views → RPCs → RLS/grants/storage, then digest, extra stock, visibility settings, per-parent totals, closing/anonymize, review fixes, packing ticks, delete campaign, remove parent, child labels
 - `supabase/functions/`: `send-emails`, `daily-digest` (20:00 Oslo + 07:00 morning round, `.github/workflows/daily.yml`, also keep-alive), `invite-admin`; `_shared/email.ts` (all email texts), `_shared/outbox.ts` (sending)
 - `functions/` (Cloudflare Pages Functions) + `functions-lib/preview.ts`: link previews for `/k/<code>` and `/bli-med/<code>`, only for preview apps (`isPreviewBot`); texts built by `src/lib/linkPreview.ts`, shared with the preview card on the parent page
 - `src/pages/FriendOrderPage.tsx` (the page most people see), `OrderStatusPage.tsx`, `PackingPage.tsx`, `src/pages/parent/`, `src/pages/admin/` (`AdminHome`, `CampaignPage` with tabs Oversikt/Foreldre/Bestillinger/Varer/Oppsett, `PeoplePage` = Innstillinger, `PersonsPage` = Personer)

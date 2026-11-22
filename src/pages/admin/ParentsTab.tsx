@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { Badge, Button, Card, ErrorBox, Field, Input } from '../../components/ui'
-import type { AdminData } from '../../lib/adminData'
+import { adminChildName, saveChildLabel, type AdminData } from '../../lib/adminData'
 import { errorText } from '../../lib/errors'
 import { kr, longDate, phone, todayOslo } from '../../lib/format'
 import { supabase } from '../../lib/supabase'
@@ -37,7 +37,7 @@ function Owing({ paid, owed }: { paid: number; owed: number }) {
 function byChild(rows: Row[]) {
   const groups = new Map<string, { name: string; rows: Row[] }>()
   for (const r of rows) {
-    const name = r.parent.child_first_name.trim()
+    const name = adminChildName(r.parent)
     const key = name.toLocaleLowerCase('nb')
     const g = groups.get(key)
     // Show a capitalised spelling if any parent typed one ("Emma" over "emma")
@@ -64,6 +64,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
         : parentName(a.parent).localeCompare(parentName(b.parent), 'nb'),
     )
   const toggle = (id: string) => setOpen(open === id ? null : id)
+  const [editing, setEditing] = useState<string | null>(null)
 
   const packingLink = (
     <Link to={`/admin/d/${data.campaign.id}/pakkelister`} className="block w-fit font-semibold text-brand">
@@ -100,13 +101,30 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
               <Card key={g.name || '-'} className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <div className="text-lg font-bold">{g.name || 'Barn ikke oppgitt'}</div>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-lg font-bold">{g.name || 'Barn ikke oppgitt'}</span>
+                      {g.name && editing !== g.name && (
+                        <button type="button" className="text-sm font-semibold text-brand" onClick={() => setEditing(g.name)}>
+                          Endre navn
+                        </button>
+                      )}
+                    </div>
                     <div className="text-sm text-muted">
                       {ordersText(orders)} · <strong className="text-ink">{kr(sum('to_team'))}</strong> til laget
                     </div>
                   </div>
                   {g.rows.length > 1 && <Owing paid={sum('paid')} owed={sum('owed')} />}
                 </div>
+                {editing === g.name && (
+                  <ChildNameForm
+                    parents={g.rows.map((r) => r.parent)}
+                    initial={g.name}
+                    onDone={async (saved) => {
+                      setEditing(null)
+                      if (saved) await reload()
+                    }}
+                  />
+                )}
                 {g.rows.map(({ parent, totals }) => (
                   <div key={parent.id} className="border-t border-line pt-2">
                     <button type="button" className="flex w-full items-start justify-between gap-2 text-left" onClick={() => toggle(parent.id)}>
@@ -136,7 +154,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
                     {parentName(parent)} <span className="font-normal text-muted">{parent.payment_code}</span>
                   </div>
                   <div className="text-sm text-muted">
-                    {parent.child_first_name && `${parent.child_first_name} · `}
+                    {adminChildName(parent) && `${adminChildName(parent)} · `}
                     {ordersText(num(totals?.order_count))} · <strong className="text-ink">{kr(totals?.to_team)}</strong> til laget
                   </div>
                 </div>
@@ -149,6 +167,64 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
   )
 }
 
+/** Admins' name for a child, for this overview only. Parents and friends keep seeing what the parent wrote */
+function ChildNameForm({
+  parents,
+  initial,
+  onDone,
+}: {
+  parents: AdminData['parents']
+  initial: string
+  onDone: (saved: boolean) => Promise<void> | void
+}) {
+  const [value, setValue] = useState(initial)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  // What parents and friends see, each spelling once ("Emma", not "emma / Emma")
+  const spellings = new Map<string, string>()
+  for (const p of parents) {
+    const n = p.child_first_name.trim()
+    const k = n.toLocaleLowerCase('nb')
+    if (n && (!spellings.has(k) || n[0] === n[0].toLocaleUpperCase('nb'))) spellings.set(k, n)
+  }
+  const theirs = [...spellings.values()].join(' / ')
+
+  async function save() {
+    setError('')
+    setBusy(true)
+    const err = await saveChildLabel(parents, value)
+    setBusy(false)
+    if (err) return setError(errorText(err))
+    await onDone(true)
+  }
+
+  return (
+    <form
+      className="space-y-2 rounded-xl bg-cream p-3 ring-1 ring-line"
+      onSubmit={(e) => {
+        e.preventDefault()
+        void save()
+      }}
+    >
+      <Field
+        label={parents.length > 1 ? `Navn i oversikten (for alle ${parents.length} foreldrene)` : 'Navn i oversikten'}
+        hint={`Bare admin ser dette, for eksempel «Emil H.» når flere barn heter det samme. Foreldre og venner ser fortsatt «${theirs || 'navnet forelderen skrev'}»`}
+      >
+        <Input value={value} onChange={(e) => setValue(e.target.value)} maxLength={40} autoFocus />
+      </Field>
+      <ErrorBox>{error}</ErrorBox>
+      <div className="flex gap-2">
+        <Button type="submit" disabled={busy}>
+          {busy ? 'Lagrer …' : 'Lagre'}
+        </Button>
+        <Button type="button" variant="secondary" onClick={() => void onDone(false)}>
+          Avbryt
+        </Button>
+      </div>
+    </form>
+  )
+}
+
 function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: string; reload: () => Promise<void> }) {
   const parent = data.parents.find((p) => p.id === parentId)!
   const totals = data.totals.find((t) => t.campaign_parent_id === parentId)
@@ -158,6 +234,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const ask = useConfirm()
+  const [editingChild, setEditingChild] = useState(false)
 
   async function addPayment() {
     setError('')
@@ -217,6 +294,26 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
       <p>
         {phone(parent.profiles.phone)} · {parent.profiles.email}
       </p>
+      {editingChild ? (
+        <ChildNameForm
+          parents={[parent]}
+          initial={adminChildName(parent)}
+          onDone={async (saved) => {
+            setEditingChild(false)
+            if (saved) await reload()
+          }}
+        />
+      ) : (
+        <p>
+          Barn: {adminChildName(parent) || 'ikke oppgitt'}
+          {parent.child_labels && parent.child_first_name.trim() && (
+            <span className="text-muted"> (forelderen skrev «{parent.child_first_name.trim()}»)</span>
+          )}{' '}
+          <button type="button" className="font-semibold text-brand" onClick={() => setEditingChild(true)}>
+            Endre
+          </button>
+        </p>
+      )}
       <div className="space-y-1">
         <h3 className="font-semibold">Betalinger</h3>
         {payments.length === 0 && <p className="text-muted">Ingen registrert</p>}

@@ -32,7 +32,7 @@ To test on a phone on the same wifi, use the laptop's IP address instead of `loc
 
 ```bash
 npm test          # formatting and share-text tests
-npm run test:db   # security tests against the local database: friend, parent and admin (45)
+npm run test:db   # security tests against the local database: friend, parent and admin (46)
 npx supabase test db   # guard: every table has row level security, friends can only call the public functions
 ```
 

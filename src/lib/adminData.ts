@@ -6,12 +6,37 @@ import type { Campaign, CampaignParent, Order, ParentPayment, ParentTotals, Prod
 export interface AdminData {
   campaign: Campaign
   products: Product[]
-  parents: (CampaignParent & { profiles: { name: string; phone: string; email: string } })[]
+  parents: (CampaignParent & {
+    profiles: { name: string; phone: string; email: string }
+    /** Admins' own name for the child ("Emil H."); parents and friends never see it */
+    child_labels: { label: string } | null
+  })[]
   totals: ParentTotals[]
   orders: Order[]
   payments: ParentPayment[]
   progress: { raised: number; sales: number; target_amount: number } | null
   supplier: { product_id: string; units: number }[]
+}
+
+/** The child's name on admin pages: the admins' label if set, otherwise what the parent wrote */
+export function adminChildName(p: AdminData['parents'][number]): string {
+  return p.child_labels?.label?.trim() || p.child_first_name.trim()
+}
+
+/** Sets the admins' label for these parents' child; the parent's own spelling (or nothing) removes it */
+export async function saveChildLabel(parents: AdminData['parents'], value: string) {
+  const label = value.trim()
+  const clear = parents.filter((p) => !label || label === p.child_first_name.trim()).map((p) => p.id)
+  const set = parents.filter((p) => !clear.includes(p.id)).map((p) => ({ campaign_parent_id: p.id, label, updated_at: new Date().toISOString() }))
+  if (clear.length) {
+    const { error } = await supabase.from('child_labels').delete().in('campaign_parent_id', clear)
+    if (error) return error
+  }
+  if (set.length) {
+    const { error } = await supabase.from('child_labels').upsert(set)
+    if (error) return error
+  }
+  return null
 }
 
 export function useAdminData(campaignId: string) {
@@ -24,7 +49,7 @@ export function useAdminData(campaignId: string) {
     if (!campaign) return setData(null)
     const [products, parents, totals, orders, payments, progress, supplier] = await Promise.all([
       supabase.from('products').select('*, product_images(*)').eq('campaign_id', campaignId).order('sort_order').order('created_at'),
-      supabase.from('campaign_parents').select('*, profiles(name, phone, email)').eq('campaign_id', campaignId).order('created_at'),
+      supabase.from('campaign_parents').select('*, profiles(name, phone, email), child_labels(label)').eq('campaign_id', campaignId).order('created_at'),
       supabase.from('v_parent_totals').select('*').eq('campaign_id', campaignId),
       supabase
         .from('orders')

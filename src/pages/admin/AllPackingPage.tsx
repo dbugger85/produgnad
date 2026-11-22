@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { CheckRow, PackedProgress, UnitsTable, unitsByProduct, unitsText } from '../../components/PackingList'
 import { Card, ErrorBox, Loading, Page, TopBar } from '../../components/ui'
-import { useAdminData } from '../../lib/adminData'
+import { adminChildName, useAdminData } from '../../lib/adminData'
 import { errorText } from '../../lib/errors'
 import { supabase } from '../../lib/supabase'
 
@@ -68,7 +68,7 @@ export default function AllPackingPage() {
                     >
                       <span className={`block font-semibold ${checked ? 'line-through decoration-ink/30' : ''}`}>
                         {p.profiles.name}
-                        {p.child_first_name && <span className="font-normal text-muted"> · {p.child_first_name}</span>}
+                        {adminChildName(p) && <span className="font-normal text-muted"> · {adminChildName(p)}</span>}
                       </span>
                       <span className="block text-sm">{unitsText(units)}</span>
                       {p.goods_sent_at && <span className="block text-xs text-green-800">Sendt</span>}
