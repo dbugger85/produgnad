@@ -87,7 +87,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
               onClick={() => setSortBy(k)}
               className={`rounded-full px-3 py-1 ${sortBy === k ? 'bg-ink text-white' : 'bg-line'}`}
             >
-              {k === 'child' ? 'Barn' : k === 'name' ? 'Navn' : 'Mest til laget'}
+              {k === 'child' ? 'Barn' : k === 'name' ? 'Foreldre' : 'Mest til laget'}
             </button>
           ))}
         </div>
