@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { CheckRow, PackedProgress, UnitsTable, unitsByProduct, unitsText } from '../../components/PackingList'
+import { CheckRow, PackedProgress, UnitsTable, unitsByProduct } from '../../components/PackingList'
 import { Card, ErrorBox, Loading, Page, TopBar } from '../../components/ui'
 import { adminChildName, useAdminData } from '../../lib/adminData'
 import { errorText } from '../../lib/errors'
@@ -107,7 +107,11 @@ export default function AllPackingPage() {
                           </>
                         )}
                       </span>
-                      <span className="block text-sm">{unitsText(units)}</span>
+                      {units.map((u) => (
+                        <span key={u.id} className="block text-sm">
+                          {u.units} × {u.name}
+                        </span>
+                      ))}
                       {p.goods_sent_at && <span className="block text-xs text-green-800">Sendt</span>}
                     </CheckRow>
                     <Link to={`/pakkeliste/${p.id}`} className="ml-12 inline-flex min-h-9 items-center text-sm font-semibold text-brand">
