@@ -128,9 +128,10 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | F6b | Under the share text | *a chat card with the link, picture, title and text as Messenger/WhatsApp show it* · Slik ser lenken ut når den deles |
 | F7 | Shown 3 days before deadline | Påminnelse om fristen |
 | F8 | Box title | Oppgjør med de ansvarlige |
+| F8b | Under the title | Du trenger ikke vippse de ansvarlige før varene deles ut |
 | F9 | Rows | Totalt bestilt via deg · Betalt til admin · Gjenstår · Ubetalt fra venner |
 | F10 | Vipps (same as B) | Vipps **1 440 kr** til **Kari Nordmann** · **+47 912 34 567** · Kopier · Skriv **D-1** i meldingen |
-| F11 | Under it | Betal gjerne samlet når fristen er ute. Du kan betale i flere deler; skriv D-1 i meldingen hver gang |
+| F11 | Under it | Du kan betale samlet eller i flere deler; skriv D-1 i meldingen hver gang |
 | F12 | Paid too much | Du har betalt 200 kr for mye. Ta kontakt med de ansvarlige |
 | F13 | Payments list | 7. november 2026: 1 440 kr registrert |
 | F14 | List title + buttons | Bestillinger (4) · Pakkeliste · + Ny |

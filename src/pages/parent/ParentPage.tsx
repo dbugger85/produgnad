@@ -141,6 +141,7 @@ export default function ParentPage() {
 
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">Oppgjør med de ansvarlige</h2>
+          <p className="text-sm">Du trenger ikke vippse de ansvarlige før varene deles ut</p>
           <dl className="grid grid-cols-2 gap-y-1 text-sm">
             <dt>Totalt bestilt via deg</dt>
             <dd className="text-right font-semibold">{kr(totals?.owed)}</dd>
@@ -167,7 +168,7 @@ export default function ParentPage() {
           )}
           {owedLeft < 0 && <p className="text-sm">Du har betalt {kr(-owedLeft)} for mye. Ta kontakt med de ansvarlige</p>}
           <p className="text-xs text-muted">
-            Betal gjerne samlet når fristen er ute. Du kan betale i flere deler; skriv {cp.payment_code} i meldingen hver gang
+            Du kan betale samlet eller i flere deler; skriv {cp.payment_code} i meldingen hver gang
           </p>
           {payments.length > 0 && (
             <ul className="text-sm text-muted">
