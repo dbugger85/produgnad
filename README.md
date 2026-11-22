@@ -36,7 +36,7 @@ The live database and product pictures are copied to the owner's laptop every ni
 
 ```bash
 npm test          # formatting and share-text tests
-npm run test:db   # security tests against the local database: friend, parent and admin (46)
+npm run test:db   # security tests against the local database: friend, parent and admin (47)
 npx supabase test db   # guard: every table has row level security, friends can only call the public functions
 ```
 

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { withProfile } from './offline'
 import { cached, remember } from './pageCache'
 import { supabase } from './supabase'
 import type { Campaign, CampaignParent, LinkPage, Order, ParentPayment, ParentTotals } from './types'
@@ -36,7 +37,7 @@ export function useParentData(cpId: string) {
       supabase.rpc('public_campaign_by_link', { p_link_code: cp.link_code }),
     ])
     setData(remember(`parent:${cpId}`, {
-      cp: cp as ParentData['cp'],
+      cp: withProfile(cp as ParentData['cp']),
       orders: (orders.data as Order[]) ?? [],
       totals: (totals.data as ParentTotals) ?? null,
       payments: (payments.data as ParentPayment[]) ?? [],

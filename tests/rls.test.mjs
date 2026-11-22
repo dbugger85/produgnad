@@ -190,6 +190,7 @@ describe('friend (no login)', () => {
     expectError(await anon().rpc('claim_outbox', { p_limit: 5 }))
     expectError(await anon().rpc('set_order_packed', { p_order_id: '00000000-0000-0000-0000-000000000000', p_packed: true }))
     expectError(await anon().rpc('delete_campaign', { p_campaign_id: campaign.id, p_name: campaign.name }))
+    expectError(await anon().rpc('admin_save_seller', { p_campaign_id: campaign.id, p_child_first_name: 'X' }))
   })
 })
 
@@ -670,3 +671,69 @@ describe("admins' child labels", () => {
   })
 })
 
+
+describe('sellers without login (added by admins)', () => {
+  test('admins only; gets a payment code, no parent sees it, its link takes no orders, no emails', async () => {
+    const c = (await admin.client.from('campaigns').insert({ name: `Uten innlogging ${run}`, organizer_label: 'X', closing_message: 'Takk' }).select().single()).data
+    const p = (await admin.client.from('products').insert({ campaign_id: c.id, name: 'Kaffe', price: 100, to_team_amount: 40, active: true }).select().single()).data
+    const args = { p_campaign_id: c.id, p_child_first_name: 'Sara', p_name: 'Per Olsen', p_phone: '93333333' }
+
+    expectError(await anon().rpc('admin_save_seller', args))
+    expectError(await parentA.client.rpc('admin_save_seller', args), 'NOT_ALLOWED')
+    expectError(await admin.client.rpc('admin_save_seller', { ...args, p_child_first_name: '  ' }), 'INVALID_NAME')
+    const made = await admin.client.rpc('admin_save_seller', { ...args, p_name: 'Per\u0007Olsen' })
+    assert.ifError(made.error)
+    const cp = made.data
+    // A second one in the same campaign is fine (no login, so no clash on parent_user_id)
+    const second = await admin.client.rpc('admin_save_seller', { p_campaign_id: c.id, p_child_first_name: 'Ali' })
+    assert.ifError(second.error)
+
+    const row = (await service.from('campaign_parents').select('*').eq('id', cp).single()).data
+    assert.equal(row.parent_user_id, null)
+    assert.equal(row.offline_name, 'Per Olsen')
+    assert.match(row.payment_code, /^D-\d+$/)
+    assert.ok(row.link_code)
+
+    // Editing: only sellers without login
+    assert.ifError((await admin.client.rpc('admin_save_seller', { ...args, p_child_first_name: 'Sara B.', p_campaign_parent_id: cp })).error)
+    assert.equal((await service.from('campaign_parents').select('child_first_name').eq('id', cp).single()).data.child_first_name, 'Sara B.')
+    expectError(await admin.client.rpc('admin_save_seller', { ...args, p_campaign_id: campaign.id, p_campaign_parent_id: cpA }), 'NOT_ALLOWED')
+
+    // Parents never see it
+    expectNoRows(await parentA.client.from('campaign_parents').select('id').eq('id', cp))
+    expectError(await parentA.client.rpc('save_order', { p_campaign_parent_id: cp, p_type: 'own', p_lines: [{ product_id: p.id, qty: 1 }] }), 'NOT_ALLOWED')
+
+    // The link page loads but takes no orders, and the database refuses them
+    const page = (await anon().rpc('public_campaign_by_link', { p_link_code: row.link_code })).data
+    assert.equal(page.parent.name, 'Per Olsen')
+    assert.equal(page.campaign.accepting_orders, false)
+    expectError(await anon().rpc('create_friend_order', { p_link_code: row.link_code, p_first_name: 'Kari', p_lines: [{ product_id: p.id, qty: 1 }] }), 'CAMPAIGN_CLOSED')
+
+    // Admins enter orders (also after the lock) and payments; they count like anyone's
+    assert.ifError((await admin.client.rpc('save_order', { p_campaign_parent_id: cp, p_type: 'own', p_lines: [{ product_id: p.id, qty: 3 }] })).error)
+    await admin.client.from('campaigns').update({ locked_at: new Date().toISOString() }).eq('id', c.id)
+    assert.ifError((await admin.client.rpc('save_order', { p_campaign_parent_id: cp, p_type: 'extra', p_lines: [{ product_id: p.id, qty: 2 }] })).error)
+    assert.ifError((await admin.client.from('parent_payments').insert({ campaign_parent_id: cp, amount: 300 })).error)
+    const totals = (await admin.client.from('v_parent_totals').select('*').eq('campaign_parent_id', cp).single()).data
+    assert.equal(Number(totals.owed), 500)
+    assert.equal(Number(totals.to_team), 200)
+    assert.equal(Number(totals.paid), 300)
+    const progress = (await admin.client.from('v_campaign_progress').select('raised').eq('campaign_id', c.id).single()).data
+    assert.equal(Number(progress.raised), 200)
+
+    // No emails: payment, goods sent, digest, closing
+    assert.ifError((await admin.client.from('campaign_parents').update({ goods_sent_at: new Date().toISOString() }).eq('id', cp)).error)
+    await service.rpc('queue_daily_digests')
+    await admin.client.from('campaigns').update({ closed_at: new Date().toISOString() }).eq('id', c.id)
+    assert.ifError((await admin.client.rpc('queue_closing_emails', { p_campaign_id: c.id })).error)
+    assert.equal((await service.from('email_outbox').select('id').eq('campaign_parent_id', cp)).data.length, 0)
+    expectError(await admin.client.rpc('admin_save_seller', { ...args, p_child_first_name: 'Ny' }), 'CAMPAIGN_CLOSED')
+
+    // Admins can remove it, with its orders and payments
+    assert.ifError((await admin.client.from('campaign_parents').delete().eq('id', cp)).error)
+    for (const [table, col] of [['campaign_parents', 'id'], ['orders', 'campaign_parent_id'], ['parent_payments', 'campaign_parent_id']]) {
+      assert.equal((await service.from(table).select('id').eq(col, cp)).data.length, 0, table)
+    }
+    await admin.client.rpc('delete_campaign', { p_campaign_id: c.id, p_name: c.name })
+  })
+})

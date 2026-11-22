@@ -27,6 +27,7 @@ function emptyForm(userId: string | undefined): Form {
     reminder_template: DEFAULT_TEMPLATES.reminder,
     payment_reminder_template: DEFAULT_TEMPLATES.paymentReminder,
     closing_message: '',
+    payment_note: 'Du trenger ikke vippse de ansvarlige før varene deles ut',
     max_qty_per_line: 20,
     progress_visibility: 'parents',
     contribution_visibility: 'parents',
@@ -75,6 +76,7 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
       reminder_template: form.reminder_template,
       payment_reminder_template: form.payment_reminder_template,
       closing_message: form.closing_message,
+      payment_note: form.payment_note.trim(),
       max_qty_per_line: Number(form.max_qty_per_line) || 20,
       progress_visibility: form.progress_visibility,
       contribution_visibility: form.contribution_visibility,
@@ -149,6 +151,12 @@ export function CampaignSettings({ campaign, onSaved }: { campaign?: Campaign; o
         </Field>
         <Field label="Vipps-nummer">
           <Input inputMode="tel" value={form.admin_vipps_phone} onChange={(e) => set('admin_vipps_phone', e.target.value)} />
+        </Field>
+        <Field
+          label="Beskjed om oppgjør"
+          hint="Vises for hver forelder over beløpet de skal vippse, for eksempel når og hvor varene deles ut og når de skal betale. Tomt felt: ingen beskjed"
+        >
+          <TextArea rows={3} maxLength={1000} value={form.payment_note} onChange={(e) => set('payment_note', e.target.value)} />
         </Field>
         <Field label="Kontaktperson for e‑post" hint="Svar på e‑poster fra appen går til denne personen">
           <select

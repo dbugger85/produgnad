@@ -5,13 +5,14 @@ import { Card, ErrorBox, Loading, Page, TopBar } from '../components/ui'
 import { useAuth } from '../lib/auth'
 import { errorText } from '../lib/errors'
 import { phone } from '../lib/format'
+import { withProfile } from '../lib/offline'
 import { cached, remember } from '../lib/pageCache'
 import { supabase } from '../lib/supabase'
 import type { Order } from '../lib/types'
 
 interface Loaded {
   campaign: { id: string; name: string; organizer_label: string }
-  parent: { name: string; phone: string; child_first_name: string; payment_code: string; user_id: string }
+  parent: { name: string; phone: string; child_first_name: string; payment_code: string; user_id: string | null }
   orders: Order[]
   products: { id: string; name: string; sort_order: number }[]
 }
@@ -28,17 +29,19 @@ export default function PackingPage() {
     async function load() {
       const { data: cp } = await supabase
         .from('campaign_parents')
-        .select('parent_user_id, child_first_name, payment_code, campaign_id, campaigns(id, name, organizer_label), profiles(name, phone)')
+        .select('parent_user_id, child_first_name, offline_name, offline_phone, payment_code, campaign_id, campaigns(id, name, organizer_label), profiles(name, phone)')
         .eq('id', cpId)
         .maybeSingle()
       if (!cp) return setData(null)
       const c = cp as unknown as {
-        parent_user_id: string
+        parent_user_id: string | null
         child_first_name: string
+        offline_name: string
+        offline_phone: string
         payment_code: string
         campaign_id: string
         campaigns: Loaded['campaign']
-        profiles: { name: string; phone: string }
+        profiles: { name: string; phone: string } | null
       }
       const [orders, products] = await Promise.all([
         supabase.from('orders').select('*, order_lines(*)').eq('campaign_parent_id', cpId).is('deleted_at', null).order('created_at'),
@@ -47,7 +50,7 @@ export default function PackingPage() {
       setData(
         remember(key, {
           campaign: c.campaigns,
-          parent: { ...c.profiles, child_first_name: c.child_first_name, payment_code: c.payment_code, user_id: c.parent_user_id },
+          parent: { ...withProfile({ ...c, profiles: c.profiles && { ...c.profiles, email: '' } }).profiles, child_first_name: c.child_first_name, payment_code: c.payment_code, user_id: c.parent_user_id },
           orders: (orders.data as Order[]) ?? [],
           products: products.data ?? [],
         }),
@@ -90,7 +93,7 @@ export default function PackingPage() {
             {data.parent.name}
             {data.parent.child_first_name && <span className="font-normal text-muted"> · {data.parent.child_first_name}</span>}
           </h2>
-          {!own && <p className="text-sm text-muted">{phone(data.parent.phone)} · {data.parent.payment_code}</p>}
+          {!own && <p className="text-sm text-muted">{[phone(data.parent.phone), data.parent.payment_code].filter(Boolean).join(' · ')}</p>}
         </div>
 
         <Card className="space-y-2">

@@ -119,6 +119,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | # | Where | Text |
 |---|---|---|
 | F0 | Top (follows Fremdrift) | **765 kr** til laget via deg · av 1 850 kr solgt · Hele dugnaden · *progress bar* · **2 280 kr** til laget · Mål: **12 000 kr** |
+| F0b | Seller without login (seen by admins) | Uten innlogging: admin legger inn bestillinger og betalinger for *Sara*, og bestillingslenken er slått av *(no link and share boxes, no «Venner ser navnet ditt …»)* |
 | F1 | Box title | Din bestillingslenke |
 | F2 | Buttons (one row) | Kopier · Åpne · QR |
 | F3 | QR print heading | *Kaffesalg* – bestill via *Ola Hansen* · Skriv ut |
@@ -128,7 +129,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | F6b | Under the share text | *a chat card with the link, picture, title and text as Messenger/WhatsApp show it* · Slik ser lenken ut når den deles |
 | F7 | Shown 3 days before deadline | Påminnelse om fristen |
 | F8 | Box title | Oppgjør med de ansvarlige |
-| F8b | Under the title | Du trenger ikke vippse de ansvarlige før varene deles ut |
+| F8b | Under the title | *the admins' «Beskjed om oppgjør» from Oppsett (I20), line breaks kept; nothing when empty).* Default: Du trenger ikke vippse de ansvarlige før varene deles ut |
 | F9 | Rows | Totalt bestilt via deg · Betalt til admin · Gjenstår · Ubetalt fra venner |
 | F10 | Vipps (same as B) | Vipps **1 440 kr** til **Kari Nordmann** · **+47 912 34 567** · Kopier · Skriv **D-1** i meldingen |
 | F11 | Under it | Du kan betale samlet eller i flere deler; skriv D-1 i meldingen hver gang |
@@ -218,6 +219,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | I9 | Foreldre tab | Pakkeliste for alle foreldre → · Barn / Foreldre / Mest til laget · Barn (default): one card per child (*Emma*, the family's totals) with the parent(s) under it, tap a parent for I10; Barn ikke oppgitt (parents who gave no child's name, last) · Emma · 6 bestillinger · **765 kr** til laget · Ola Hansen D-1 · Emma · 4 bestillinger · 0 kr / 1 370 kr · Oppgjort / Skylder 1 370 kr / Betalt 200 kr for mye |
 | I28 | Packing list for admins (per forelder) | Pakkeliste · 1 av 2 poser pakket / Alt er pakket (2 poser) · Igjen å pakke (12 stk) · Én pose per forelder. Trykk når posen er pakket. Se fordelingen per venn under hver forelder · Lise Berg · Jonas · 5 × Kaffe · 5 stk · Sendt · Fordeling per venn (1) → · Ingen bestillinger ennå |
 | I31 | Child's name for admins | Endre navn (on a child's card) · Barn: *Emma H.* (forelderen skrev «*Emma*») · Endre (in a parent's details) · Navn i oversikten / Navn i oversikten (for alle 2 foreldrene) · Bare admin ser dette, for eksempel «Emil H.» når flere barn heter det samme. Foreldre og venner ser fortsatt «*Emma*» · Lagre · Avbryt |
+| I32 | Add a child without login (Foreldre tab) | + Legg til barn · For foreldre som ikke vil logge inn. Du legger inn bestillingene og betalingene deres selv, og de får ingen e-post · Barnets fornavn · Forelderens navn (valgfritt) · Mobilnummer (valgfritt) · Legg til / Lagre · Avbryt · badge Uten innlogging · in details: Barn: *Sara* · *Per Olsen* · *+47 933 33 333* Endre · Uten innlogging: du legger inn bestillinger og betalinger, og forelderen får ingen e-post · + Ny bestilling · Se bestillingene → · new orders start as Egen · no «Forelderen får e-post» when marking goods sent |
 | I10 | Opened parent | Betalinger · Ingen registrert · Beløp (kr) · Dato · Registrer betaling fra Ola · Slett · Merk varer sendt / Varer sendt 7. november 2026 (angre) · Pakkeliste · Se forelderens side → · Fjern fra dugnaden |
 | I11 | Confirms | Slette denne betalingen? · Merke at varene er sendt til Ola Hansen? Forelderen får e-post |
 | I30 | Remove a parent (confirm) | Fjerne *Ola Hansen* fra dugnaden? · Dette slettes for godt: *4 bestillinger (565 kr til laget)* og *1 betaling (200 kr)* / Forelderen har ingen bestillinger eller betalinger. Bestillingslenken slutter å virke. Brukeren beholdes, så forelderen kan melde seg på igjen · Skriv «*Ola Hansen*» for å bekrefte (only when there are orders or payments) · Avbryt · Fjern |
@@ -229,7 +231,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | I17 | Product errors | Beløpet til laget kan ikke være høyere enn prisen · Slette *Kaffe*? Går ikke hvis noen har bestilt den; skjul den i stedet · Kan ikke slette en vare som er bestilt. Fjern haken for «Vises» i stedet · Slette bildet? |
 | I18 | Oppsett: sections | Om dugnaden · Betaling fra foreldre · Tekster foreldrene deler · Avslutning |
 | I19 | Oppsett: fields | Navn på dugnaden · Laget (For eksempel Ready G2018. Brukes som {lag} i tekstene) · Hvem som organiserer (Vises på alle sider. Skriv at det er foreldre/supportere, ikke klubben) · Hva pengene går til · Mål (kr til laget) · Bestillingsfrist · Maks antall per vare i én bestilling |
-| I20 | Oppsett: payment | Foreldrene vippser det de skylder hit, med betalingskoden sin som melding · Vipps-navn · Vipps-nummer · Kontaktperson for e-post (Svar på e-poster fra appen går til denne personen) |
+| I20 | Oppsett: payment | Foreldrene vippser det de skylder hit, med betalingskoden sin som melding · Vipps-navn · Vipps-nummer · Beskjed om oppgjør (Vises for hver forelder over beløpet de skal vippse, for eksempel når og hvor varene deles ut og når de skal betale. Tomt felt: ingen beskjed) · Kontaktperson for e-post (Svar på e-poster fra appen går til denne personen) |
 | I21 | Oppsett: texts | Du kan bruke {barn}, {lag}, {produkter}, {frist}, {lenke}, {forelder}, {beløp}, {kode}, {vipps}. Foreldrene kan endre teksten før de deler · Kort tekst (SMS, chat) · Lang tekst (Facebook) · Påminnelse om frist (Vises for foreldrene de siste tre dagene før fristen) · Betalingspåminnelse (Per ubetalt bestilling. «Hei!» blir til «Hei Kari!») |
 | I25 | Oppsett: Hva som vises | Fremdrift (Linjen med penger til laget og målet, for eksempel «815 kr til laget · Mål: 30 000 kr») · Bidrag per vare (For eksempel «50 kr av hver pose på 120 kr går til laget». Med «Alle» vises det også når lenken deles) · Ansvarlige og kontakt (Navn, rolle og telefon (hvis den enkelte har valgt det) for de ansvarlige. Med «Alle» svarer venner på e-post til kontaktpersonen, ellers til forelderen) · Ikke vist / Foreldre og admin / Alle, også venner · Som admin ser du alltid alt under Oversikt |
 | I22 | Oppsett: closing | Avslutningsmelding (Vises på alle sider når dugnaden er avsluttet: hvor mye som ble samlet inn og hva det betaler) |

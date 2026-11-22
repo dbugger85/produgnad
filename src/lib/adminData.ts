@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { withProfile } from './offline'
 import { cached, remember } from './pageCache'
 import { supabase } from './supabase'
 import type { Campaign, CampaignParent, Order, ParentPayment, ParentTotals, Product } from './types'
@@ -73,7 +74,7 @@ export function useAdminData(campaignId: string) {
         ...p,
         product_images: [...(p.product_images ?? [])].sort((a, b) => a.sort_order - b.sort_order),
       })),
-      parents: (parents.data as AdminData['parents']) ?? [],
+      parents: ((parents.data as AdminData['parents']) ?? []).map(withProfile),
       totals: (totals.data as ParentTotals[]) ?? [],
       orders: (orders.data as Order[]) ?? [],
       payments: (payments.data as ParentPayment[]) ?? [],

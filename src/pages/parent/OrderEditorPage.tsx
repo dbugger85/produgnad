@@ -35,13 +35,15 @@ export default function OrderEditorPage() {
     async function load() {
       const { data: cp } = await supabase
         .from('campaign_parents')
-        .select('campaign_id, campaigns(max_qty_per_line, locked_at, closed_at)')
+        .select('campaign_id, parent_user_id, campaigns(max_qty_per_line, locked_at, closed_at)')
         .eq('id', cpId)
         .maybeSingle()
       if (!cp) return setError('Fant ikke dugnaden')
       const c = cp.campaigns as unknown as { max_qty_per_line: number; locked_at: string | null; closed_at: string | null }
       setMaxQty(c.max_qty_per_line)
       setLocked(!!c.locked_at || !!c.closed_at)
+      // A seller without login (added by an admin) usually buys products to sell on their own
+      if (!orderId && cp.parent_user_id === null) setType('own')
 
       let existing: Order | null = null
       if (orderId) {

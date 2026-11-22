@@ -4,6 +4,7 @@ import { Badge, Button, Card, ErrorBox, Field, Input } from '../../components/ui
 import { adminChildName, saveChildLabel, type AdminData } from '../../lib/adminData'
 import { errorText } from '../../lib/errors'
 import { kr, longDate, phone, todayOslo } from '../../lib/format'
+import { isOffline } from '../../lib/offline'
 import { supabase } from '../../lib/supabase'
 import { useConfirm } from '../../components/Confirm'
 
@@ -13,6 +14,8 @@ type Row = { parent: AdminData['parents'][number]; totals: Totals | undefined }
 const num = (v: unknown) => Number(v ?? 0)
 const ordersText = (n: number) => `${n} ${n === 1 ? 'bestilling' : 'bestillinger'}`
 const parentName = (p: Row['parent']) => p.profiles.name || p.profiles.email
+/** Marks a seller an admin added for a parent who doesn't log in */
+const OfflineBadge = ({ parent }: { parent: Row['parent'] }) => (isOffline(parent) ? <Badge>Uten innlogging</Badge> : null)
 
 /** Paid / owed and whether it's settled, for one parent or a whole family */
 function Owing({ paid, owed }: { paid: number; owed: number }) {
@@ -65,13 +68,36 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
     )
   const toggle = (id: string) => setOpen(open === id ? null : id)
   const [editing, setEditing] = useState<string | null>(null)
+  const [adding, setAdding] = useState(false)
+
+  const addChild = adding ? (
+    <SellerForm
+      campaignId={data.campaign.id}
+      onDone={async (id) => {
+        setAdding(false)
+        if (!id) return
+        await reload()
+        setOpen(id)
+      }}
+    />
+  ) : (
+    <Button variant="secondary" onClick={() => setAdding(true)} disabled={!!data.campaign.closed_at}>
+      + Legg til barn
+    </Button>
+  )
 
   const packingLink = (
     <Link to={`/admin/d/${data.campaign.id}/pakkelister`} className="block w-fit font-semibold text-brand">
       Pakkeliste for alle foreldre →
     </Link>
   )
-  if (rows.length === 0) return <p className="text-muted">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt</p>
+  if (rows.length === 0)
+    return (
+      <div className="space-y-3">
+        <p className="text-muted">Ingen foreldre har meldt seg på ennå. Del påmeldingslenken fra Oversikt</p>
+        {addChild}
+      </div>
+    )
 
   return (
     <div className="space-y-2">
@@ -92,6 +118,7 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
           ))}
         </div>
       </div>
+      {addChild}
 
       {sortBy === 'child'
         ? byChild(rows).map((g) => {
@@ -130,7 +157,8 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
                     <button type="button" className="flex w-full items-start justify-between gap-2 text-left" onClick={() => toggle(parent.id)}>
                       <div>
                         <div className="font-semibold">
-                          {parentName(parent)} <span className="font-normal text-muted">{parent.payment_code}</span>
+                          {parentName(parent)} <span className="font-normal text-muted">{parent.payment_code}</span>{' '}
+                          <OfflineBadge parent={parent} />
                         </div>
                         {g.rows.length > 1 && (
                           <div className="text-sm text-muted">
@@ -151,7 +179,8 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
               <button type="button" className="flex w-full items-start justify-between gap-2 text-left" onClick={() => toggle(parent.id)}>
                 <div>
                   <div className="font-bold">
-                    {parentName(parent)} <span className="font-normal text-muted">{parent.payment_code}</span>
+                    {parentName(parent)} <span className="font-normal text-muted">{parent.payment_code}</span>{' '}
+                    <OfflineBadge parent={parent} />
                   </div>
                   <div className="text-sm text-muted">
                     {adminChildName(parent) && `${adminChildName(parent)} · `}
@@ -235,6 +264,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
   const [busy, setBusy] = useState(false)
   const ask = useConfirm()
   const [editingChild, setEditingChild] = useState(false)
+  const offline = isOffline(parent)
 
   async function addPayment() {
     setError('')
@@ -257,7 +287,8 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
 
   async function toggleSent() {
     const next = parent.goods_sent_at ? null : new Date().toISOString()
-    if (next && !(await ask(`Merke at varene er sendt til ${parent.profiles.name}? Forelderen får e‑post`, { confirm: 'Merk sendt' }))) return
+    const question = `Merke at varene er sendt til ${parent.profiles.name}?${offline ? '' : ' Forelderen får e‑post'}`
+    if (next && !(await ask(question, { confirm: 'Merk sendt' }))) return
     await supabase.from('campaign_parents').update({ goods_sent_at: next }).eq('id', parentId)
     await reload()
   }
@@ -272,8 +303,10 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
     ].filter(Boolean)
     const message = [
       lost.length ? `Dette slettes for godt: ${lost.join(' og ')}` : 'Forelderen har ingen bestillinger eller betalinger',
-      'Bestillingslenken slutter å virke. Brukeren beholdes, så forelderen kan melde seg på igjen',
-    ].join('. ')
+      offline ? '' : 'Bestillingslenken slutter å virke. Brukeren beholdes, så forelderen kan melde seg på igjen',
+    ]
+      .filter(Boolean)
+      .join('. ')
     const ok = await ask(message, {
       title: `Fjerne ${name} fra dugnaden?`,
       confirm: 'Fjern',
@@ -291,10 +324,35 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
 
   return (
     <div className="space-y-3 border-t border-line pt-3 text-sm">
-      <p>
-        {phone(parent.profiles.phone)} · {parent.profiles.email}
-      </p>
-      {editingChild ? (
+      {offline ? (
+        editingChild ? (
+          <SellerForm
+            campaignId={data.campaign.id}
+            parent={parent}
+            onDone={async (id) => {
+              setEditingChild(false)
+              if (id) await reload()
+            }}
+          />
+        ) : (
+          <>
+            <p>
+              Barn: {parent.child_first_name}
+              {parent.offline_name && ` · ${parent.offline_name}`}
+              {parent.offline_phone && ` · ${phone(parent.offline_phone)}`}{' '}
+              <button type="button" className="font-semibold text-brand" onClick={() => setEditingChild(true)}>
+                Endre
+              </button>
+            </p>
+            <p className="text-muted">Uten innlogging: du legger inn bestillinger og betalinger, og forelderen får ingen e‑post</p>
+          </>
+        )
+      ) : (
+        <p>
+          {phone(parent.profiles.phone)} · {parent.profiles.email}
+        </p>
+      )}
+      {offline ? null : editingChild ? (
         <ChildNameForm
           parents={[parent]}
           initial={adminChildName(parent)}
@@ -342,7 +400,7 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
           <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </Field>
         <Button type="submit" className="col-span-2" disabled={busy}>
-          Registrer betaling fra {parent.profiles.name.split(' ')[0] || 'forelder'}
+          Registrer betaling fra {(offline ? parent.offline_name : parent.profiles.name).split(' ')[0] || 'forelder'}
         </Button>
       </form>
       <ErrorBox>{error}</ErrorBox>
@@ -353,8 +411,13 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
         <Link to={`/pakkeliste/${parent.id}`} className="inline-flex min-h-11 items-center px-2 font-semibold text-brand">
           Pakkeliste
         </Link>
+        {offline && (
+          <Link to={`/forelder/${parent.id}/ny`} className="inline-flex min-h-11 items-center px-2 font-semibold text-brand">
+            + Ny bestilling
+          </Link>
+        )}
         <Link to={`/forelder/${parent.id}`} className="inline-flex min-h-11 items-center px-2 font-semibold text-brand">
-          Se forelderens side →
+          {offline ? 'Se bestillingene →' : 'Se forelderens side →'}
         </Link>
       </div>
       <div className="border-t border-line pt-3">
@@ -363,5 +426,71 @@ function ParentDetail({ data, parentId, reload }: { data: AdminData; parentId: s
         </Button>
       </div>
     </div>
+  )
+}
+
+/** Adds or changes a seller without login: a child whose parent doesn't want to log in */
+function SellerForm({
+  campaignId,
+  parent,
+  onDone,
+}: {
+  campaignId: string
+  parent?: AdminData['parents'][number]
+  onDone: (id: string | null) => Promise<void> | void
+}) {
+  const [child, setChild] = useState(parent?.child_first_name ?? '')
+  const [name, setName] = useState(parent?.offline_name ?? '')
+  const [tel, setTel] = useState(parent?.offline_phone ?? '')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  async function save() {
+    setError('')
+    setBusy(true)
+    const { data, error } = await supabase.rpc('admin_save_seller', {
+      p_campaign_id: campaignId,
+      p_child_first_name: child,
+      p_name: name,
+      p_phone: tel,
+      p_campaign_parent_id: parent?.id ?? null,
+    })
+    setBusy(false)
+    if (error) return setError(errorText(error))
+    await onDone(data as string)
+  }
+
+  return (
+    <form
+      className="space-y-2 rounded-xl bg-cream p-3 text-sm ring-1 ring-line"
+      onSubmit={(e) => {
+        e.preventDefault()
+        void save()
+      }}
+    >
+      {!parent && (
+        <p className="text-muted">
+          For foreldre som ikke vil logge inn. Du legger inn bestillingene og betalingene deres selv, og de får ingen e‑post
+        </p>
+      )}
+      <Field label="Barnets fornavn">
+        <Input value={child} onChange={(e) => setChild(e.target.value)} maxLength={40} required autoFocus />
+      </Field>
+      <Field label="Forelderens navn (valgfritt)">
+        <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={80} autoComplete="off" />
+      </Field>
+      <Field label="Mobilnummer (valgfritt)">
+        <Input value={tel} onChange={(e) => setTel(e.target.value)} maxLength={30} inputMode="tel" autoComplete="off" />
+      </Field>
+      <ErrorBox>{error}</ErrorBox>
+      <div className="flex gap-2">
+        <Button type="submit" disabled={busy || !child.trim()}>
+          {busy ? 'Lagrer …' : parent ? 'Lagre' : 'Legg til'}
+        </Button>
+        <Button type="button" variant="secondary" onClick={() => void onDone(null)}>
+          Avbryt
+        </Button>
+      </div>
+    </form>
   )
 }

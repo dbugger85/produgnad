@@ -114,15 +114,18 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
     .eq('id', row.campaign_parent_id)
     .single()
   if (!cp) return null
-  const parentName: string = cp.profiles?.name ?? ''
+  // A seller without login (added by an admin) has no profile: the admin-entered name and phone
+  const parentName: string = cp.profiles?.name ?? cp.offline_name ?? ''
+  const parentPhone: string = cp.profiles?.phone ?? cp.offline_phone ?? ''
+  const parentEmail: string = cp.profiles?.email ?? ''
   // Emails to friends: replies go to the parent they ordered through, unless the campaign shows
   // its admins to everyone (Oppsett → Ansvarlige og kontakt = Alle)
   const wrapFriend = (subject: string, body: string): Rendered => {
     if (campaign.admins_visibility === 'all' && contact?.email) return wrap(subject, body)
     const first = parentName.split(' ')[0]
-    const line = first ? `Spørsmål? Svar på denne e‑posten, så kommer den til ${esc(first)}` : ''
+    const line = first && parentEmail ? `Spørsmål? Svar på denne e‑posten, så kommer den til ${esc(first)}` : ''
     const html = layout(campaign, line, body)
-    return { ...base, replyTo: cp.profiles?.email || null, subject, html, text: htmlToText(html) }
+    return { ...base, replyTo: parentEmail || null, subject, html, text: htmlToText(html) }
   }
 
   if (row.kind === 'friend_order' || row.kind === 'friend_paid') {
@@ -143,7 +146,7 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
         `<h1 style="font-size:20px;margin:0 0 12px">Takk for bestillingen, ${esc(order.buyer_first_name)}!</h1>
 <table style="width:100%;font-size:15px;border-collapse:collapse">${lines}
 <tr><td style="padding-top:8px;font-weight:700">Totalt</td><td style="padding-top:8px;text-align:right;white-space:nowrap;padding-left:12px;font-weight:700">${kr(amount)}</td></tr></table>
-${vippsBlock(amount, parentName, cp.profiles?.phone ?? '', order.code)}
+${vippsBlock(amount, parentName, parentPhone, order.code)}
 ${button(statusUrl, 'Se status på bestillingen')}
 <p>${esc(parentName)} leverer varene når de kommer</p>`,
       )

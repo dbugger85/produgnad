@@ -10,6 +10,7 @@ import { signOut, useAuth } from '../../lib/auth'
 import { errorText } from '../../lib/errors'
 import { daysUntil, kr, longDate, phone } from '../../lib/format'
 import { useParentData } from '../../lib/parentData'
+import { isOffline } from '../../lib/offline'
 import { supabase } from '../../lib/supabase'
 import { baseVars, fill, parentLink } from '../../lib/templates'
 import { ORDER_TYPE_LABEL, orderAmount, orderUnits, type Order } from '../../lib/types'
@@ -52,6 +53,9 @@ export default function ParentPage() {
   const { cp, orders, totals, payments, page } = data
   const campaign = cp.campaigns
   const open = !campaign.locked_at && !campaign.closed_at
+  // Admins may add and change orders after the lock too (the database allows it)
+  const canEdit = open || !!profile?.is_admin
+  const offline = isOffline(cp)
   const owedLeft = Number(totals?.diff ?? 0)
   const link = parentLink(cp.link_code)
   const days = daysUntil(campaign.deadline)
@@ -92,6 +96,10 @@ export default function ParentPage() {
         {campaign.closed_at && <Notice>Dugnaden er avsluttet</Notice>}
         {cp.goods_sent_at && <Notice>Varene dine er sendt fra de ansvarlige ({longDate(cp.goods_sent_at)})</Notice>}
 
+        {offline && <Notice>Uten innlogging: admin legger inn bestillinger og betalinger for {cp.child_first_name}, og bestillingslenken er slått av</Notice>}
+
+        {!offline && (
+        <>
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">Din bestillingslenke</h2>
           <p className="break-all rounded-lg bg-cream p-2 font-mono text-sm">{link}</p>
@@ -140,10 +148,12 @@ export default function ParentPage() {
             </div>
           )}
         </Card>
+        </>
+        )}
 
         <Card className="space-y-3">
           <h2 className="text-lg font-bold">Oppgjør med de ansvarlige</h2>
-          <p className="text-sm">Du trenger ikke vippse de ansvarlige før varene deles ut</p>
+          {campaign.payment_note?.trim() && <p className="text-sm whitespace-pre-line">{campaign.payment_note.trim()}</p>}
           <dl className="grid grid-cols-2 gap-y-1 text-sm">
             <dt>Totalt bestilt via deg</dt>
             <dd className="text-right font-semibold">{kr(totals?.owed)}</dd>
@@ -192,7 +202,7 @@ export default function ParentPage() {
                   <Button variant="secondary">Pakkeliste</Button>
                 </Link>
               )}
-              {open && (
+              {canEdit && (
                 <Link to={`/forelder/${cp.id}/ny`}>
                   <Button>+ Ny</Button>
                 </Link>
@@ -218,7 +228,7 @@ export default function ParentPage() {
               key={o.id}
               order={o}
               cpId={cp.id}
-              editable={open}
+              editable={canEdit}
               canGive={!campaign.closed_at}
               productNames={Object.fromEntries((page?.products ?? []).map((p) => [p.id, p.name]))}
               reminder={fill(campaign, 'paymentReminder', {
@@ -232,10 +242,12 @@ export default function ParentPage() {
           ))}
         </section>
 
+        {!offline && (
         <p className="text-sm text-muted">
           Venner ser navnet ditt og nummeret {phone(cp.profiles.phone)} når de bestiller. Svarer de på en e‑post fra
           appen, går svaret til e‑postadressen din. Betalingskoden din til admin er {cp.payment_code}
         </p>
+        )}
         {page && (
           <>
             <hr className="border-line" />

@@ -98,6 +98,8 @@ export interface Campaign {
   reminder_template: string
   payment_reminder_template: string
   closing_message: string
+  /** Note to parents on their page, above what they owe (when products are handed out etc.) */
+  payment_note: string
   max_qty_per_line: number
   progress_visibility: Visibility
   contribution_visibility: Visibility
@@ -133,13 +135,17 @@ export interface ProductImageRow {
 export interface CampaignParent {
   id: string
   campaign_id: string
-  parent_user_id: string
+  /** null: a seller without login, added by an admin (see lib/offline.ts) */
+  parent_user_id: string | null
   child_first_name: string
+  /** Name and phone the admin entered for a seller without login */
+  offline_name: string
+  offline_phone: string
   link_code: string
   payment_code: string
   goods_sent_at: string | null
   packed_at: string | null
-  profiles?: Pick<Profile, 'name' | 'phone' | 'email'>
+  profiles?: Pick<Profile, 'name' | 'phone' | 'email'> | null
 }
 
 export interface OrderLine {
