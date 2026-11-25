@@ -34,7 +34,7 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
     if (field === 'paid') {
       const { error } = await supabase.rpc('set_order_paid', { p_order_id: o.id, p_paid: value })
       // Send the receipt email now instead of with the next round (fire and forget)
-      if (value && !error && o.wants_email) void supabase.functions.invoke('send-emails').catch(() => {})
+      if (value && !error && o.wants_receipt) void supabase.functions.invoke('send-emails').catch(() => {})
     }
     else await supabase.rpc('set_order_delivered', { p_order_id: o.id, p_delivered: value })
     await reload()

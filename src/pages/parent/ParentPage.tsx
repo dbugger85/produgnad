@@ -240,7 +240,7 @@ export default function ParentPage() {
                 act(async () => {
                   const result = await supabase.rpc('set_order_paid', { p_order_id: o.id, p_paid: paid })
                   // Send the receipt email now instead of with the next round (fire and forget)
-                  if (paid && !result.error && o.wants_email) void supabase.functions.invoke('send-emails').catch(() => {})
+                  if (paid && !result.error && o.wants_receipt) void supabase.functions.invoke('send-emails').catch(() => {})
                   return result
                 })
               }

@@ -149,10 +149,12 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
 <tr><td style="padding-top:8px;font-weight:700">Totalt</td><td style="padding-top:8px;text-align:right;white-space:nowrap;padding-left:12px;font-weight:700">${kr(amount)}</td></tr></table>
 ${vippsBlock(amount, parentName, parentPhone, order.code)}
 ${button(statusUrl, 'Se status på bestillingen')}
-<p>${esc(parentName)} leverer varene når de kommer. Når ${esc(parentName.split(' ')[0])} har registrert betalingen, får du en kvittering på e‑post</p>`,
+<p>${esc(parentName)} leverer varene når de kommer${order.wants_receipt ? `. Når ${esc(parentName.split(' ')[0])} har registrert betalingen, får du kvitteringen som PDF på e‑post` : ''}</p>`,
       )
     }
-    // The «paid» email is the receipt (kvittering): same content as the page /kvittering/<token>
+    // The «paid» email is the receipt (kvittering), only for friends who ticked «Jeg trenger
+    // kvittering»: same content as the page /kvittering/<token>, with the PDF attached
+    if (!order.wants_receipt) return null
     const paidAt = order.paid_to_parent_at ?? row.created_at ?? new Date().toISOString()
     const team = campaign.team_name || campaign.organizer_label
     const cell = 'padding:8px 0;vertical-align:top;border-top:1px solid #e7e5e4'
@@ -160,14 +162,11 @@ ${button(statusUrl, 'Se status på bestillingen')}
       .map((l: { qty: number; unit_price: number; products: { name: string } }) =>
         `<tr><td style="${cell}">${l.qty} × ${esc(l.products.name)} <span style="white-space:nowrap">à ${kr(l.unit_price)}</span></td><td style="${cell};text-align:right;white-space:nowrap;padding-left:12px">${kr(l.qty * Number(l.unit_price))}</td></tr>`)
       .join('')
-    // A friend who ticked «Jeg trenger kvittering» gets the receipt as a PDF too
     let attachments: Rendered['attachments']
-    if (order.wants_receipt) {
-      const { data: receipt } = await db.rpc('order_status_by_token', { p_token: order.status_token })
-      if (receipt?.paid_at) {
-        const pdf = await receiptPdf(receipt as ReceiptData, await loadLogo())
-        attachments = [{ filename: receiptFileName(order.code), content: encodeBase64(pdf) }]
-      }
+    const { data: receipt } = await db.rpc('order_status_by_token', { p_token: order.status_token })
+    if (receipt?.paid_at) {
+      const pdf = await receiptPdf(receipt as ReceiptData, await loadLogo())
+      attachments = [{ filename: receiptFileName(order.code), content: encodeBase64(pdf) }]
     }
     const paidEmail = wrapFriend(
       `Kvittering for bestilling ${order.code}`,

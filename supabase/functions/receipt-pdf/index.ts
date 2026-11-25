@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
   if (!data) return new Response('Fant ikke bestillingen', { status: 404, headers: cors })
   if (!data.paid_at) return new Response('Kvitteringen kommer når betalingen er registrert', { status: 409, headers: cors })
   const pdf = await receiptPdf(data as ReceiptData, await loadLogo())
-  return new Response(pdf, {
+  return new Response(pdf as Uint8Array<ArrayBuffer>, {
     headers: {
       ...cors,
       'Content-Type': 'application/pdf',
