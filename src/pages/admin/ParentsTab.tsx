@@ -36,8 +36,8 @@ function Owing({ paid, owed }: { paid: number; owed: number }) {
   )
 }
 
-/** Children by first name (case and spaces ignored); parents who gave no name go last */
-function byChild(rows: Row[]) {
+/** Children by first name (case and spaces ignored), A–Å or most to the team first; parents who gave no name go last */
+function byChild(rows: Row[], sort: Sort) {
   const groups = new Map<string, { name: string; rows: Row[] }>()
   for (const r of rows) {
     const name = adminChildName(r.parent)
@@ -51,18 +51,45 @@ function byChild(rows: Row[]) {
     }
   }
   for (const g of groups.values()) g.name = g.name.charAt(0).toLocaleUpperCase('nb') + g.name.slice(1)
+  const toTeam = (g: { rows: Row[] }) => g.rows.reduce((n, r) => n + num(r.totals?.to_team), 0)
   return [...groups.values()].sort((a, b) =>
-    !a.name ? 1 : !b.name ? -1 : a.name.localeCompare(b.name, 'nb'),
+    !a.name ? 1 : !b.name ? -1 : sort === 'team' ? toTeam(b) - toTeam(a) : a.name.localeCompare(b.name, 'nb'),
+  )
+}
+
+type View = 'child' | 'parent'
+type Sort = 'alpha' | 'team'
+
+/** A row of round buttons for one choice */
+function Choice<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: [T, string][]; onChange: (v: T) => void }) {
+  return (
+    <div className="flex items-center gap-1 text-sm" role="radiogroup" aria-label={label}>
+      <span className="mr-1 text-muted">{label}</span>
+      {options.map(([k, text]) => (
+        <button
+          key={k}
+          type="button"
+          role="radio"
+          aria-checked={value === k}
+          onClick={() => onChange(k)}
+          className={`rounded-full px-3 py-1 ${value === k ? 'bg-ink text-white' : 'bg-line'}`}
+        >
+          {text}
+        </button>
+      ))}
+    </div>
   )
 }
 
 export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Promise<void> }) {
   const [open, setOpen] = useState<string | null>(null)
-  const [sortBy, setSortBy] = useState<'child' | 'name' | 'team'>('child')
+  // What to show (children or parents) and the order (A–Å or most to the team) are separate choices
+  const [view, setView] = useState<View>('child')
+  const [sort, setSort] = useState<Sort>('alpha')
   const rows: Row[] = data.parents
     .map((p) => ({ parent: p, totals: data.totals.find((t) => t.campaign_parent_id === p.id) }))
     .sort((a, b) =>
-      sortBy === 'team'
+      sort === 'team'
         ? num(b.totals?.to_team) - num(a.totals?.to_team)
         : parentName(a.parent).localeCompare(parentName(b.parent), 'nb'),
     )
@@ -103,25 +130,15 @@ export function ParentsTab({ data, reload }: { data: AdminData; reload: () => Pr
     <div className="space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         {packingLink}
-        <div className="flex gap-1 text-sm" role="radiogroup" aria-label="Vis">
-          {(['child', 'name', 'team'] as const).map((k) => (
-            <button
-              key={k}
-              type="button"
-              role="radio"
-              aria-checked={sortBy === k}
-              onClick={() => setSortBy(k)}
-              className={`rounded-full px-3 py-1 ${sortBy === k ? 'bg-ink text-white' : 'bg-line'}`}
-            >
-              {k === 'child' ? 'Barn' : k === 'name' ? 'Foreldre' : 'Mest til laget'}
-            </button>
-          ))}
+        <div className="flex flex-wrap gap-x-4 gap-y-2">
+          <Choice label="Vis" value={view} onChange={setView} options={[['child', 'Barn'], ['parent', 'Foreldre']]} />
+          <Choice label="Sorter" value={sort} onChange={setSort} options={[['alpha', 'A–Å'], ['team', 'Mest til laget']]} />
         </div>
       </div>
       {addChild}
 
-      {sortBy === 'child'
-        ? byChild(rows).map((g) => {
+      {view === 'child'
+        ? byChild(rows, sort).map((g) => {
             const sum = (f: keyof Totals) => g.rows.reduce((n, r) => n + num(r.totals?.[f]), 0)
             const orders = sum('order_count')
             return (
