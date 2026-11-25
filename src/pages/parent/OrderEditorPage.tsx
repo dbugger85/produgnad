@@ -64,6 +64,15 @@ export default function OrderEditorPage() {
         .eq('campaign_id', cp.campaign_id)
         .order('sort_order')
       const onOrder = new Set(existing?.order_lines.map((l) => l.product_id) ?? [])
+      // Stock left for this order: what's left for everyone plus what this order already has
+      const { data: stockRows } = await supabase.rpc('campaign_stock', { p_campaign_id: cp.campaign_id })
+      const stock = (stockRows ?? {}) as Record<string, { stock: number; sold: number }>
+      const leftFor = (id: string) => {
+        const s = stock[id]
+        if (!s) return null
+        const mine = existing?.order_lines.find((l) => l.product_id === id)?.qty ?? 0
+        return Math.max(0, s.stock - s.sold) + mine
+      }
       setProducts(
         ((rows as Product[]) ?? [])
           .filter((p) => p.active || onOrder.has(p.id))
@@ -74,6 +83,7 @@ export default function OrderEditorPage() {
             // Existing lines keep the price from when they were ordered.
             price: existing?.order_lines.find((l) => l.product_id === p.id)?.unit_price ?? p.price,
             to_team_amount: p.to_team_amount,
+            remaining: leftFor(p.id),
             images: [...(p.product_images ?? [])]
               .sort((a, b) => a.sort_order - b.sort_order)
               .map((i) => ({ path: i.storage_path, thumb: i.thumb_path, width: i.width, height: i.height })),

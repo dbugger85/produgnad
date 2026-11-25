@@ -323,8 +323,9 @@ describe('parent', () => {
     await parentA.client.rpc('set_order_paid', { p_order_id: id, p_paid: true })
     let s = (await anon().rpc('order_status_by_token', { p_token: friendOrder.status_token })).data
     assert.equal(s.status, 'betalt')
+    // No receipt asked for: no «paid» email (receipt emails are tested under «receipt on request»)
     const mail = await service.from('email_outbox').select('id').eq('dedupe_key', `friend_paid:${id}`)
-    assert.equal(mail.data.length, 1)
+    assert.equal(mail.data.length, 0)
     await parentA.client.rpc('set_order_delivered', { p_order_id: id, p_delivered: true })
     s = (await anon().rpc('order_status_by_token', { p_token: friendOrder.status_token })).data
     assert.equal(s.status, 'levert')
@@ -775,5 +776,75 @@ describe('sellers without login (added by admins)', () => {
       assert.equal((await service.from(table).select('id').eq(col, cp)).data.length, 0, table)
     }
     await admin.client.rpc('delete_campaign', { p_campaign_id: c.id, p_name: c.name })
+  })
+})
+
+describe('stock per product', () => {
+  test('stock counts units already sold; nobody can buy more than is left', async () => {
+    const { data: socks, error } = await admin.client
+      .from('products')
+      .insert({ campaign_id: campaign.id, name: 'Sokker', price: 100, to_team_amount: 20, sort_order: 9, active: true })
+      .select()
+      .single()
+    assert.ifError(error)
+    const line = (qty) => [{ product_id: socks.id, qty }]
+    // 3 sold before the stock is set
+    const own = await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_type: 'own', p_lines: line(3) })
+    assert.ifError(own.error)
+    expectError(await admin.client.from('products').update({ stock: 2 }).eq('id', socks.id), 'STOCK_BELOW_SOLD\\|3')
+    expectError(await parentA.client.from('products').update({ stock: 99 }).eq('id', socks.id).select().single())
+    assert.ifError((await admin.client.from('products').update({ stock: 5 }).eq('id', socks.id)).error)
+
+    const left = async () =>
+      (await anon().rpc('public_campaign_by_link', { p_link_code: linkA })).data.products.find((p) => p.id === socks.id).remaining
+    assert.equal(await left(), 2)
+    assert.equal((await anon().rpc('public_campaign_by_link', { p_link_code: linkA })).data.products.find((p) => p.id === coffee.id).remaining, null)
+
+    expectError(await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Ida', p_lines: line(3) }), 'OUT_OF_STOCK\\|2\\|Sokker')
+    const ok = await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Ida', p_lines: line(2) })
+    assert.ifError(ok.error)
+    assert.equal(await left(), 0)
+    expectError(await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Ola', p_lines: line(1) }), 'OUT_OF_STOCK\\|0\\|Sokker')
+    expectError(await parentB.client.rpc('save_order', { p_campaign_parent_id: cpB, p_type: 'own', p_lines: line(1) }), 'OUT_OF_STOCK')
+
+    // Parents and admins see stock and sold; strangers and friends don't
+    const st = await parentB.client.rpc('campaign_stock', { p_campaign_id: campaign.id })
+    assert.deepEqual(st.data[socks.id], { stock: 5, sold: 5 })
+    assert.deepEqual((await outsider.client.rpc('campaign_stock', { p_campaign_id: campaign.id })).data, {})
+    expectError(await anon().rpc('campaign_stock', { p_campaign_id: campaign.id }))
+
+    // Shrinking is fine when sold out; it frees units, and so does deleting
+    assert.ifError((await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_type: 'own', p_lines: line(2), p_order_id: own.data.id })).error)
+    assert.equal(await left(), 1)
+    expectError(await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_type: 'own', p_lines: line(4), p_order_id: own.data.id }), 'OUT_OF_STOCK\\|1')
+    assert.ifError((await parentA.client.rpc('delete_order', { p_order_id: own.data.id })).error)
+    assert.equal(await left(), 3)
+
+    // Giving away extra units moves them between orders: the count stays the same
+    const extra = await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_type: 'extra', p_lines: line(3) })
+    assert.ifError(extra.error)
+    assert.equal(await left(), 0)
+    const given = await parentA.client.rpc('assign_extra', { p_order_id: extra.data.id, p_buyer_first_name: 'Nabo', p_lines: line(1) })
+    assert.ifError(given.error)
+    assert.ifError((await parentA.client.rpc('save_order', { p_campaign_parent_id: cpA, p_type: 'friend', p_buyer_first_name: 'Nabo', p_lines: line(3), p_order_id: given.data.id })).error)
+    assert.equal(await left(), 0)
+
+    const ids = (await service.from('order_lines').select('order_id').eq('product_id', socks.id)).data.map((r) => r.order_id)
+    await service.from('orders').delete().in('id', ids)
+    await service.from('products').delete().eq('id', socks.id)
+  })
+
+  test('the receipt email only goes to friends who asked for a receipt', async () => {
+    const lines = [{ product_id: coffee.id, qty: 1 }]
+    const { data: placed, error } = await anon().rpc('create_friend_order', {
+      p_link_code: linkA, p_first_name: 'Siv', p_lines: lines, p_email: `siv-${run}@example.com`, p_wants_email: true,
+    })
+    assert.ifError(error)
+    const { data: row } = await service.from('orders').select('id').eq('status_token', placed.status_token).single()
+    assert.ifError((await parentA.client.rpc('set_order_paid', { p_order_id: row.id, p_paid: true })).error)
+    const { data: queued } = await service.from('email_outbox').select('kind').eq('order_id', row.id)
+    assert.deepEqual(queued.map((r) => r.kind), ['friend_order'])
+    await service.from('email_outbox').delete().eq('order_id', row.id)
+    await service.from('orders').delete().eq('id', row.id)
   })
 })

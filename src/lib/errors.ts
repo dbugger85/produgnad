@@ -35,6 +35,11 @@ export function errorText(error: unknown): string {
     typeof error === 'object' && error && 'message' in error
       ? String((error as { message: unknown }).message)
       : String(error ?? '')
+  // Codes with values: OUT_OF_STOCK|<left>|<product name>, STOCK_BELOW_SOLD|<sold>
+  const stock = raw.match(/OUT_OF_STOCK\|(\d+)\|(.*)/)
+  if (stock) return Number(stock[1]) > 0 ? `Det er bare ${stock[1]} igjen av ${stock[2]}` : `${stock[2]} er utsolgt`
+  const below = raw.match(/STOCK_BELOW_SOLD\|(\d+)/)
+  if (below) return `Det er allerede solgt ${below[1]}, så lageret kan ikke være lavere`
   for (const code of Object.keys(messages)) {
     if (raw.includes(code)) return messages[code]
   }

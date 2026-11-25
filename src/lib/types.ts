@@ -49,6 +49,8 @@ export interface PublicProduct {
   price: number
   /** Null when the campaign doesn't show the contribution to this viewer */
   to_team_amount: number | null
+  /** How many can still be bought; null or missing = no stock limit */
+  remaining?: number | null
   images: ProductImage[]
 }
 
@@ -125,6 +127,8 @@ export interface Product {
   to_team_amount: number
   active: boolean
   sort_order: number
+  /** Total available, units already sold included; null = no limit */
+  stock: number | null
   product_images?: ProductImageRow[]
 }
 

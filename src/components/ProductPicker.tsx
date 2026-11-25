@@ -26,6 +26,10 @@ export function ProductPicker({
     <div className="space-y-3">
       {products.map((p) => {
         const main = p.images[0]
+        const qty = quantities[p.id] ?? 0
+        const limited = p.remaining !== null && p.remaining !== undefined
+        const max = limited ? Math.min(maxQty, p.remaining!) : maxQty
+        const soldOut = limited && p.remaining === 0 && qty === 0
         return (
           <article key={p.id} className="flex gap-3 rounded-[20px] bg-white/85 p-3 shadow-card ring-1 ring-line/80">
             {main ? (
@@ -52,10 +56,17 @@ export function ProductPicker({
               <h3 className="font-bold leading-tight">{p.name}</h3>
               {p.description && <RichText text={p.description} className="text-sm text-muted" />}
               <div className="mt-auto flex items-end justify-between gap-2 pt-2">
-                <span className="font-bold">{kr(p.price)}</span>
+                <span>
+                  <span className="block font-bold">{kr(p.price)}</span>
+                  {soldOut ? (
+                    <span className="block text-sm font-semibold text-red-700">Utsolgt</span>
+                  ) : (
+                    limited && p.remaining! <= 10 && <span className="block text-sm text-muted">{p.remaining} igjen</span>
+                  )}
+                </span>
                 <QtyStepper
-                  value={quantities[p.id] ?? 0}
-                  max={maxQty}
+                  value={qty}
+                  max={max}
                   label={p.name}
                   onChange={(n) => onChange({ ...quantities, [p.id]: n })}
                 />

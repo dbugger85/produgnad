@@ -61,6 +61,22 @@ export default function FriendOrderPage() {
     })
   }, [code])
 
+  // Someone else bought the last ones meanwhile: fresh stock, and no more in the basket than is left
+  async function refreshStock() {
+    const { data } = await publicClient.rpc('public_campaign_by_link', { p_link_code: code })
+    const fresh = data as LinkPage | null
+    if (!fresh) return
+    setPage(fresh)
+    setQuantities((q) =>
+      Object.fromEntries(
+        Object.entries(q).map(([id, n]) => {
+          const left = fresh.products.find((p) => p.id === id)?.remaining
+          return [id, left === null || left === undefined ? n : Math.min(n, left)]
+        }),
+      ),
+    )
+  }
+
   const total = useMemo(() => (page ? quantitiesTotal(page.products, quantities) : 0), [page, quantities])
 
   if (loadError) return <Page><ErrorBox>{loadError}</ErrorBox></Page>
@@ -96,7 +112,10 @@ export default function FriendOrderPage() {
       p_wants_receipt: wantsReceipt,
     })
     setSending(false)
-    if (error) return setError(errorText(error))
+    if (error) {
+      if (error.message.includes('OUT_OF_STOCK')) void refreshStock()
+      return setError(errorText(error))
+    }
     const result = data as Placed
     rememberOrder({
       link_code: code,

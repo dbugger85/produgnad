@@ -46,7 +46,7 @@ export default function CampaignPage() {
         {tab === 'oversikt' && <OverviewTab data={data} reload={reload} />}
         {tab === 'foreldre' && <ParentsTab data={data} reload={reload} />}
         {tab === 'bestillinger' && <OrdersTab data={data} reload={reload} />}
-        {tab === 'produkter' && <ProductsTab campaignId={id} products={data.products} reload={reload} />}
+        {tab === 'produkter' && <ProductsTab campaignId={id} products={data.products} orders={data.orders} reload={reload} />}
         {tab === 'oppsett' && <CampaignSettings key={data.campaign.id} campaign={data.campaign} onSaved={reload} />}
         <Link to="/admin" className="block pt-4 text-sm text-muted">
           ← Alle dugnader

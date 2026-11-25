@@ -6,19 +6,24 @@ import { kr } from '../../lib/format'
 import { newId } from '../../lib/id'
 import { prepareProductImage } from '../../lib/images'
 import { IMAGE_BUCKET, imageUrl, supabase } from '../../lib/supabase'
-import type { Product, ProductImageRow } from '../../lib/types'
+import type { Order, Product, ProductImageRow } from '../../lib/types'
 import { useConfirm } from '../../components/Confirm'
 import { RichTextEditor } from '../../components/RichText'
 
 export function ProductsTab({
   campaignId,
   products,
+  orders,
   reload,
 }: {
   campaignId: string
   products: Product[]
+  /** The campaign's orders that aren't deleted (all types), to count units sold */
+  orders: Order[]
   reload: () => Promise<void>
 }) {
+  const sold: Record<string, number> = {}
+  for (const o of orders) for (const l of o.order_lines) sold[l.product_id] = (sold[l.product_id] ?? 0) + l.qty
   const [editing, setEditing] = useState<string | 'new' | null>(products.length === 0 ? 'new' : null)
   const [copying, setCopying] = useState<string | null>(null)
   const [error, setError] = useState('')
@@ -36,6 +41,7 @@ export function ProductsTab({
           description: p.description,
           price: p.price,
           to_team_amount: p.to_team_amount,
+          stock: p.stock,
           active: false,
           sort_order: Math.max(0, ...products.map((x) => x.sort_order)) + 1,
         })
@@ -81,6 +87,7 @@ export function ProductsTab({
             key={p.id}
             campaignId={campaignId}
             product={p}
+            sold={sold[p.id] ?? 0}
             nextSort={0}
             onDone={async () => {
               setEditing(null)
@@ -106,6 +113,15 @@ export function ProductsTab({
               <div className="text-sm text-muted">
                 {kr(p.price)}, {kr(p.to_team_amount)} til laget
               </div>
+              <div className="text-sm text-muted">
+                Solgt {sold[p.id] ?? 0}
+                {p.stock !== null && (
+                  <>
+                    {' '}av {p.stock} ·{' '}
+                    {p.stock - (sold[p.id] ?? 0) > 0 ? `${p.stock - (sold[p.id] ?? 0)} igjen` : <strong className="text-red-700">Utsolgt</strong>}
+                  </>
+                )}
+              </div>
               <div className="mt-1 flex gap-4">
                 <button type="button" className="text-sm font-semibold text-brand" onClick={() => setEditing(p.id)}>
                   Endre
@@ -126,6 +142,7 @@ export function ProductsTab({
       {editing === 'new' ? (
         <ProductForm
           campaignId={campaignId}
+          sold={0}
           nextSort={products.length}
           onDone={async () => {
             setEditing(null)
@@ -143,12 +160,14 @@ export function ProductsTab({
 function ProductForm({
   campaignId,
   product,
+  sold,
   nextSort,
   onDone,
   reload,
 }: {
   campaignId: string
   product?: Product
+  sold: number
   nextSort: number
   onDone: () => Promise<void>
   reload: () => Promise<void>
@@ -159,6 +178,8 @@ function ProductForm({
   const [toTeam, setToTeam] = useState(String(product?.to_team_amount ?? ''))
   const [active, setActive] = useState(product?.active ?? true)
   const [sortOrder, setSortOrder] = useState(String(product?.sort_order ?? nextSort))
+  const [stock, setStock] = useState(product?.stock === null || product?.stock === undefined ? '' : String(product.stock))
+  const stockNumber = stock.trim() === '' ? null : Number(stock)
   const ask = useConfirm()
   const formId = useId()
   const [busy, setBusy] = useState(false)
@@ -167,6 +188,8 @@ function ProductForm({
   async function save() {
     setError('')
     if (Number(toTeam) > Number(price)) return setError('Beløpet til laget kan ikke være høyere enn prisen')
+    if (stockNumber !== null && (!Number.isInteger(stockNumber) || stockNumber < 0)) return setError('Skriv antallet på lager som et helt tall')
+    if (stockNumber !== null && stockNumber < sold) return setError(`Det er allerede solgt ${sold}, så lageret kan ikke være lavere`)
     setBusy(true)
     const row = {
       campaign_id: campaignId,
@@ -176,6 +199,7 @@ function ProductForm({
       to_team_amount: Number(toTeam.replace(',', '.')) || 0,
       active,
       sort_order: Number(sortOrder) || 0,
+      stock: stockNumber,
     }
     const { error } = product
       ? await supabase.from('products').update(row).eq('id', product.id)
@@ -216,6 +240,16 @@ function ProductForm({
             <Input inputMode="decimal" value={toTeam} onChange={(e) => setToTeam(e.target.value)} />
           </Field>
         </div>
+        <Field
+          label="Antall på lager (valgfritt)"
+          hint={
+            stockNumber === null || Number.isNaN(stockNumber)
+              ? `Tomt = ingen grense. Solgt så langt: ${sold}`
+              : `Totalt tilgjengelig, også de som er solgt. Solgt så langt: ${sold}, igjen: ${Math.max(0, stockNumber - sold)}`
+          }
+        >
+          <Input type="number" inputMode="numeric" min={sold} step={1} value={stock} onChange={(e) => setStock(e.target.value)} />
+        </Field>
         <div className="grid grid-cols-2 items-end gap-3">
           <Field label="Rekkefølge">
             <Input type="number" value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} />
