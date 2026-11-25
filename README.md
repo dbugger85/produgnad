@@ -47,9 +47,10 @@ GitHub Actions runs all of them on every push.
 | Address | Who | What |
 |---|---|---|
 | `/k/<code>` | Friends | Order through a parent's link; Vipps instructions afterwards |
-| `/status/<token>` | Friends | Status of one order |
+| `/status/<token>` | Friends | Status of one order; «Se kvittering» once paid |
+| `/kvittering/<token>` | Friends | Receipt for a paid order (seller, buyer or company, lines, date paid, no VAT note), print or save as PDF |
 | `/bli-med/<code>` | Parents | Sign up as a seller in a campaign |
-| `/logg-inn` | Parents, admins | Login with a code from email (or the link in the email) |
+| `/logg-inn` | Parents, admins | Login with a code from email (code only, no link) |
 | `/forelder/<id>` | Parents | Money to the team via them, their link with share texts, link preview and QR, amount owed with Vipps, orders |
 | `/forelder/<id>/ny`, `/ordre/<id>`, `/fra-ekstra/<id>` | Parents | New or edit order (Venn / Egen / Ekstra), give extra stock to a friend |
 | `/pakkeliste/<id>` | Parents, admins | Packing list per friend, ticked on the phone |
@@ -60,4 +61,4 @@ GitHub Actions runs all of them on every push.
 
 ## Emails
 
-All in Norwegian, from `dugnad@substitutor.no` via Resend: login code (Supabase template), friend's order confirmation and "paid" (opt-in), payment registered, goods sent, daily digest at 20:00 (only on days with new orders), closing message, admin invitation. They go through a queue (`email_outbox`): max 90 a day, parents' emails first.
+All in Norwegian, from `dugnad@substitutor.no` via Resend: login code (Supabase template), friend's order confirmation and receipt when paid (opt-in), payment registered, goods sent, daily digest at 20:00 (only on days with new orders), closing message, admin invitation. They go through a queue (`email_outbox`): max 90 a day, parents' emails first.

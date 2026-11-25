@@ -4,7 +4,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 
 ## A. Friend order page (`/k/…`), the page most people see
 
-<p><a href="screenshots/a-bestillingsside.jpg"><img src="screenshots/a-bestillingsside.jpg" width="230" alt="Bestillingssiden" title="Bestillingssiden"></a> <a href="screenshots/a-din-bestilling-tidligere.jpg"><img src="screenshots/a-din-bestilling-tidligere.jpg" width="230" alt="Tidligere bestilling på samme telefon (A19)" title="Tidligere bestilling på samme telefon (A19)"></a></p>
+<p><a href="screenshots/a-bestillingsside.jpg"><img src="screenshots/a-bestillingsside.jpg" width="230" alt="Bestillingssiden" title="Bestillingssiden"></a> <a href="screenshots/a-din-bestilling-tidligere.jpg"><img src="screenshots/a-din-bestilling-tidligere.jpg" width="230" alt="Tidligere bestilling på samme telefon (A19)" title="Tidligere bestilling på samme telefon (A19)"></a> <a href="screenshots/a-kvittering-firma.jpg"><img src="screenshots/a-kvittering-firma.jpg" width="230" alt="Kvittering til firma (A22)" title="Kvittering til firma (A22)"></a></p>
 
 <sub>Bestillingssiden · Tidligere bestilling på samme telefon (A19)</sub>
 
@@ -48,9 +48,9 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 
 ## C. Order status page (`/status/…`)
 
-<p><a href="screenshots/c-status.jpg"><img src="screenshots/c-status.jpg" width="230" alt="Statussiden" title="Statussiden"></a></p>
+<p><a href="screenshots/c-status.jpg"><img src="screenshots/c-status.jpg" width="230" alt="Statussiden" title="Statussiden"></a> <a href="screenshots/c-status-betalt.jpg"><img src="screenshots/c-status-betalt.jpg" width="230" alt="Statussiden når bestillingen er betalt (C9)" title="Statussiden når bestillingen er betalt (C9)"></a> <a href="screenshots/c-kvittering.jpg"><img src="screenshots/c-kvittering.jpg" width="230" alt="Kvitteringen (C10)" title="Kvitteringen (C10)"></a></p>
 
-<sub>Statussiden</sub>
+<sub>Statussiden · Betalt, med lenke til kvitteringen · Kvitteringen</sub>
 
 | # | Where | Text |
 |---|---|---|
@@ -264,7 +264,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 
 ## K. Emails
 
-<p><a href="screenshots/k-epost-innlogging.jpg"><img src="screenshots/k-epost-innlogging.jpg" width="230" alt="K1 Innlogging" title="K1 Innlogging"></a> <a href="screenshots/k-epost-friend-order.jpg"><img src="screenshots/k-epost-friend-order.jpg" width="230" alt="K2 Bestilling" title="K2 Bestilling"></a> <a href="screenshots/k-epost-friend-paid.jpg"><img src="screenshots/k-epost-friend-paid.jpg" width="230" alt="K3 Betalt" title="K3 Betalt"></a> <a href="screenshots/k-epost-parent-payment.jpg"><img src="screenshots/k-epost-parent-payment.jpg" width="230" alt="K4 Betaling registrert" title="K4 Betaling registrert"></a> <a href="screenshots/k-epost-goods-sent.jpg"><img src="screenshots/k-epost-goods-sent.jpg" width="230" alt="K5 Varer sendt" title="K5 Varer sendt"></a> <a href="screenshots/k-epost-digest.jpg"><img src="screenshots/k-epost-digest.jpg" width="230" alt="K6 Daglig oppsummering" title="K6 Daglig oppsummering"></a> <a href="screenshots/k-epost-closing.jpg"><img src="screenshots/k-epost-closing.jpg" width="230" alt="K9 Avslutning" title="K9 Avslutning"></a> <a href="screenshots/k-epost-admin-invite.jpg"><img src="screenshots/k-epost-admin-invite.jpg" width="230" alt="K10 Admin-invitasjon" title="K10 Admin-invitasjon"></a></p>
+<p><a href="screenshots/k-epost-innlogging.jpg"><img src="screenshots/k-epost-innlogging.jpg" width="230" alt="K1 Innlogging" title="K1 Innlogging"></a> <a href="screenshots/k-epost-friend-order.jpg"><img src="screenshots/k-epost-friend-order.jpg" width="230" alt="K2 Bestilling" title="K2 Bestilling"></a> <a href="screenshots/k-epost-friend-paid.jpg"><img src="screenshots/k-epost-friend-paid.jpg" width="230" alt="K3 Kvittering" title="K3 Kvittering"></a> <a href="screenshots/k-epost-parent-payment.jpg"><img src="screenshots/k-epost-parent-payment.jpg" width="230" alt="K4 Betaling registrert" title="K4 Betaling registrert"></a> <a href="screenshots/k-epost-goods-sent.jpg"><img src="screenshots/k-epost-goods-sent.jpg" width="230" alt="K5 Varer sendt" title="K5 Varer sendt"></a> <a href="screenshots/k-epost-digest.jpg"><img src="screenshots/k-epost-digest.jpg" width="230" alt="K6 Daglig oppsummering" title="K6 Daglig oppsummering"></a> <a href="screenshots/k-epost-closing.jpg"><img src="screenshots/k-epost-closing.jpg" width="230" alt="K9 Avslutning" title="K9 Avslutning"></a> <a href="screenshots/k-epost-admin-invite.jpg"><img src="screenshots/k-epost-admin-invite.jpg" width="230" alt="K10 Admin-invitasjon" title="K10 Admin-invitasjon"></a></p>
 
 <sub>K1 Innlogging · K2 Bestilling · K3 Betalt · K4 Betaling registrert · K5 Varer sendt · K6 Daglig oppsummering · K9 Avslutning · K10 Admin-invitasjon</sub>
 
