@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
+import { ReceiptPdfButton } from '../components/ReceiptPdfButton'
 import { Button, Card, ErrorBox, Loading, Logo, Page } from '../components/ui'
 import { kr, longDate, phone } from '../lib/format'
 import { publicClient } from '../lib/supabase'
 import type { StatusPage } from '../lib/types'
 
-/** Receipt (kvittering) for a paid friend order, made to be printed or saved as PDF. Same content as the «paid» email */
+/** Receipt (kvittering) for a paid friend order. Same content as the «paid» email and the PDF (_shared/receiptPdf.ts) */
 export default function ReceiptPage() {
   const { token = '' } = useParams()
   const [order, setOrder] = useState<StatusPage | null | undefined>(undefined)
@@ -103,8 +104,9 @@ export default function ReceiptPage() {
       </Card>
 
       <div className="space-y-4 print:hidden">
-        <Button className="w-full" onClick={() => window.print()}>
-          Skriv ut eller lagre som PDF
+        <ReceiptPdfButton token={token} code={order.code} />
+        <Button variant="secondary" className="w-full" onClick={() => window.print()}>
+          Skriv ut
         </Button>
         <Link to={`/status/${token}`} className="block font-semibold text-brand">
           Til bestillingen →

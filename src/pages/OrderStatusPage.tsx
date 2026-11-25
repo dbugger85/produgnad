@@ -4,6 +4,7 @@ import { ProgressBar } from '../components/ProgressBar'
 import { ClosingMessage, Transparency } from '../components/Transparency'
 import { Card, ErrorBox, Loading, Logo, Page } from '../components/ui'
 import { VippsSimple } from '../components/VippsSimple'
+import { ReceiptPdfButton } from '../components/ReceiptPdfButton'
 import { kr, longDate } from '../lib/format'
 import { publicClient } from '../lib/supabase'
 import { STATUS_LABEL, type StatusPage } from '../lib/types'
@@ -68,10 +69,23 @@ export default function OrderStatusPage() {
         </Card>
       )}
 
-      {order.paid_at && (
-        <Link to={`/kvittering/${token}`} className="block font-semibold text-brand">
-          Se kvittering →
-        </Link>
+      {order.paid_at ? (
+        <Card className="space-y-3">
+          <h2 className="font-semibold">Kvittering</h2>
+          {order.wants_receipt && <p className="text-sm text-muted">Kvitteringen er også sendt på e‑post</p>}
+          <ReceiptPdfButton token={token} code={order.code} variant={order.wants_receipt ? 'primary' : 'secondary'} />
+          <Link to={`/kvittering/${token}`} className="block text-center text-sm font-semibold text-brand">
+            Se kvitteringen
+          </Link>
+        </Card>
+      ) : (
+        order.wants_receipt &&
+        order.status !== 'avbestilt' && (
+          <p className="text-sm text-muted">
+            Du får kvitteringen{order.receipt_name && ` til ${order.receipt_name}`} som PDF på e‑post når {parent.name.split(' ')[0]} har
+            registrert betalingen
+          </p>
+        )
       )}
 
       {campaign.raised !== null && <ProgressBar raised={campaign.raised} target={campaign.target_amount ?? 0} />}

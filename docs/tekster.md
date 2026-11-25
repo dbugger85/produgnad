@@ -19,10 +19,11 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | A8 | Total box | Totalt |
 | A9 | Name field | Fornavnet ditt |
 | A10 | Button | Bestill |
-| A11 | Fold-out under the button | Vil du ha bekreftelse på e-post? |
+| A11 | Fold-out under the button (hidden when A22 is ticked) | Vil du ha bekreftelse på e-post? |
 | A12 | Inside it | E-post (valgfritt) |
-| A22 | Second fold-out under the button | Trenger du kvittering til firma? · Firmanavn (valgfritt) · Error: Firmanavnet kan ha høyst 80 tegn |
-| A13 | Privacy notice | Personvern: *Foreldre og supportere av Ready G2018* lagrer fornavnet ditt (og e-post og firmanavn hvis du oppgir det) bare for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden |
+| A22 | Tick box above the button | Jeg trenger kvittering · when ticked: Navn på kvitteringen (hint: Organisasjon eller firma) · E-post (hint: Kvitteringen kommer som PDF på e-post når betalingen er registrert), both required · Errors: Skriv inn navnet som skal stå på kvitteringen · Skriv inn e-posten kvitteringen skal sendes til · Navnet på kvitteringen kan ha høyst 80 tegn |
+| A23 | Thank-you card, when A22 was ticked | Kvitteringen kommer som PDF på e-post når *Ola* har registrert betalingen |
+| A13 | Privacy notice | Personvern: *Foreldre og supportere av Ready G2018* lagrer fornavnet ditt (og e-post og navn på kvitteringen hvis du oppgir det) bare for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden |
 | A14 | Error, no name | Skriv inn fornavnet ditt |
 | A15 | Error, no products | Velg minst én vare |
 | A16 | Ordering closed (deadline) | Fristen for å bestille har gått ut |
@@ -58,7 +59,8 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | C2 | Under the title | Kari, bestilt 7. november 2026 via Ola Hansen, forelder til Emma |
 | C4 | List | 2 × *Kaffe, filtermalt 500 g* · Totalt |
 | C8 | Payment (only while unpaid), same as B | Vipps **240 kr** til **Ola Hansen** · **+47 912 34 568** · Kopier · Skriv **K7** i meldingen |
-| C9 | Link (only once paid) | Se kvittering → |
+| C9 | Card (only once paid) | Kvittering · Kvitteringen er også sendt på e-post (when asked for) · Last ned kvittering (PDF) (error: Kunne ikke lage kvitteringen. Prøv igjen litt senere) · Se kvitteringen |
+| C13 | Receipt asked for, not paid yet | Du får kvitteringen til *Nordlys Regnskap AS* som PDF på e-post når *Ola* har registrert betalingen |
 | C5 | Link | Til bestillingssiden → |
 | C7 | Progress bar | Not shown to friends (only parents and admins: *bar* · **18 400 kr** til laget · Mål: **30 000 kr**) |
 | C6 | Wrong link | Fant ikke bestillingen. Sjekk at du har hele lenken |
@@ -68,7 +70,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 | # | Where | Text |
 |---|---|---|
 | C10 | Receipt | *organizer label* · **KVITTERING** · Bestilling K7 · 25. november 2026 · Selger: **Ola Hansen**, +47 912 34 568, Dugnad til inntekt for *Ready Bandy G2018* (team name, else organizer label) · Kjøper: **Nordlys Regnskap AS**, Bestilt av Kari (or just **Kari**) · 2 × *Kaffe, filtermalt 500 g* à 120 kr · Totalt · Betalt med Vipps 25. november 2026 · Ikke MVA-pliktig (privatsalg / dugnad) · *Kaffesalg* er organisert av *…*, ikke av klubben direkte · *purpose* |
-| C11 | Below | Skriv ut eller lagre som PDF · Til bestillingen → |
+| C11 | Below | Last ned kvittering (PDF) · Skriv ut · Til bestillingen → |
 | C12 | Not paid yet | Kvitteringen kommer når betalingen er registrert · Til bestillingen → |
 
 ## D. Shown at the bottom of public pages (transparency)
@@ -272,7 +274,7 @@ Every text in the app, the emails and the link previews, as of 22 November 2026,
 |---|---|---|
 | K1 | Login (Supabase template) | **Innloggingskode for dugnaden** · Logg inn på dugnaden · Skriv inn denne koden på siden du har åpen: · *the code, no link (email security filters open links and that used the code up)* · Koden virker i én time. Har du ikke bedt om denne e-posten, kan du se bort fra den |
 | K2 | Friend ordered (opt-in) | **Bestilling K7: Vipps 240 kr til Ola Hansen** · Takk for bestillingen, Kari! · Totalt · Vipps **240 kr** til **Ola Hansen, +47 912 34 568**, melding **K7** · Se status på bestillingen · Ola Hansen leverer varene når de kommer. Når Ola har registrert betalingen, får du en kvittering på e-post |
-| K3 | Friend paid (opt-in) = receipt | **Kvittering for bestilling K7** · the receipt as C10 · Skriv ut eller lagre som PDF (opens `/kvittering/…`) |
+| K3 | Friend paid (opt-in) = receipt | **Kvittering for bestilling K7** · the receipt as C10 · Skriv ut eller lagre som PDF (opens `/kvittering/…`). When the friend ticked A22: + «Kvitteringen ligger ved som PDF», the button says «Se kvitteringen på nett», and `kvittering-K7.pdf` is attached |
 | K4 | Parent payment registered | **Betaling registrert: 1 440 kr av 1 440 kr** · Takk, Ola! · Vi har registrert betalingen din for *Kaffesalg*. Du har nå betalt **1 440 kr** av **1 440 kr** · Det gjenstår … / Du har betalt … for mye. Vi tar kontakt / Alt er betalt. Tusen takk! · Se dine bestillinger |
 | K5 | Goods sent | **Varene til *Kaffesalg* er på vei til deg** · Varene er på vei, Ola! · Varene for bestillingene dine er sendt til deg. Åpne pakkelisten på mobilen og kryss av hver bestilling når den er pakket. Merk «levert» når vennen har fått varene · Åpne pakkelisten · Til bestillingene dine |
 | K6 | Daily digest (20:00) | **3 nye bestillinger siden sist (720 kr)** / **1 ny bestilling siden sist (240 kr)** · Nye bestillinger, Ola · Nye totalt · Totalt bestilt via deg: … · Ikke betalt ennå: 480 kr fra Kari, Per / Alle venner har betalt · Åpne bestillingene · Du får denne e-posten bare på dager med nye bestillinger via lenken din |

@@ -61,8 +61,10 @@ export interface LinkPage {
 export interface StatusPage {
   code: string
   buyer_first_name: string
-  /** Company name for the receipt, '' when none */
+  /** Organization or company name for the receipt, '' when none */
   receipt_name: string
+  /** The friend ticked «Jeg trenger kvittering»: the PDF comes by email once paid */
+  wants_receipt: boolean
   status: FriendStatus
   created_at: string
   /** When the parent registered the payment; null when not paid */
@@ -171,6 +173,9 @@ export interface Order {
   note: string
   email: string | null
   wants_email: boolean
+  /** The friend asked for a receipt: ticking «betalt» emails it as a PDF */
+  wants_receipt: boolean
+  receipt_name: string
   paid_to_parent_at: string | null
   delivered_at: string | null
   packed_at: string | null

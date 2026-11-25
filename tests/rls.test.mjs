@@ -181,8 +181,8 @@ describe('friend (no login)', () => {
 
   test('company name for the receipt; paid date on the status page', async () => {
     const lines = [{ product_id: coffee.id, qty: 1 }]
-    expectError(await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Per', p_lines: lines, p_receipt_name: 'x'.repeat(81) }), 'INVALID_RECEIPT_NAME')
-    const { data: placed, error } = await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Per', p_lines: lines, p_receipt_name: '  Firma AS ' })
+    expectError(await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Per', p_lines: lines, p_receipt_name: 'x'.repeat(81), p_wants_receipt: true, p_email: 'per@example.com' }), 'INVALID_RECEIPT_NAME')
+    const { data: placed, error } = await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Per', p_lines: lines, p_receipt_name: '  Firma AS ', p_wants_receipt: true, p_email: `per-${run}@example.com` })
     assert.ifError(error)
     let { data } = await anon().rpc('order_status_by_token', { p_token: placed.status_token })
     assert.equal(data.receipt_name, 'Firma AS')
@@ -191,7 +191,32 @@ describe('friend (no login)', () => {
     assert.ifError((await parentA.client.rpc('set_order_paid', { p_order_id: row.id, p_paid: true })).error)
     ;({ data } = await anon().rpc('order_status_by_token', { p_token: placed.status_token }))
     assert.ok(data.paid_at)
+    await service.from('email_outbox').delete().eq('order_id', row.id)
     await service.from('orders').delete().eq('id', row.id)
+  })
+
+  test('receipt on request: name and email required; paid queues the receipt email', async () => {
+    const lines = [{ product_id: coffee.id, qty: 1 }]
+    const base = { p_link_code: linkA, p_first_name: 'Rita', p_lines: lines, p_wants_receipt: true }
+    expectError(await anon().rpc('create_friend_order', { ...base, p_email: 'rita@example.com' }), 'RECEIPT_NAME_REQUIRED')
+    expectError(await anon().rpc('create_friend_order', { ...base, p_receipt_name: 'Lag AS' }), 'RECEIPT_EMAIL_REQUIRED')
+    // A name without the tick is not kept
+    const plain = await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Rita', p_lines: lines, p_receipt_name: 'Lag AS' })
+    assert.ifError(plain.error)
+    assert.equal((await anon().rpc('order_status_by_token', { p_token: plain.data.status_token })).data.receipt_name, '')
+    const mail = `rita-${run}@example.com`
+    const { data: placed, error } = await anon().rpc('create_friend_order', { ...base, p_receipt_name: ' Lag AS ', p_email: mail })
+    assert.ifError(error)
+    const { data } = await anon().rpc('order_status_by_token', { p_token: placed.status_token })
+    assert.equal(data.receipt_name, 'Lag AS')
+    assert.equal(data.wants_receipt, true)
+    const { data: row } = await service.from('orders').select('id, wants_email').eq('status_token', placed.status_token).single()
+    assert.equal(row.wants_email, true) // the receipt also gives the confirmation
+    assert.ifError((await parentA.client.rpc('set_order_paid', { p_order_id: row.id, p_paid: true })).error)
+    const { data: queued } = await service.from('email_outbox').select('to_email').eq('kind', 'friend_paid').eq('order_id', row.id)
+    assert.deepEqual(queued, [{ to_email: mail }])
+    await service.from('email_outbox').delete().eq('order_id', row.id)
+    await service.from('orders').delete().in('status_token', [placed.status_token, plain.data.status_token])
   })
 
   test('opt-in email is queued once', async () => {

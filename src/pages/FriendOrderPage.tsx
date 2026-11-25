@@ -32,8 +32,8 @@ export default function FriendOrderPage() {
   const [firstName, setFirstName] = useState('')
   const [wantsEmail, setWantsEmail] = useState(false)
   const [email, setEmail] = useState('')
-  const [wantsCompany, setWantsCompany] = useState(false)
-  const [company, setCompany] = useState('')
+  const [wantsReceipt, setWantsReceipt] = useState(false)
+  const [receiptName, setReceiptName] = useState('')
   const [honeypot, setHoneypot] = useState('')
   const [clientToken, setClientToken] = useState(newId)
   const [sending, setSending] = useState(false)
@@ -79,16 +79,21 @@ export default function FriendOrderPage() {
     setError('')
     if (!firstName.trim()) return setError('Skriv inn fornavnet ditt')
     if (total <= 0) return setError('Velg minst én vare')
+    if (wantsReceipt && !receiptName.trim()) return setError('Skriv inn navnet som skal stå på kvitteringen')
+    if (wantsReceipt && !email.trim()) return setError('Skriv inn e‑posten kvitteringen skal sendes til')
+    // A receipt also gives the order confirmation by email
+    const sendEmail = (wantsEmail || wantsReceipt) && email.trim() !== ''
     setSending(true)
     const { data, error } = await publicClient.rpc('create_friend_order', {
       p_link_code: code,
       p_first_name: firstName.trim(),
       p_lines: quantitiesToLines(quantities),
-      p_email: wantsEmail ? email.trim() : null,
-      p_wants_email: wantsEmail && email.trim() !== '',
+      p_email: sendEmail ? email.trim() : null,
+      p_wants_email: sendEmail,
       p_honeypot: honeypot,
       p_client_token: clientToken,
-      p_receipt_name: wantsCompany ? company.trim() : '',
+      p_receipt_name: wantsReceipt ? receiptName.trim() : '',
+      p_wants_receipt: wantsReceipt,
     })
     setSending(false)
     if (error) return setError(errorText(error))
@@ -101,7 +106,7 @@ export default function FriendOrderPage() {
       created_at: new Date().toISOString(),
     })
     // Ask the server to send the confirmation email now (fire and forget).
-    if (wantsEmail && email.trim()) void supabase.functions.invoke('send-emails').catch(() => {})
+    if (sendEmail) void supabase.functions.invoke('send-emails').catch(() => {})
     setPlaced(result)
     window.scrollTo({ top: 0 })
   }
@@ -148,6 +153,11 @@ export default function FriendOrderPage() {
         <Card className="space-y-5 py-6 text-center">
           <h2 className="font-display text-[34px] leading-none uppercase tracking-wide">Takk for støtten, {firstName.trim()}!</h2>
           <VippsSimple amount={placed.amount} name={placed.parent.name} phoneNumber={placed.parent.phone} code={placed.code} />
+          {wantsReceipt && (
+            <p className="text-sm text-muted">
+              Kvitteringen kommer som PDF på e‑post når {placed.parent.name.split(' ')[0]} har registrert betalingen
+            </p>
+          )}
           <div className="flex justify-center gap-6 pt-1 text-sm">
             <Link to={`/status/${placed.status_token}`} className="font-semibold text-brand">
               Se bestillingen
@@ -199,6 +209,39 @@ export default function FriendOrderPage() {
                     required
                   />
                 </Field>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5 accent-[var(--color-brand)]"
+                    checked={wantsReceipt}
+                    onChange={(e) => setWantsReceipt(e.target.checked)}
+                  />
+                  Jeg trenger kvittering
+                </label>
+                {wantsReceipt && (
+                  <div className="space-y-4 border-l-2 border-brand/20 pl-3">
+                    <Field label="Navn på kvitteringen" hint="Organisasjon eller firma">
+                      <Input
+                        value={receiptName}
+                        onChange={(e) => setReceiptName(e.target.value)}
+                        autoComplete="organization"
+                        maxLength={80}
+                        required
+                      />
+                    </Field>
+                    <Field label="E‑post" hint="Kvitteringen kommer som PDF på e‑post når betalingen er registrert">
+                      <Input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="email"
+                        inputMode="email"
+                        maxLength={200}
+                        required
+                      />
+                    </Field>
+                  </div>
+                )}
                 {/* Hidden field that only bots fill in */}
                 <input
                   type="text"
@@ -214,31 +257,25 @@ export default function FriendOrderPage() {
                 <Button type="submit" className="w-full text-lg" disabled={sending}>
                   {sending ? 'Sender …' : 'Bestill'}
                 </Button>
-                <details open={wantsEmail} onToggle={(e) => setWantsEmail((e.target as HTMLDetailsElement).open)}>
-                  <summary className="cursor-pointer text-sm text-brand">Vil du ha bekreftelse på e‑post?</summary>
-                  <div className="pt-2">
-                    <Field label="E‑post (valgfritt)">
-                      <Input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        autoComplete="email"
-                        inputMode="email"
-                      />
-                    </Field>
-                  </div>
-                </details>
-                <details open={wantsCompany} onToggle={(e) => setWantsCompany((e.target as HTMLDetailsElement).open)}>
-                  <summary className="cursor-pointer text-sm text-brand">Trenger du kvittering til firma?</summary>
-                  <div className="pt-2">
-                    <Field label="Firmanavn (valgfritt)">
-                      <Input value={company} onChange={(e) => setCompany(e.target.value)} autoComplete="organization" maxLength={80} />
-                    </Field>
-                  </div>
-                </details>
+                {!wantsReceipt && (
+                  <details open={wantsEmail} onToggle={(e) => setWantsEmail((e.target as HTMLDetailsElement).open)}>
+                    <summary className="cursor-pointer text-sm text-brand">Vil du ha bekreftelse på e‑post?</summary>
+                    <div className="pt-2">
+                      <Field label="E‑post (valgfritt)">
+                        <Input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          autoComplete="email"
+                          inputMode="email"
+                        />
+                      </Field>
+                    </div>
+                  </details>
+                )}
               </Card>
               <p className="text-xs text-muted">
-                Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e‑post og firmanavn hvis du oppgir det) bare
+                Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e‑post og navn på kvitteringen hvis du oppgir det) bare
                 for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden
               </p>
             </form>

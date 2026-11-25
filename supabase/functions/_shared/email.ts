@@ -2,6 +2,8 @@
 // Replies from parents go to the campaign's contact admin; replies from friends go to the parent
 // they ordered through (friends don't see the admins, owner's choice 7 Nov 2026).
 import type { SupabaseClient } from 'npm:@supabase/supabase-js@2'
+import { kr, osloDate, phone } from './format.ts'
+import { loadLogo, receiptFileName, receiptPdf, type ReceiptData } from './receiptPdf.ts'
 
 const APP_URL = Deno.env.get('APP_URL') ?? 'https://dugnad.substitutor.no'
 
@@ -11,6 +13,8 @@ export interface Rendered {
   subject: string
   html: string
   text: string
+  /** Files sent with the email (the receipt PDF), content in base64 */
+  attachments?: { filename: string; content: string }[]
 }
 
 // Not tied to a campaign: someone was made admin
@@ -38,21 +42,13 @@ interface OutboxRow {
   campaign_parent_id: string | null
 }
 
-const nf = new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 2 })
-// Non-breaking space so "250 kr" never splits over two lines
-const kr = (n: number | string) => `${nf.format(Number(n))}\u00a0kr`
-// Same rules as phone() in src/lib/format.ts: "+47 912 34 567"
-const phone = (p: string) => {
-  const raw = (p ?? '').replace(/[^\d+]/g, '')
-  const d = raw.replace(/^(\+47|0047)/, '')
-  return /^\d{8}$/.test(d) ? `+47\u00a0${d.slice(0, 3)}\u00a0${d.slice(3, 5)}\u00a0${d.slice(5)}` : (p ?? '').trim()
+const encodeBase64 = (bytes: Uint8Array) => {
+  let bin = ''
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+  return btoa(bin)
 }
 const esc = (s: string) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
-
-// "20. november 2026" in Norwegian time, like longDate() in src/lib/format.ts
-const osloDate = (d: string | Date) =>
-  new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Oslo' }).format(new Date(d))
 
 function layout(campaign: { organizer_label: string; purpose_text: string; name: string }, contactLine: string, body: string) {
   return `<!doctype html><html lang="nb"><body style="margin:0;background:#f1eee8;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#121a26">
@@ -164,7 +160,16 @@ ${button(statusUrl, 'Se status på bestillingen')}
       .map((l: { qty: number; unit_price: number; products: { name: string } }) =>
         `<tr><td style="${cell}">${l.qty} × ${esc(l.products.name)} <span style="white-space:nowrap">à ${kr(l.unit_price)}</span></td><td style="${cell};text-align:right;white-space:nowrap;padding-left:12px">${kr(l.qty * Number(l.unit_price))}</td></tr>`)
       .join('')
-    return wrapFriend(
+    // A friend who ticked «Jeg trenger kvittering» gets the receipt as a PDF too
+    let attachments: Rendered['attachments']
+    if (order.wants_receipt) {
+      const { data: receipt } = await db.rpc('order_status_by_token', { p_token: order.status_token })
+      if (receipt?.paid_at) {
+        const pdf = await receiptPdf(receipt as ReceiptData, await loadLogo())
+        attachments = [{ filename: receiptFileName(order.code), content: encodeBase64(pdf) }]
+      }
+    }
+    const paidEmail = wrapFriend(
       `Kvittering for bestilling ${order.code}`,
       `<h1 style="font-size:22px;margin:0 0 2px;letter-spacing:0.05em">KVITTERING</h1>
 <p style="margin:0 0 16px;color:#57534e">Bestilling ${esc(order.code)} · ${osloDate(paidAt)}</p>
@@ -176,8 +181,10 @@ ${button(statusUrl, 'Se status på bestillingen')}
 <tr><td style="${cell};font-weight:700">Totalt</td><td style="${cell};text-align:right;white-space:nowrap;padding-left:12px;font-weight:700">${kr(amount)}</td></tr></table>
 <p style="margin:16px 0 0">Betalt med Vipps ${osloDate(paidAt)}</p>
 <p style="margin:4px 0 0;color:#57534e">Ikke MVA-pliktig (privatsalg / dugnad)</p>
-${button(`${APP_URL}/kvittering/${order.status_token}`, 'Skriv ut eller lagre som PDF')}`,
+${attachments ? '<p style="margin:16px 0 0">Kvitteringen ligger ved som PDF</p>' : ''}
+${button(`${APP_URL}/kvittering/${order.status_token}`, attachments ? 'Se kvitteringen på nett' : 'Skriv ut eller lagre som PDF')}`,
     )
+    return { ...paidEmail, attachments }
   }
 
   if (row.kind === 'parent_payment') {

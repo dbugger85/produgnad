@@ -236,7 +236,14 @@ export default function ParentPage() {
                 kode: o.code,
                 beløp: kr(orderAmount(o)),
               }).replace(/^Hei!/, `Hei ${o.buyer_first_name}!`)}
-              onPaid={(paid) => act(() => supabase.rpc('set_order_paid', { p_order_id: o.id, p_paid: paid }))}
+              onPaid={(paid) =>
+                act(async () => {
+                  const result = await supabase.rpc('set_order_paid', { p_order_id: o.id, p_paid: paid })
+                  // Send the receipt email now instead of with the next round (fire and forget)
+                  if (paid && !result.error && o.wants_email) void supabase.functions.invoke('send-emails').catch(() => {})
+                  return result
+                })
+              }
               onDelivered={(d) => act(() => supabase.rpc('set_order_delivered', { p_order_id: o.id, p_delivered: d }))}
             />
           ))}
@@ -303,6 +310,7 @@ function OrderRow({
       <div className="flex flex-wrap items-center gap-2">
         {!isFriend && <Badge>{ORDER_TYPE_LABEL[order.type]}</Badge>}
         {order.created_by === 'friend' && <Badge tone="blue">via lenken</Badge>}
+        {order.wants_receipt && <Badge tone="amber">Vil ha kvittering</Badge>}
         {isFriend && (
           <label className="flex min-h-9 items-center gap-2 rounded-lg bg-cream px-3">
             <input

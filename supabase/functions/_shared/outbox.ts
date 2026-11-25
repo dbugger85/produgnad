@@ -20,9 +20,10 @@ async function send(email: Rendered, to: string): Promise<void> {
     html: email.html,
     text: email.text,
     ...(email.replyTo ? { reply_to: email.replyTo } : {}),
+    ...(email.attachments?.length ? { attachments: email.attachments } : {}),
   }
   if (!RESEND_API_KEY) {
-    console.log('[dry run, no RESEND_API_KEY]', JSON.stringify({ to, subject: email.subject, replyTo: email.replyTo }))
+    console.log('[dry run, no RESEND_API_KEY]', JSON.stringify({ to, subject: email.subject, replyTo: email.replyTo, attachments: email.attachments?.map((a) => a.filename) }))
     return
   }
   const res = await fetch('https://api.resend.com/emails', {

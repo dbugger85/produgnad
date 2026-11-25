@@ -31,7 +31,11 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
   const sum = shown.reduce((s, o) => s + orderAmount(o), 0)
 
   async function toggle(o: Order, field: 'paid' | 'delivered', value: boolean) {
-    if (field === 'paid') await supabase.rpc('set_order_paid', { p_order_id: o.id, p_paid: value })
+    if (field === 'paid') {
+      const { error } = await supabase.rpc('set_order_paid', { p_order_id: o.id, p_paid: value })
+      // Send the receipt email now instead of with the next round (fire and forget)
+      if (value && !error && o.wants_email) void supabase.functions.invoke('send-emails').catch(() => {})
+    }
     else await supabase.rpc('set_order_delivered', { p_order_id: o.id, p_delivered: value })
     await reload()
   }
@@ -69,6 +73,7 @@ export function OrdersTab({ data, reload }: { data: AdminData; reload: () => Pro
           <div className="flex justify-between gap-2">
             <span className="font-bold">
               {paymentCode[o.campaign_parent_id]} · {o.code} · {o.type === 'friend' ? o.buyer_first_name : ORDER_TYPE_LABEL[o.type]}
+              {o.wants_receipt && ' · vil ha kvittering'}
             </span>
             <span className="font-bold">{kr(orderAmount(o))}</span>
           </div>
