@@ -68,6 +68,12 @@ export default function OrderStatusPage() {
         </Card>
       )}
 
+      {order.paid_at && (
+        <Link to={`/kvittering/${token}`} className="block font-semibold text-brand">
+          Se kvittering →
+        </Link>
+      )}
+
       {campaign.raised !== null && <ProgressBar raised={campaign.raised} target={campaign.target_amount ?? 0} />}
       <Link to={`/k/${parent.link_code}`} className="block font-semibold text-brand">
         Til bestillingssiden →

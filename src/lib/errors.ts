@@ -5,6 +5,7 @@ const messages: Record<string, string> = {
   CAMPAIGN_CLOSED: 'Dugnaden tar ikke imot flere bestillinger',
   CAMPAIGN_LOCKED: 'Bestillingene er låst fordi varene er bestilt fra leverandøren',
   INVALID_NAME: 'Skriv inn et fornavn',
+  INVALID_RECEIPT_NAME: 'Firmanavnet kan ha høyst 80 tegn',
   INVALID_EMAIL: 'E‑postadressen ser ikke riktig ut',
   INVALID_QTY: 'Antallet er for høyt',
   INVALID_PRODUCT: 'En av varene finnes ikke lenger. Last siden på nytt',

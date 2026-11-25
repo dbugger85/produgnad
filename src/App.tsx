@@ -8,6 +8,7 @@ import { ErrorBox, Loading, Page } from './components/ui'
 import { AuthProvider } from './lib/auth'
 import FriendOrderPage from './pages/FriendOrderPage'
 import OrderStatusPage from './pages/OrderStatusPage'
+import ReceiptPage from './pages/ReceiptPage'
 
 // Friends only load the order and status pages first; the rest is fetched in the background
 // right after, so later page changes don't wait for code.
@@ -59,6 +60,7 @@ export default function App() {
           <Routes>
             <Route path="/k/:code" element={<FriendOrderPage />} />
             <Route path="/status/:token" element={<OrderStatusPage />} />
+            <Route path="/kvittering/:token" element={<ReceiptPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/logg-inn" element={<LoginPage />} />
             <Route path="/bli-med/:code" element={<JoinPage />} />

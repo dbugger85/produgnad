@@ -179,6 +179,21 @@ describe('friend (no login)', () => {
     assert.equal(none.data, null)
   })
 
+  test('company name for the receipt; paid date on the status page', async () => {
+    const lines = [{ product_id: coffee.id, qty: 1 }]
+    expectError(await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Per', p_lines: lines, p_receipt_name: 'x'.repeat(81) }), 'INVALID_RECEIPT_NAME')
+    const { data: placed, error } = await anon().rpc('create_friend_order', { p_link_code: linkA, p_first_name: 'Per', p_lines: lines, p_receipt_name: '  Firma AS ' })
+    assert.ifError(error)
+    let { data } = await anon().rpc('order_status_by_token', { p_token: placed.status_token })
+    assert.equal(data.receipt_name, 'Firma AS')
+    assert.equal(data.paid_at, null)
+    const { data: row } = await service.from('orders').select('id').eq('status_token', placed.status_token).single()
+    assert.ifError((await parentA.client.rpc('set_order_paid', { p_order_id: row.id, p_paid: true })).error)
+    ;({ data } = await anon().rpc('order_status_by_token', { p_token: placed.status_token }))
+    assert.ok(data.paid_at)
+    await service.from('orders').delete().eq('id', row.id)
+  })
+
   test('opt-in email is queued once', async () => {
     const { data } = await service.from('email_outbox').select('*').eq('kind', 'friend_order').eq('to_email', 'kari@example.com')
     assert.equal(data.filter((r) => r.campaign_parent_id === cpA).length, 1)

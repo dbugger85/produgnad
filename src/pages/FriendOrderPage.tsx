@@ -32,6 +32,8 @@ export default function FriendOrderPage() {
   const [firstName, setFirstName] = useState('')
   const [wantsEmail, setWantsEmail] = useState(false)
   const [email, setEmail] = useState('')
+  const [wantsCompany, setWantsCompany] = useState(false)
+  const [company, setCompany] = useState('')
   const [honeypot, setHoneypot] = useState('')
   const [clientToken, setClientToken] = useState(newId)
   const [sending, setSending] = useState(false)
@@ -86,6 +88,7 @@ export default function FriendOrderPage() {
       p_wants_email: wantsEmail && email.trim() !== '',
       p_honeypot: honeypot,
       p_client_token: clientToken,
+      p_receipt_name: wantsCompany ? company.trim() : '',
     })
     setSending(false)
     if (error) return setError(errorText(error))
@@ -225,9 +228,17 @@ export default function FriendOrderPage() {
                     </Field>
                   </div>
                 </details>
+                <details open={wantsCompany} onToggle={(e) => setWantsCompany((e.target as HTMLDetailsElement).open)}>
+                  <summary className="cursor-pointer text-sm text-brand">Trenger du kvittering til firma?</summary>
+                  <div className="pt-2">
+                    <Field label="Firmanavn (valgfritt)">
+                      <Input value={company} onChange={(e) => setCompany(e.target.value)} autoComplete="organization" maxLength={80} />
+                    </Field>
+                  </div>
+                </details>
               </Card>
               <p className="text-xs text-muted">
-                Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e‑post hvis du vil ha bekreftelse) bare
+                Personvern: {campaign.organizer_label} lagrer fornavnet ditt (og e‑post og firmanavn hvis du oppgir det) bare
                 for å levere varene og holde orden på betalingen. Opplysningene slettes etter dugnaden
               </p>
             </form>

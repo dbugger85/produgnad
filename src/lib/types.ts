@@ -61,8 +61,12 @@ export interface LinkPage {
 export interface StatusPage {
   code: string
   buyer_first_name: string
+  /** Company name for the receipt, '' when none */
+  receipt_name: string
   status: FriendStatus
   created_at: string
+  /** When the parent registered the payment; null when not paid */
+  paid_at: string | null
   amount: number
   lines: { name: string; qty: number; unit_price: number }[]
   parent: PublicParent

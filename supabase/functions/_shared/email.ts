@@ -50,6 +50,10 @@ const phone = (p: string) => {
 const esc = (s: string) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 
+// "20. november 2026" in Norwegian time, like longDate() in src/lib/format.ts
+const osloDate = (d: string | Date) =>
+  new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Oslo' }).format(new Date(d))
+
 function layout(campaign: { organizer_label: string; purpose_text: string; name: string }, contactLine: string, body: string) {
   return `<!doctype html><html lang="nb"><body style="margin:0;background:#f1eee8;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#121a26">
 <div style="max-width:560px;margin:0 auto;padding:24px 16px">
@@ -66,6 +70,7 @@ ${contactLine ? `<br>${contactLine}` : ''}</p>
 function htmlToText(html: string) {
   return html
     .replace(/<br\s*\/?>/g, '\n')
+    .replace(/<\/td>\s*<td/g, ':  </td><td')
     .replace(/<\/(p|div|tr|h\d)>/g, '\n')
     .replace(/<[^>]+>/g, '')
     .replace(/&amp;/g, '&')
@@ -148,14 +153,30 @@ export async function renderEmail(db: SupabaseClient, row: OutboxRow): Promise<R
 <tr><td style="padding-top:8px;font-weight:700">Totalt</td><td style="padding-top:8px;text-align:right;white-space:nowrap;padding-left:12px;font-weight:700">${kr(amount)}</td></tr></table>
 ${vippsBlock(amount, parentName, parentPhone, order.code)}
 ${button(statusUrl, 'Se status på bestillingen')}
-<p>${esc(parentName)} leverer varene når de kommer</p>`,
+<p>${esc(parentName)} leverer varene når de kommer. Når ${esc(parentName.split(' ')[0])} har registrert betalingen, får du en kvittering på e‑post</p>`,
       )
     }
+    // The «paid» email is the receipt (kvittering): same content as the page /kvittering/<token>
+    const paidAt = order.paid_to_parent_at ?? row.created_at ?? new Date().toISOString()
+    const team = campaign.team_name || campaign.organizer_label
+    const cell = 'padding:8px 0;vertical-align:top;border-top:1px solid #e7e5e4'
+    const receiptLines = order.order_lines
+      .map((l: { qty: number; unit_price: number; products: { name: string } }) =>
+        `<tr><td style="${cell}">${l.qty} × ${esc(l.products.name)} <span style="white-space:nowrap">à ${kr(l.unit_price)}</span></td><td style="${cell};text-align:right;white-space:nowrap;padding-left:12px">${kr(l.qty * Number(l.unit_price))}</td></tr>`)
+      .join('')
     return wrapFriend(
-      `Takk! Betalingen for ${order.code} er registrert`,
-      `<h1 style="font-size:20px;margin:0 0 12px">Takk, ${esc(order.buyer_first_name)}!</h1>
-<p>${esc(parentName)} har registrert at du har betalt ${kr(amount)} for bestilling ${esc(order.code)}</p>
-${button(statusUrl, 'Se status på bestillingen')}`,
+      `Kvittering for bestilling ${order.code}`,
+      `<h1 style="font-size:22px;margin:0 0 2px;letter-spacing:0.05em">KVITTERING</h1>
+<p style="margin:0 0 16px;color:#57534e">Bestilling ${esc(order.code)} · ${osloDate(paidAt)}</p>
+<table style="width:100%;font-size:15px;border-collapse:collapse;margin-bottom:16px">
+<tr><td style="${cell};color:#57534e;width:80px">Selger</td><td style="${cell}"><strong>${esc(parentName)}</strong>${parentPhone ? `<br>${esc(phone(parentPhone))}` : ''}<br>Dugnad til inntekt for ${esc(team)}</td></tr>
+<tr><td style="${cell};color:#57534e">Kjøper</td><td style="${cell}">${order.receipt_name ? `<strong>${esc(order.receipt_name)}</strong><br>Bestilt av ${esc(order.buyer_first_name)}` : `<strong>${esc(order.buyer_first_name)}</strong>`}</td></tr>
+</table>
+<table style="width:100%;font-size:15px;border-collapse:collapse">${receiptLines}
+<tr><td style="${cell};font-weight:700">Totalt</td><td style="${cell};text-align:right;white-space:nowrap;padding-left:12px;font-weight:700">${kr(amount)}</td></tr></table>
+<p style="margin:16px 0 0">Betalt med Vipps ${osloDate(paidAt)}</p>
+<p style="margin:4px 0 0;color:#57534e">Ikke MVA-pliktig (privatsalg / dugnad)</p>
+${button(`${APP_URL}/kvittering/${order.status_token}`, 'Skriv ut eller lagre som PDF')}`,
     )
   }
 
